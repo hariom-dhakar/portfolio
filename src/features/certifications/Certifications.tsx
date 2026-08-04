@@ -7,29 +7,34 @@ export const Certifications = () => {
   const isInView = useInView(containerRef, { once: true, margin: '-50px' });
 
   return (
-    <section id="certifications" className="py-10 px-6 md:px-12 max-w-7xl mx-auto">
+    <section id="certifications" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" aria-label="Credentials Section">
       <motion.div
         ref={containerRef}
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
+        animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 24, filter: 'blur(6px)' }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-        className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 md:gap-8 border-t border-border-primary/20 pt-10"
+        className="glass-card p-6 md:p-8 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8 border border-border-primary/60"
       >
-        <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-text-primary shrink-0">
-          Credentials
-        </h2>
+        <div className="space-y-1">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400">
+            Verified Accreditation
+          </span>
+          <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-text-primary">
+            Credentials & Certifications
+          </h2>
+        </div>
 
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-3 group">
-            <div className="p-2 rounded-full bg-text-accent/10 text-text-accent transition-transform duration-300 group-hover:scale-110">
-              <Award className="w-4 h-4" />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3.5 group p-3 rounded-xl bg-neutral-950/60 border border-neutral-850 hover:border-cyan-500/40 transition-all">
+            <div className="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 group-hover:scale-105 transition-transform">
+              <Award className="w-5 h-5" aria-hidden="true" />
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-base md:text-lg font-medium text-text-primary tracking-wide">
-                Databricks Certified GenAI Engineer Associate
+            <div className="flex flex-col">
+              <span className="text-sm md:text-base font-display font-semibold text-text-primary tracking-wide group-hover:text-cyan-300 transition-colors">
+                Databricks Certified Generative AI Engineer Associate
               </span>
-              <span className="text-xs md:text-sm font-mono text-text-tertiary">
-                (2025)
+              <span className="text-xs font-mono text-text-tertiary">
+                Issued 2025 • Industry Standard GenAI Certification
               </span>
             </div>
           </div>

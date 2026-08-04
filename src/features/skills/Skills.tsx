@@ -1,163 +1,77 @@
+import React, { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { BookOpen } from 'lucide-react';
+import { KNOWLEDGE_TREE_DATA, type TechnologyNode } from '../../data/knowledgeData';
+import { KnowledgeTree } from './components/KnowledgeTree';
+import { InspectorPanel } from './components/InspectorPanel';
 
-interface SkillItem {
-  name: string;
-  isPrimary: boolean;
-}
+export const Skills: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: '-80px' });
 
-interface SkillCategory {
-  label: string;
-  skills: SkillItem[];
-}
+  // Currently selected technology (default: CrewAI)
+  const defaultTech = KNOWLEDGE_TREE_DATA[0].items[0]; // CrewAI
+  const [selectedTech, setSelectedTech] = useState<TechnologyNode | null>(defaultTech);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-const CATEGORIES: SkillCategory[] = [
-  {
-    label: 'AI & ML',
-    skills: [
-      { name: 'CrewAI', isPrimary: true },
-      { name: 'LangChain', isPrimary: true },
-      { name: 'RAG', isPrimary: true },
-      { name: 'FAISS', isPrimary: true },
-      { name: 'ChromaDB', isPrimary: false },
-      { name: 'HuggingFace', isPrimary: false },
-      { name: 'Transformers', isPrimary: false },
-      { name: 'LLM Orchestration', isPrimary: true },
-    ],
-  },
-  {
-    label: 'Languages & Frameworks',
-    skills: [
-      { name: 'Python', isPrimary: true },
-      { name: 'TypeScript', isPrimary: false },
-      { name: 'FastAPI', isPrimary: true },
-      { name: 'React', isPrimary: false },
-      { name: 'Scikit-learn', isPrimary: false },
-      { name: 'Pandas', isPrimary: true },
-      { name: 'NumPy', isPrimary: false },
-    ],
-  },
-  {
-    label: 'Infrastructure',
-    skills: [
-      { name: 'Docker', isPrimary: true },
-      { name: 'AWS', isPrimary: false },
-      { name: 'PostgreSQL', isPrimary: false },
-      { name: 'Redis', isPrimary: false },
-      { name: 'Git', isPrimary: true },
-      { name: 'REST APIs', isPrimary: true },
-      { name: 'CI/CD', isPrimary: false },
-    ],
-  },
-  {
-    label: 'Specialties',
-    skills: [
-      { name: 'Multi-Agent Systems', isPrimary: true },
-      { name: 'Agentic AI', isPrimary: true },
-      { name: 'Prompt Engineering', isPrimary: true },
-      { name: 'Vector Databases', isPrimary: true },
-      { name: 'NLP', isPrimary: false },
-    ],
-  },
-];
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const rowVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1] as const,
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-const skillVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' as const },
-  },
-};
-
-export function Skills() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const handleSelectTechById = (id: string) => {
+    const found = KNOWLEDGE_TREE_DATA.flatMap((f) => f.items).find((n) => n.id === id);
+    if (found) {
+      setSelectedTech(found);
+    }
+  };
 
   return (
     <section
       id="skills"
-      className="relative w-full py-16 md:py-24 px-6 md:px-12 border-t border-[var(--border-primary)]"
+      ref={containerRef}
+      className="relative w-full py-16 md:py-24 px-4 md:px-8 border-t border-[var(--border-primary)] overflow-hidden bg-[var(--bg-primary)]"
+      aria-label="Obsidian Engineering Knowledge Base Section"
     >
-      <div className="max-w-7xl mx-auto" ref={ref}>
-        {/* Section Title */}
+      <div className="max-w-7xl mx-auto space-y-8">
+        
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
+          animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12 md:mb-16"
+          className="space-y-2"
         >
-          <h2 className="text-4xl md:text-6xl font-display font-semibold tracking-tight text-[var(--text-primary)]">
-            Tech Stack
+          <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest px-3 py-1 rounded-full border border-border-glow bg-brand-glow inline-flex items-center gap-1.5">
+            <BookOpen className="w-3.5 h-3.5" /> Obsidian Engineering Knowledge Base
+          </span>
+          <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-[var(--text-primary)]">
+            Tech Stack & Knowledge Explorer
           </h2>
-          <div className="mt-4 h-px w-20 bg-gradient-to-r from-[var(--text-accent)] to-transparent" />
+          <p className="text-text-secondary text-sm md:text-base font-light max-w-2xl">
+            Explore my engineering knowledge tree, architectural usage, key concepts, and code implementations.
+          </p>
         </motion.div>
 
-        {/* Skill Categories */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="space-y-10 md:space-y-12"
-        >
-          {CATEGORIES.map((category) => (
-            <motion.div
-              key={category.label}
-              variants={rowVariants}
-              className="flex flex-col md:flex-row gap-3 md:gap-8 items-start"
-            >
-              {/* Category Label */}
-              <span className="text-[11px] md:text-xs font-mono uppercase tracking-[0.2em] text-[var(--text-tertiary)] md:w-40 md:pt-1.5 shrink-0">
-                {category.label}
-              </span>
+        {/* 2-Column Desktop Explorer Layout (35% Tree / 65% Inspector) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* Left Panel: Knowledge Tree (35% on Desktop -> lg:col-span-4 or 5) */}
+          <div className="lg:col-span-5 w-full">
+            <KnowledgeTree
+              selectedTechId={selectedTech?.id || null}
+              onSelectTech={setSelectedTech}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+            />
+          </div>
 
-              {/* Skills Flow */}
-              <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-x-6 md:gap-y-3 items-baseline">
-                {category.skills.map((skill) => (
-                  <motion.span
-                    key={skill.name}
-                    variants={skillVariants}
-                    className={`
-                      cursor-default transition-all duration-300
-                      ${
-                        skill.isPrimary
-                          ? 'text-xl md:text-2xl font-display font-medium text-[var(--text-primary)] hover:text-[var(--text-accent)]'
-                          : 'text-base md:text-lg font-light text-[var(--text-secondary)] opacity-65 hover:opacity-100 hover:text-[var(--text-accent)]'
-                      }
-                    `}
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                  >
-                    {skill.name}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* Right Panel: Knowledge Inspector (65% on Desktop -> lg:col-span-7) */}
+          <div className="lg:col-span-7 w-full">
+            <InspectorPanel
+              tech={selectedTech}
+              onSelectTechById={handleSelectTechById}
+            />
+          </div>
+
+        </div>
+
       </div>
     </section>
   );
-}
+};
