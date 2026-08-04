@@ -10,9 +10,11 @@ interface NavigationProps {
 
 const NAV_ITEMS = [
   { id: 'hero', label: 'Home' },
-  { id: 'pipeline', label: 'Pipeline' },
+  { id: 'about', label: 'About' },
+  { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Work' },
   { id: 'skills', label: 'Skills' },
+  { id: 'certifications', label: 'Credentials' },
   { id: 'resume', label: 'Resume' },
   { id: 'contact', label: 'Contact' },
 ];
@@ -76,24 +78,26 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
             : 'bg-transparent border-b border-transparent py-5'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Brand Name */}
           <button
             onClick={() => handleNavClick('hero')}
-            className="font-display font-semibold text-lg tracking-tight text-text-primary hover:text-text-accent transition-colors duration-200 cursor-pointer"
+            className="font-display font-semibold text-lg tracking-tight text-text-primary hover:text-text-accent transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1"
+            aria-label="Hariom Dhakar - Return to top"
           >
-            Hariom
+            Hariom Dhakar
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-7" aria-label="Main Navigation">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative py-1 text-sm font-medium transition-colors duration-200 cursor-pointer ${
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`relative py-1 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1 ${
                     isActive ? 'text-text-primary' : 'text-text-tertiary hover:text-text-primary'
                   }`}
                 >
@@ -115,23 +119,25 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/60 transition-colors duration-200 cursor-pointer"
-              aria-label="Toggle visual theme"
+              className="p-2 rounded-full text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/60 transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {theme === 'dark' ? (
-                <Sun className="w-4.5 h-4.5 text-amber-400" />
+                <Sun className="w-4.5 h-4.5 text-amber-400" aria-hidden="true" />
               ) : (
-                <Moon className="w-4.5 h-4.5 text-slate-700" />
+                <Moon className="w-4.5 h-4.5 text-slate-700" aria-hidden="true" />
               )}
             </button>
 
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/60 transition-colors duration-200 cursor-pointer md:hidden relative z-50"
-              aria-label="Toggle navigation menu"
+              className="p-2 rounded-full text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/60 transition-colors duration-200 cursor-pointer lg:hidden relative z-50 focus-visible:outline-2 focus-visible:outline-cyan-400"
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation-menu"
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -141,13 +147,14 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            id="mobile-navigation-menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-bg-primary/95 backdrop-blur-2xl md:hidden flex flex-col items-center justify-center px-6"
+            className="fixed inset-0 z-40 bg-bg-primary/95 backdrop-blur-2xl lg:hidden flex flex-col items-center justify-center px-6"
           >
-            <nav className="flex flex-col items-center gap-8 text-center" aria-label="Mobile Navigation">
+            <nav className="flex flex-col items-center gap-6 text-center" aria-label="Mobile Navigation">
               {NAV_ITEMS.map((item, index) => {
                 const isActive = activeSection === item.id;
                 return (
@@ -156,9 +163,10 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.25, delay: index * 0.04 }}
+                    transition={{ duration: 0.25, delay: index * 0.03 }}
                     onClick={() => handleNavClick(item.id)}
-                    className={`text-2xl font-display font-semibold transition-colors duration-200 cursor-pointer ${
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`text-xl md:text-2xl font-display font-semibold transition-colors duration-200 cursor-pointer ${
                       isActive ? 'text-text-accent' : 'text-text-tertiary hover:text-text-primary'
                     }`}
                   >
@@ -173,4 +181,3 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
     </>
   );
 };
-

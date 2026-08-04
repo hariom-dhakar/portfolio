@@ -21,6 +21,7 @@ export const NeuralBackground: React.FC = () => {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
+    let isTabVisible = true;
     
     // Configs
     let particleCount = 75;
@@ -30,7 +31,7 @@ export const NeuralBackground: React.FC = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       
-      // Scale down particle counts on mobile to ensure top performance
+      // Scale down particle counts on mobile to ensure top 60 FPS performance
       if (window.innerWidth < 768) {
         particleCount = 30;
         maxDistance = 80;
@@ -48,7 +49,7 @@ export const NeuralBackground: React.FC = () => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.35, // slow drifting velocity
+          vx: (Math.random() - 0.5) * 0.35,
           vy: (Math.random() - 0.5) * 0.35,
           radius: Math.random() * 1.5 + 1,
         });
@@ -65,14 +66,26 @@ export const NeuralBackground: React.FC = () => {
       mouseRef.current.y = null;
     };
 
+    const handleVisibilityChange = () => {
+      isTabVisible = !document.hidden;
+      if (isTabVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     // Trigger initial sizing
     handleResize();
 
     const animate = () => {
+      if (!isTabVisible) return;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Determine theme from root element class list
@@ -99,19 +112,17 @@ export const NeuralBackground: React.FC = () => {
         ctx.fillStyle = particleColor + '0.45)';
         ctx.fill();
         
-        // Calculate interaction with mouse cursor (subtle repulsion)
+        // Calculate interaction with mouse cursor
         if (mouse.x !== null && mouse.y !== null) {
           const dx = mouse.x - p.x;
           const dy = mouse.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           
           if (dist < 150) {
-            // Push particles away slightly
             const force = (150 - dist) / 150;
             p.x -= (dx / dist) * force * 1.5;
             p.y -= (dy / dist) * force * 1.5;
             
-            // Draw connection to mouse
             const alpha = (1 - dist / 150) * 0.15;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
@@ -150,6 +161,7 @@ export const NeuralBackground: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -158,6 +170,7 @@ export const NeuralBackground: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none -z-10 bg-transparent transition-opacity duration-300"
+      aria-hidden="true"
     />
   );
 };

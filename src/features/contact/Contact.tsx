@@ -30,32 +30,33 @@ export const Contact = () => {
       name: "Email",
       value: "hariomdhakar85@gmail.com",
       href: "mailto:hariomdhakar85@gmail.com",
-      icon: <Mail className="w-5 h-5" />
+      icon: <Mail className="w-5 h-5" aria-hidden="true" />
     },
     {
       name: "GitHub",
       value: "github.com/hariom-dhakar",
       href: "https://github.com/hariom-dhakar",
-      icon: <GithubIcon className="w-5 h-5" />
+      icon: <GithubIcon className="w-5 h-5" aria-hidden="true" />
     },
     {
       name: "LinkedIn",
       value: "linkedin.com/in/hariom-dhakar",
       href: "https://linkedin.com/in/hariom-dhakar",
-      icon: <LinkedinIcon className="w-5 h-5" />
+      icon: <LinkedinIcon className="w-5 h-5" aria-hidden="true" />
     },
     {
       name: "Phone",
       value: "+91-7737718909",
       href: "tel:+917737718909",
-      icon: <Phone className="w-5 h-5" />
+      icon: <Phone className="w-5 h-5" aria-hidden="true" />
     }
   ];
 
   return (
     <section 
       id="contact" 
-      className="py-16 md:py-24 bg-var(--bg-primary) relative flex items-center justify-center overflow-hidden border-t border-[var(--border-primary)]"
+      className="py-16 md:py-24 bg-[var(--bg-primary)] relative flex items-center justify-center overflow-hidden border-t border-[var(--border-primary)]"
+      aria-label="Contact Section"
     >
       <motion.div
         ref={ref}
@@ -67,52 +68,62 @@ export const Contact = () => {
         <div className="space-y-3 max-w-2xl">
           <motion.h2 
             variants={itemVariants}
-            className="text-4xl md:text-6xl font-display font-medium tracking-tight text-var(--text-primary)"
+            className="text-4xl md:text-6xl font-display font-medium tracking-tight text-[var(--text-primary)]"
           >
             Let's Connect
           </motion.h2>
           <motion.p 
             variants={itemVariants}
-            className="text-lg md:text-xl text-var(--text-secondary) font-sans font-light"
+            className="text-lg md:text-xl text-[var(--text-secondary)] font-sans font-light leading-relaxed"
           >
-            Have a project in mind? Let's build something together.
+            Have an AI engineering opportunity or multi-agent project in mind? Let's build together.
           </motion.p>
         </div>
 
         <motion.div 
           variants={itemVariants}
-          className="flex flex-col md:flex-row gap-4 md:gap-8 flex-wrap items-start"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full"
         >
           {links.map((link) => (
             <a
               key={link.name}
               href={link.href}
               target={link.href.startsWith('http') ? '_blank' : '_self'}
-              rel={link.href.startsWith('http') ? 'noopener noreferrer' : ''}
-              className="group flex items-center gap-3 text-var(--text-secondary) hover:text-var(--text-accent) transition-colors duration-300 font-mono text-sm md:text-base relative pb-1"
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              aria-label={`${link.name}: ${link.value}`}
+              className="group p-4 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-secondary)]/40 hover:bg-[var(--bg-secondary)] hover:border-cyan-500/40 transition-all duration-300 flex flex-col gap-3 focus-visible:outline-2 focus-visible:outline-cyan-400"
             >
-              <span className="opacity-70 group-hover:opacity-100 transition-opacity">
-                {link.icon}
-              </span>
-              <span>{link.value}</span>
-              {link.href.startsWith('http') && (
-                <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:-translate-y-2 group-hover:translate-x-1 transition-all duration-300" />
-              )}
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-var(--text-accent) group-hover:w-full transition-all duration-300 ease-out" />
+              <div className="flex items-center justify-between text-[var(--text-tertiary)] group-hover:text-[var(--text-accent)] transition-colors">
+                <span className="p-2 rounded-lg bg-neutral-900 border border-neutral-800">
+                  {link.icon}
+                </span>
+                {link.href.startsWith('http') && (
+                  <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300" aria-hidden="true" />
+                )}
+              </div>
+              
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-tertiary)]">
+                  {link.name}
+                </span>
+                <span className="text-xs md:text-sm font-mono text-[var(--text-primary)] group-hover:text-[var(--text-accent)] truncate transition-colors">
+                  {link.value}
+                </span>
+              </div>
             </a>
           ))}
         </motion.div>
 
         <motion.div 
           variants={itemVariants}
-          className="flex items-center gap-3 mt-4 pt-4 border-t border-var(--border-primary)/20 w-full"
+          className="flex items-center gap-3 pt-6 border-t border-[var(--border-primary)]/40 w-full"
         >
           <div className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
           </div>
-          <span className="text-xs md:text-sm font-mono text-var(--text-tertiary) uppercase tracking-wider">
-            Available for opportunities
+          <span className="text-xs md:text-sm font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
+            Available for new opportunities & role invitations
           </span>
         </motion.div>
       </motion.div>
