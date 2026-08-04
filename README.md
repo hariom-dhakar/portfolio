@@ -27,7 +27,7 @@ This portfolio goes beyond static resume pages by treating developer portfolio d
 
 ## Live Demo
 
-- **Portfolio URL**: [https://hariomdhakar.dev](https://github.com/hariom-dhakar/portfolio) *(Update with live deployment link)*
+- **Portfolio URL**: [https://hariom-dhakar.github.io/portfolio/](https://hariom-dhakar.github.io/portfolio/)
 - **GitHub Repository**: [https://github.com/hariom-dhakar/portfolio](https://github.com/hariom-dhakar/portfolio)
 
 ---
@@ -240,7 +240,7 @@ npx netlify deploy --build
 **Hariom Dhakar**  
 *AI Engineer | GenAI & Agentic AI Specialist*
 
-- **Portfolio**: [https://hariomdhakar.dev](https://github.com/hariom-dhakar/portfolio)
+- **Portfolio**: [https://hariom-dhakar.github.io/portfolio/](https://hariom-dhakar.github.io/portfolio/)
 - **GitHub**: [@hariom-dhakar](https://github.com/hariom-dhakar)
 - **LinkedIn**: [hariom-dhakar](https://linkedin.com/in/hariom-dhakar)
 - **Email**: hariomdhakar85@gmail.com
