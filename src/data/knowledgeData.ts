@@ -282,7 +282,7 @@ async def dispatch_agent(req: PromptRequest):
     return {"status": "success", "data": result}`,
         keyConcepts: ['Pydantic Validation', 'Async Route Handlers', 'Dependency Injection', 'OpenAPI Specs'],
         projects: ['MedInsight Agent', 'AI Proposal Generator', 'CrewAI EDA Analyzer'],
-        relatedTech: ['python', 'redis', 'docker', 'postgresql']
+        relatedTech: ['python', 'redis', 'docker']
       },
       {
         id: 'rest-apis',
