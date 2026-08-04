@@ -1,7 +1,7 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, memo } from 'react';
 import { motion, useInView, useSpring, useTransform } from 'framer-motion';
 
-const AnimatedNumber = ({ value, suffix = "" }: { value: number, suffix?: string }) => {
+const AnimatedNumber = memo(({ value, suffix = "" }: { value: number, suffix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const spring = useSpring(0, { mass: 1, stiffness: 50, damping: 15 });
@@ -14,9 +14,11 @@ const AnimatedNumber = ({ value, suffix = "" }: { value: number, suffix?: string
   }, [isInView, spring, value]);
 
   return <motion.span ref={ref} className="tabular-nums font-display font-semibold">{display}</motion.span>;
-};
+});
 
-export const About = () => {
+AnimatedNumber.displayName = 'AnimatedNumber';
+
+export const About = memo(() => {
   const containerRef = useRef<HTMLElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
@@ -34,7 +36,7 @@ export const About = () => {
     <section 
       id="about"
       ref={containerRef}
-      className="relative w-full flex items-center justify-center py-16 md:py-24 px-4 md:px-8 bg-[var(--bg-primary)] overflow-hidden border-t border-[var(--border-primary)]"
+      className="relative w-full flex items-center justify-center py-16 md:py-24 px-4 md:px-8 overflow-hidden border-t border-[var(--border-primary)]"
       aria-label="About Section"
     >
       <div className="max-w-7xl w-full mx-auto flex flex-col gap-12 md:gap-16">
@@ -69,7 +71,7 @@ export const About = () => {
           className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 border-y border-[var(--border-primary)] py-10"
         >
           <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-accent)] glow-text">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
               <AnimatedNumber value={3} />
             </span>
             <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
@@ -77,7 +79,7 @@ export const About = () => {
             </span>
           </div>
           <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-accent)] glow-text">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
               <AnimatedNumber value={7} />
             </span>
             <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
@@ -85,7 +87,7 @@ export const About = () => {
             </span>
           </div>
           <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-accent)] glow-text">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
               <AnimatedNumber value={70} suffix="%" />
             </span>
             <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
@@ -93,7 +95,7 @@ export const About = () => {
             </span>
           </div>
           <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-accent)] glow-text">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
               <AnimatedNumber value={500} suffix="+" />
             </span>
             <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
@@ -118,14 +120,14 @@ export const About = () => {
           
           <div className="glass-card p-6 md:p-8 rounded-2xl flex flex-col gap-6 border border-[var(--border-primary)]">
             <div className="flex flex-col gap-1 border-b border-[var(--border-primary)] pb-4">
-              <span className="text-xs font-mono text-[var(--text-accent)] uppercase tracking-widest">Education</span>
+              <span className="text-xs font-mono text-[var(--text-gold)] uppercase tracking-widest font-semibold">Education</span>
               <span className="text-[var(--text-primary)] font-display font-bold text-lg md:text-xl">B.Tech in Computer Science Engineering</span>
               <span className="text-[var(--text-secondary)] font-light text-sm">Arya College of Engineering & IT, Jaipur • 2022-2026</span>
-              <span className="text-[var(--text-tertiary)] font-mono text-xs mt-1">CGPA 7.70</span>
+              <span className="text-[var(--text-gold)] font-mono text-xs mt-1 font-semibold">CGPA 7.70</span>
             </div>
 
             <div className="flex flex-col gap-1">
-              <span className="text-xs font-mono text-[var(--text-accent)] uppercase tracking-widest">Credentials</span>
+              <span className="text-xs font-mono text-[var(--text-gold)] uppercase tracking-widest font-semibold">Credentials</span>
               <span className="text-[var(--text-primary)] font-display font-bold text-base md:text-lg">Databricks Certified Generative AI Engineer Associate</span>
             </div>
           </div>
@@ -133,4 +135,6 @@ export const About = () => {
       </div>
     </section>
   );
-};
+});
+
+About.displayName = 'About';

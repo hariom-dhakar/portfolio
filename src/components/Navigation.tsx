@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Menu, X } from 'lucide-react';
 import type { Theme } from '../hooks/useTheme';
@@ -19,35 +19,52 @@ const NAV_ITEMS = [
   { id: 'contact', label: 'Contact' },
 ];
 
-export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
+export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
   const [activeSection, setActiveSection] = useState('hero');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // 1. Passive RAF-throttled header background scroll detection
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      const scrollPosition = window.scrollY + 180;
-
-      // Handle bottom of page
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
-        setActiveSection(NAV_ITEMS[NAV_ITEMS.length - 1].id);
-        return;
-      }
-
-      for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
-        const section = document.getElementById(NAV_ITEMS[i].id);
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(NAV_ITEMS[i].id);
-          break;
-        }
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const isScrolledNow = window.scrollY > 20;
+          setScrolled((prev) => (prev !== isScrolledNow ? isScrolledNow : prev));
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 2. High-performance IntersectionObserver for active section tracking (Zero layout thrashing)
+  useEffect(() => {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      rootMargin: '-30% 0px -40% 0px',
+      threshold: 0,
+    });
+
+    NAV_ITEMS.forEach((item) => {
+      const element = document.getElementById(item.id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -74,7 +91,7 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-bg-glass/80 backdrop-blur-xl border-b border-border-primary/50 py-3.5 shadow-sm'
+            ? 'bg-[var(--bg-glass)] backdrop-blur-xl border-b border-[var(--border-primary)] py-3.5 shadow-sm'
             : 'bg-transparent border-b border-transparent py-5'
         }`}
       >
@@ -82,7 +99,7 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
           {/* Brand Name */}
           <button
             onClick={() => handleNavClick('hero')}
-            className="font-display font-semibold text-lg tracking-tight text-text-primary hover:text-text-accent transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1"
+            className="font-display font-semibold text-lg tracking-tight text-[var(--text-primary)] hover:text-[var(--text-accent)] transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1"
             aria-label="Hariom Dhakar - Return to top"
           >
             Hariom Dhakar
@@ -98,14 +115,14 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
                   onClick={() => handleNavClick(item.id)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`relative py-1 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1 ${
-                    isActive ? 'text-text-primary' : 'text-text-tertiary hover:text-text-primary'
+                    isActive ? 'text-[var(--text-primary)] font-semibold' : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   {item.label}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-text-accent rounded-full"
+                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[var(--text-accent)] rounded-full"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -119,7 +136,7 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/60 transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400"
+              className="p-2 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400"
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {theme === 'dark' ? (
@@ -132,7 +149,7 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/60 transition-colors duration-200 cursor-pointer lg:hidden relative z-50 focus-visible:outline-2 focus-visible:outline-cyan-400"
+              className="p-2 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors duration-200 cursor-pointer lg:hidden relative z-50 focus-visible:outline-2 focus-visible:outline-cyan-400"
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-menu"
@@ -152,7 +169,7 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-bg-primary/95 backdrop-blur-2xl lg:hidden flex flex-col items-center justify-center px-6"
+            className="fixed inset-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur-2xl lg:hidden flex flex-col items-center justify-center px-6"
           >
             <nav className="flex flex-col items-center gap-6 text-center" aria-label="Mobile Navigation">
               {NAV_ITEMS.map((item, index) => {
@@ -167,7 +184,7 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
                     onClick={() => handleNavClick(item.id)}
                     aria-current={isActive ? 'page' : undefined}
                     className={`text-xl md:text-2xl font-display font-semibold transition-colors duration-200 cursor-pointer ${
-                      isActive ? 'text-text-accent' : 'text-text-tertiary hover:text-text-primary'
+                      isActive ? 'text-[var(--text-accent)]' : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     {item.label}
@@ -180,4 +197,6 @@ export const Navigation = ({ theme, toggleTheme }: NavigationProps) => {
       </AnimatePresence>
     </>
   );
-};
+});
+
+Navigation.displayName = 'Navigation';

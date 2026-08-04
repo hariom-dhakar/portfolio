@@ -9,7 +9,6 @@ export const Skills: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-80px' });
 
-  // Currently selected technology (default: CrewAI)
   const defaultTech = KNOWLEDGE_TREE_DATA[0].items[0]; // CrewAI
   const [selectedTech, setSelectedTech] = useState<TechnologyNode | null>(defaultTech);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -25,7 +24,7 @@ export const Skills: React.FC = () => {
     <section
       id="skills"
       ref={containerRef}
-      className="relative w-full py-16 md:py-24 px-4 md:px-8 border-t border-[var(--border-primary)] overflow-hidden bg-[var(--bg-primary)]"
+      className="relative w-full py-16 md:py-24 px-4 md:px-8 border-t border-[var(--border-primary)] overflow-hidden"
       aria-label="Obsidian Engineering Knowledge Base Section"
     >
       <div className="max-w-7xl mx-auto space-y-8">
@@ -37,7 +36,7 @@ export const Skills: React.FC = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="space-y-2"
         >
-          <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest px-3 py-1 rounded-full border border-border-glow bg-brand-glow inline-flex items-center gap-1.5">
+          <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest px-3 py-1 rounded-full border border-[var(--border-gold)] bg-[var(--bg-tertiary)] inline-flex items-center gap-1.5 font-semibold">
             <BookOpen className="w-3.5 h-3.5" /> Obsidian Engineering Knowledge Base
           </span>
           <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-[var(--text-primary)]">
@@ -51,7 +50,7 @@ export const Skills: React.FC = () => {
         {/* 2-Column Desktop Explorer Layout (35% Tree / 65% Inspector) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          {/* Left Panel: Knowledge Tree (35% on Desktop -> lg:col-span-4 or 5) */}
+          {/* Left Panel: Knowledge Tree (35% on Desktop -> lg:col-span-5) */}
           <div className="lg:col-span-5 w-full">
             <KnowledgeTree
               selectedTechId={selectedTech?.id || null}

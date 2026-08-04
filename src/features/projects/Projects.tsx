@@ -1,12 +1,12 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback, memo } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { PROJECTS_DATA, type ProjectData, type ArchitectureStep } from '../../data/projectsData';
 import { ArchitectureSidebar } from '../../components/ArchitectureSidebar';
 
-export const Projects = () => {
+export const Projects = memo(() => {
   return (
-    <section id="projects" className="w-full bg-[var(--bg-primary)] py-16 md:py-24 overflow-hidden px-4 md:px-8 border-t border-[var(--border-primary)]">
+    <section id="projects" className="w-full py-16 md:py-24 overflow-hidden px-4 md:px-8 border-t border-[var(--border-primary)]">
       <div className="max-w-[1600px] mx-auto mb-12 md:mb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -15,16 +15,16 @@ export const Projects = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex flex-col items-center justify-center text-center space-y-4"
         >
-          <span className="font-mono text-xs text-text-accent uppercase tracking-widest px-3 py-1 rounded-full border border-border-glow bg-brand-glow">
+          <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest px-3 py-1 rounded-full border border-[var(--border-gold)] bg-[var(--bg-tertiary)] font-semibold">
             System Showcases
           </span>
           <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tighter text-[var(--text-primary)]">
             Selected Work
           </h2>
-          <p className="text-text-secondary max-w-2xl mx-auto text-sm md:text-base font-light">
+          <p className="text-[var(--text-secondary)] max-w-2xl mx-auto text-sm md:text-base font-light">
             Production-grade AI systems, multi-agent orchestrations, and LLM pipelines with custom execution architectures.
           </p>
-          <div className="w-24 h-px bg-[var(--border-glow)] opacity-50" />
+          <div className="w-24 h-px bg-[var(--border-gold)] opacity-50" />
         </motion.div>
       </div>
 
@@ -36,11 +36,17 @@ export const Projects = () => {
       </div>
     </section>
   );
-};
+});
 
-function ProjectCard({ project, index }: { project: ProjectData; index: number }) {
+Projects.displayName = 'Projects';
+
+const ProjectCard = memo(({ project, index }: { project: ProjectData; index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+  const handleStepSelect = useCallback((idx: number) => {
+    setActiveStepIndex((prev) => (prev !== idx ? idx : prev));
+  }, []);
 
   const variants = {
     hidden: { 
@@ -84,8 +90,8 @@ function ProjectCard({ project, index }: { project: ProjectData; index: number }
           {/* Header & Meta */}
           <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-[var(--border-primary)] pb-4">
             <div className="space-y-2">
-              <span className="font-mono text-xs text-cyan-400/80 uppercase tracking-widest flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest flex items-center gap-2 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-gold)] animate-pulse" />
                 PROJECT 0{index + 1}
               </span>
               <h3 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-[var(--text-primary)]">
@@ -111,7 +117,7 @@ function ProjectCard({ project, index }: { project: ProjectData; index: number }
           <div className="flex flex-wrap gap-8 md:gap-14 py-2">
             {project.metrics.map((metric, i) => (
               <div key={i} className="flex flex-col gap-0.5">
-                <span className="text-3xl md:text-4xl font-display font-medium text-[var(--text-accent)] glow-text">
+                <span className="text-3xl md:text-4xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
                   {metric.value}
                 </span>
                 <span className="text-[10px] md:text-xs uppercase tracking-widest text-[var(--text-tertiary)] font-mono">
@@ -124,10 +130,10 @@ function ProjectCard({ project, index }: { project: ProjectData; index: number }
           {/* Execution Steps & Workflow Breakdown Grid */}
           <div className="border-t border-[var(--border-primary)] pt-6 flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-text-tertiary uppercase tracking-wider">
+              <span className="font-mono text-xs text-[var(--text-tertiary)] uppercase tracking-wider">
                 Execution Steps & Workflow Breakdown
               </span>
-              <span className="font-mono text-[10px] text-cyan-400/80">
+              <span className="font-mono text-[10px] text-[var(--text-accent)]">
                 Click step to trigger left panel
               </span>
             </div>
@@ -139,7 +145,7 @@ function ProjectCard({ project, index }: { project: ProjectData; index: number }
                   step={step}
                   stepIdx={stepIdx}
                   isActive={activeStepIndex === stepIdx}
-                  onStepSelect={() => setActiveStepIndex(stepIdx)}
+                  onStepSelect={() => handleStepSelect(stepIdx)}
                 />
               ))}
             </div>
@@ -151,7 +157,7 @@ function ProjectCard({ project, index }: { project: ProjectData; index: number }
             {project.tech.map((tech, i) => (
               <span 
                 key={i} 
-                className="px-2.5 py-1 rounded-md bg-neutral-900 border border-neutral-800 text-xs font-mono text-neutral-300"
+                className="px-2.5 py-1 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-secondary)]"
               >
                 {tech}
               </span>
@@ -163,9 +169,11 @@ function ProjectCard({ project, index }: { project: ProjectData; index: number }
       </div>
     </motion.div>
   );
-}
+});
 
-function StepItemCard({ 
+ProjectCard.displayName = 'ProjectCard';
+
+const StepItemCard = memo(({ 
   step, 
   stepIdx, 
   isActive, 
@@ -175,7 +183,7 @@ function StepItemCard({
   stepIdx: number; 
   isActive: boolean; 
   onStepSelect: () => void; 
-}) {
+}) => {
   const itemRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(itemRef, { margin: "-30% 0px -40% 0px" });
 
@@ -193,26 +201,28 @@ function StepItemCard({
       onClick={onStepSelect}
       className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 ${
         isActive
-          ? 'bg-neutral-900/80 border-cyan-500/50 shadow-[0_0_20px_rgba(34,211,238,0.14)]'
-          : 'bg-neutral-950/40 border-[var(--border-primary)] hover:border-neutral-700'
+          ? 'bg-[var(--brand-glow)] border-[var(--border-glow)] shadow-sm'
+          : 'bg-[var(--bg-secondary)] border-[var(--border-primary)] hover:border-[var(--border-glow)]'
       }`}
     >
       <div className={`w-7 h-7 rounded-lg flex items-center justify-center border shrink-0 transition-colors ${
-        isActive ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' : 'bg-neutral-900 text-neutral-500 border-neutral-800'
+        isActive ? 'bg-[var(--brand-glow)] text-[var(--text-accent)] border-[var(--border-glow)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] border-[var(--border-primary)]'
       }`}>
         <Icon className="w-3.5 h-3.5" />
       </div>
       <div className="flex flex-col gap-0.5 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] text-neutral-500">Step 0{stepIdx + 1}</span>
-          <span className={`text-xs font-display font-medium truncate ${isActive ? 'text-cyan-300' : 'text-text-primary'}`}>
+          <span className="font-mono text-[10px] text-[var(--text-tertiary)]">Step 0{stepIdx + 1}</span>
+          <span className={`text-xs font-display font-medium truncate ${isActive ? 'text-[var(--text-accent)]' : 'text-[var(--text-primary)]'}`}>
             {step.title}
           </span>
         </div>
-        <p className="text-xs text-text-secondary font-light leading-snug">
+        <p className="text-xs text-[var(--text-secondary)] font-light leading-snug">
           {step.description}
         </p>
       </div>
     </div>
   );
-}
+});
+
+StepItemCard.displayName = 'StepItemCard';

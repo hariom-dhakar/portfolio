@@ -21,7 +21,7 @@ export const ResumeViewer: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border-glow bg-brand-glow text-text-accent text-[11px] font-mono mb-3"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border-glow)] bg-[var(--brand-glow)] text-[var(--text-accent)] text-[11px] font-mono mb-3"
           >
             <FileText className="w-3.5 h-3.5" aria-hidden="true" /> Resume
           </motion.div>
@@ -30,7 +30,7 @@ export const ResumeViewer: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-3"
+            className="text-3xl md:text-5xl font-display font-bold tracking-tight text-[var(--text-primary)] mb-3"
           >
             Curriculum Vitae
           </motion.h2>
@@ -39,7 +39,7 @@ export const ResumeViewer: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-text-secondary max-w-2xl mx-auto text-xs md:text-sm font-light leading-relaxed mb-6"
+            className="text-[var(--text-secondary)] max-w-2xl mx-auto text-xs md:text-sm font-light leading-relaxed mb-6"
           >
             Download my detailed CV or toggle the interactive document preview below.
           </motion.p>
@@ -73,12 +73,12 @@ export const ResumeViewer: React.FC = () => {
             >
               {isExpanded ? (
                 <>
-                  <EyeOff className="w-4 h-4 text-text-accent" aria-hidden="true" />
+                  <EyeOff className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
                   <span>Hide Preview</span>
                 </>
               ) : (
                 <>
-                  <Eye className="w-4 h-4 text-text-accent" aria-hidden="true" />
+                  <Eye className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
                   <span>Preview Resume</span>
                 </>
               )}
@@ -100,8 +100,8 @@ export const ResumeViewer: React.FC = () => {
               <div className="space-y-4">
                 {/* Controls Toolbar */}
                 <div className="glass-panel rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-                  <div className="flex items-center gap-2 text-text-secondary">
-                    <FileText className="w-4 h-4 text-text-accent" aria-hidden="true" />
+                  <div className="flex items-center gap-2 text-[var(--text-secondary)]">
+                    <FileText className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
                     <span>Hariom_Dhakar_CV.pdf</span>
                   </div>
 
@@ -110,14 +110,14 @@ export const ResumeViewer: React.FC = () => {
                     download="Hariom_Dhakar_Resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1.5 rounded-lg bg-text-accent/10 hover:bg-text-accent/20 border border-cyan-500/30 text-text-accent font-semibold flex items-center gap-1.5 transition-all text-[11px]"
+                    className="px-3 py-1.5 rounded-lg bg-[var(--brand-glow)] hover:opacity-90 border border-[var(--border-glow)] text-[var(--text-accent)] font-semibold flex items-center gap-1.5 transition-all text-[11px]"
                   >
                     <Download className="w-3.5 h-3.5" aria-hidden="true" /> Download File
                   </a>
                 </div>
 
                 {/* Paper View Container */}
-                <div className="w-full flex justify-center bg-bg-secondary rounded-2xl border border-border-primary h-[500px] sm:h-[650px] md:h-[800px] overflow-hidden shadow-2xl">
+                <div className="w-full flex justify-center bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-primary)] h-[500px] sm:h-[650px] md:h-[800px] overflow-hidden shadow-2xl">
                   <iframe
                     src={`${resumePdf}#toolbar=0&navpanes=0&scrollbar=1`}
                     className="w-full h-full border-none bg-white rounded-2xl"

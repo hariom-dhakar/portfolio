@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Search, X, FolderTree, ChevronsUpDown } from 'lucide-react';
-import { KNOWLEDGE_TREE_DATA, type TechnologyNode } from '../../../data/knowledgeData';
-import { CategoryNodeItem } from './TreeNode';
+import React, { useState, useMemo, useCallback, memo } from 'react';
+import { Search, FolderTree } from 'lucide-react';
+import { KNOWLEDGE_TREE_DATA, type CategoryFolder, type TechnologyNode } from '../../../data/knowledgeData';
+import { TreeNode } from './TreeNode';
 
 interface KnowledgeTreeProps {
   selectedTechId: string | null;
@@ -10,104 +10,108 @@ interface KnowledgeTreeProps {
   onSearchChange: (query: string) => void;
 }
 
-export const KnowledgeTree: React.FC<KnowledgeTreeProps> = ({
+export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
   selectedTechId,
   onSelectTech,
   searchQuery,
   onSearchChange
 }) => {
-  // Track expanded folder IDs (default: expand first 2 folders)
-  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(['ai-llm', 'languages'])
-  );
+  const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
+    'ai-llm': true,
+    'multi-agent': true,
+    'vector-databases': true,
+  });
 
-  const toggleExpand = (folderId: string) => {
-    setExpandedFolders((prev) => {
-      const next = new Set(prev);
-      if (next.has(folderId)) {
-        next.delete(folderId);
-      } else {
-        next.add(folderId);
-      }
-      return next;
-    });
-  };
+  const handleToggleFolder = useCallback((folderId: string) => {
+    setExpandedFolders((prev) => ({
+      ...prev,
+      [folderId]: !prev[folderId],
+    }));
+  }, []);
 
-  const handleExpandAll = () => {
-    const allIds = KNOWLEDGE_TREE_DATA.map((f) => f.id);
-    setExpandedFolders(new Set(allIds));
-  };
+  const filteredTree = useMemo(() => {
+    if (!searchQuery.trim()) return KNOWLEDGE_TREE_DATA;
 
-  // Total count of tech nodes
-  const totalTechCount = KNOWLEDGE_TREE_DATA.reduce((acc, f) => acc + f.items.length, 0);
+    const query = searchQuery.toLowerCase();
+    return KNOWLEDGE_TREE_DATA.map((folder) => {
+      const matchingItems = folder.items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(query) ||
+          item.id.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query) ||
+          item.keyConcepts.some((c) => c.toLowerCase().includes(query))
+      );
+
+      return {
+        ...folder,
+        items: matchingItems,
+      };
+    }).filter((folder) => folder.items.length > 0);
+  }, [searchQuery]);
+
+  const totalNodeCount = useMemo(() => {
+    return KNOWLEDGE_TREE_DATA.reduce((acc, folder) => acc + folder.items.length, 0);
+  }, []);
 
   return (
-    <div className="flex flex-col h-full bg-neutral-950/80 rounded-2xl border border-[var(--border-primary)] overflow-hidden">
-      {/* Tree Header */}
-      <div className="p-3.5 border-b border-[var(--border-primary)] bg-neutral-950 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
-            <FolderTree className="w-4 h-4" />
-            <span className="font-semibold uppercase tracking-wider">KNOWLEDGE BASE</span>
+    <div className="h-full bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] p-4 md:p-6 space-y-4 shadow-xl flex flex-col justify-between font-sans glass-card">
+      <div className="space-y-4">
+        
+        {/* Explorer Panel Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-[var(--border-primary)]">
+          <div className="flex items-center gap-2">
+            <FolderTree className="w-4 h-4 text-[var(--text-accent)]" />
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-primary)]">
+              Explorer: AI Knowledge Tree
+            </h3>
           </div>
-
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={handleExpandAll}
-              title="Expand All Folders"
-              className="p-1 rounded hover:bg-neutral-900 text-neutral-400 hover:text-white transition-colors cursor-pointer"
-            >
-              <ChevronsUpDown className="w-3.5 h-3.5" />
-            </button>
-            <span className="text-[10px] font-mono text-neutral-500 bg-neutral-900 px-2 py-0.5 rounded">
-              {totalTechCount} NODES
-            </span>
-          </div>
+          <span className="text-[10px] font-mono text-[var(--text-tertiary)] bg-[var(--bg-tertiary)] px-2 py-0.5 rounded-full border border-[var(--border-primary)]">
+            {totalNodeCount} nodes
+          </span>
         </div>
 
-        {/* Search Input Bar */}
-        <div className="relative w-full">
-          <Search className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+        {/* Search Input Box */}
+        <div className="relative">
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search technology or keyword..."
-            className="w-full pl-9 pr-7 py-2 rounded-xl bg-neutral-900/90 border border-neutral-850 text-xs font-mono text-neutral-200 placeholder:text-neutral-500 focus:border-cyan-400 focus:outline-none transition-colors"
+            placeholder="Search technology, RAG, CrewAI..."
+            className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] focus:border-[var(--border-glow)] rounded-xl py-2 pl-9 pr-3 text-xs font-mono text-[var(--text-primary)] placeholder-[var(--text-tertiary)] outline-none transition-all"
           />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-200"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+        </div>
+
+        {/* Knowledge Tree List Container */}
+        <div className="space-y-2 max-h-[550px] overflow-y-auto pr-1 scrollbar-thin">
+          {filteredTree.length === 0 ? (
+            <div className="py-8 text-center text-xs font-mono text-[var(--text-tertiary)]">
+              No matching knowledge nodes found.
+            </div>
+          ) : (
+            filteredTree.map((folder: CategoryFolder) => (
+              <TreeNode
+                key={folder.id}
+                node={folder}
+                isFolder={true}
+                expandedFolders={expandedFolders}
+                selectedTechId={selectedTechId}
+                onToggleFolder={handleToggleFolder}
+                onSelectTech={onSelectTech}
+              />
+            ))
           )}
         </div>
+
       </div>
 
-      {/* Tree Content Area */}
-      <div className="p-3 space-y-1 overflow-y-auto max-h-[500px] md:max-h-[620px] scrollbar-thin">
-        {KNOWLEDGE_TREE_DATA.map((folder) => (
-          <CategoryNodeItem
-            key={folder.id}
-            folder={folder}
-            isExpanded={expandedFolders.has(folder.id)}
-            onToggleExpand={toggleExpand}
-            selectedTechId={selectedTechId}
-            onSelectTech={onSelectTech}
-            searchQuery={searchQuery}
-          />
-        ))}
-      </div>
-
-      {/* Tree Footer */}
-      <div className="p-3 border-t border-[var(--border-primary)] bg-neutral-950/90 text-[10px] font-mono text-neutral-500 flex items-center justify-between">
-        <span>OBSIDIAN GRAPH // V2.6</span>
-        <span className="flex items-center gap-1 text-emerald-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> INDEXED
-        </span>
+      {/* Footer Info */}
+      <div className="pt-3 border-t border-[var(--border-primary)] flex items-center justify-between text-[10px] font-mono text-[var(--text-tertiary)]">
+        <span>OBSIDIAN_FORMAT_V2</span>
+        <span>{KNOWLEDGE_TREE_DATA.length} CATEGORIES</span>
       </div>
     </div>
   );
-};
+});
+
+KnowledgeTree.displayName = 'KnowledgeTree';

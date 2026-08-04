@@ -28,15 +28,15 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
   if (!tech) {
     return (
-      <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-8 bg-neutral-950/60 rounded-2xl border border-[var(--border-primary)] text-center space-y-4 font-sans">
-        <div className="p-4 rounded-2xl bg-neutral-900/60 border border-neutral-850 text-cyan-400">
+      <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-8 bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] text-center space-y-4 font-sans glass-panel">
+        <div className="p-4 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-[var(--text-accent)]">
           <BookOpen className="w-8 h-8" />
         </div>
         <div className="space-y-1 max-w-sm">
-          <h3 className="text-lg font-display font-semibold text-neutral-200">
+          <h3 className="text-lg font-display font-semibold text-[var(--text-primary)]">
             No Technology Selected
           </h3>
-          <p className="text-xs text-neutral-400 font-light">
+          <p className="text-xs text-[var(--text-secondary)] font-light">
             Select any technology from the knowledge tree on the left to inspect architectural details, usage, key concepts, and code snippets.
           </p>
         </div>
@@ -50,7 +50,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
     setTimeout(() => setHasCopied(false), 2000);
   };
 
-  // Find connected technology objects for relatedTech
   const relatedTechNodes = KNOWLEDGE_TREE_DATA.flatMap((f) => f.items).filter((node) =>
     tech.relatedTech.includes(node.id)
   );
@@ -63,74 +62,74 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="h-full bg-neutral-950/90 rounded-2xl border border-[var(--border-primary)] p-5 md:p-8 space-y-6 shadow-2xl flex flex-col justify-between overflow-hidden font-sans"
+        className="h-full bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] p-5 md:p-8 space-y-6 shadow-2xl flex flex-col justify-between overflow-hidden font-sans glass-card"
       >
         <div className="space-y-6">
           
           {/* Header & Category Breadcrumb */}
           <div className="space-y-3 border-b border-[var(--border-primary)] pb-5">
-            <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
+            <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-gold)]">
               <span>AI Engineering</span>
               <span>&gt;</span>
               <span>{tech.categoryName}</span>
               <span>&gt;</span>
-              <span className="text-neutral-200 font-semibold">{tech.name}</span>
+              <span className="text-[var(--text-primary)] font-semibold">{tech.name}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+                <div className="p-3 rounded-2xl bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)]">
                   <TechIcon name={tech.name} className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-display font-bold text-text-primary tracking-tight">
+                  <h3 className="text-2xl md:text-3xl font-display font-bold text-[var(--text-primary)] tracking-tight">
                     {tech.name}
                   </h3>
-                  <p className="text-xs text-text-tertiary font-mono">
-                    Node ID: <span className="text-cyan-400">#{tech.id}</span>
+                  <p className="text-xs text-[var(--text-tertiary)] font-mono">
+                    Node ID: <span className="text-[var(--text-accent)]">#{tech.id}</span>
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-xs font-semibold">
+                <span className="px-3 py-1 rounded-full bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)] font-mono text-xs font-semibold">
                   {tech.level}
                 </span>
-                <span className="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-400 font-mono text-xs">
+                <span className="px-3 py-1 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-gold)] text-[var(--text-gold)] font-mono text-xs font-semibold">
                   {tech.years}
                 </span>
               </div>
             </div>
 
-            <p className="text-xs md:text-sm text-text-secondary leading-relaxed font-light">
+            <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed font-light">
               {tech.description}
             </p>
           </div>
 
           {/* WHAT I USE IT FOR */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-cyan-400">
-              <Zap className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-gold)] font-semibold">
+              <Zap className="w-3.5 h-3.5 text-[var(--text-gold)]" />
               <span>What I Use It For</span>
             </div>
-            <div className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-850 text-xs md:text-sm text-neutral-200 leading-relaxed font-light">
+            <div className="p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-xs md:text-sm text-[var(--text-primary)] leading-relaxed font-light">
               {tech.usage}
             </div>
           </div>
 
           {/* KEY CONCEPTS */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
-              <FileText className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
+              <FileText className="w-3.5 h-3.5 text-[var(--text-accent)]" />
               <span>Key Concepts & Capabilities</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {tech.keyConcepts.map((concept, i) => (
                 <span
                   key={i}
-                  className="px-2.5 py-1 rounded-md bg-neutral-900 border border-neutral-800 text-xs font-mono text-neutral-300 flex items-center gap-1.5"
+                  className="px-2.5 py-1 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-secondary)] flex items-center gap-1.5"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-accent)]" />
                   {concept}
                 </span>
               ))}
@@ -140,19 +139,19 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           {/* CODE SNIPPET BOX */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
-                <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
+                <Code2 className="w-3.5 h-3.5 text-[var(--text-accent)]" />
                 <span>Example Implementation Snippet</span>
               </div>
 
               <button
                 onClick={handleCopySnippet}
-                className="px-2.5 py-1 rounded bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-[11px] font-mono text-neutral-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded bg-[var(--bg-tertiary)] hover:bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[11px] font-mono text-[var(--text-secondary)] flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 {hasCopied ? (
                   <>
-                    <Check className="w-3 h-3 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
+                    <Check className="w-3 h-3 text-emerald-500" />
+                    <span className="text-emerald-500">Copied</span>
                   </>
                 ) : (
                   <>
@@ -163,7 +162,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
               </button>
             </div>
 
-            <div className="relative rounded-xl bg-neutral-950 border border-neutral-850 p-4 font-mono text-xs overflow-x-auto text-neutral-300 scrollbar-thin">
+            <div className="relative rounded-xl bg-[var(--bg-code)] border border-[var(--border-primary)] p-4 font-mono text-xs overflow-x-auto text-[var(--text-primary)] scrollbar-thin">
               <pre className="leading-relaxed whitespace-pre font-mono text-[11px] md:text-xs">
                 <code>{tech.codeSnippet}</code>
               </pre>
@@ -172,17 +171,17 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
           {/* INTEGRATED PROJECTS */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
-              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[var(--text-accent)]" />
               <span>Integrated Systems & Projects</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {tech.projects.map((proj, i) => (
                 <span
                   key={i}
-                  className="px-3 py-1.5 rounded-lg bg-neutral-900/80 border border-neutral-800 text-xs font-mono text-cyan-300 flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-accent)] flex items-center gap-1.5"
                 >
-                  <GitBranch className="w-3.5 h-3.5 text-cyan-400" />
+                  <GitBranch className="w-3.5 h-3.5 text-[var(--text-accent)]" />
                   {proj}
                 </span>
               ))}
@@ -192,8 +191,8 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           {/* RELATED TECHNOLOGIES */}
           {relatedTechNodes.length > 0 && (
             <div className="space-y-2 pt-2 border-t border-[var(--border-primary)]">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
-                <GitBranch className="w-3.5 h-3.5 text-cyan-400" />
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
+                <GitBranch className="w-3.5 h-3.5 text-[var(--text-accent)]" />
                 <span>Related Knowledge Nodes</span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -201,9 +200,9 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                   <button
                     key={rel.id}
                     onClick={() => onSelectTechById(rel.id)}
-                    className="px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-xs font-mono text-neutral-300 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-[var(--bg-tertiary)] hover:bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-accent)] flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <TechIcon name={rel.name} className="w-3.5 h-3.5 text-cyan-400" />
+                    <TechIcon name={rel.name} className="w-3.5 h-3.5 text-[var(--text-accent)]" />
                     <span>{rel.name}</span>
                   </button>
                 ))}
@@ -213,8 +212,8 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
           {/* CERTIFICATIONS (IF APPLICABLE) */}
           {tech.certifications && (
-            <div className="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center gap-3 text-xs font-mono text-cyan-300">
-              <Award className="w-5 h-5 shrink-0 text-cyan-400" />
+            <div className="p-3.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-gold)] flex items-center gap-3 text-xs font-mono text-[var(--text-gold)] font-semibold">
+              <Award className="w-5 h-5 shrink-0 text-[var(--text-gold)]" />
               <div>
                 <span className="block font-semibold">Accreditation Verified</span>
                 <span>{tech.certifications}</span>
@@ -225,14 +224,14 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         </div>
 
         {/* Footer Links */}
-        <div className="pt-4 mt-4 border-t border-[var(--border-primary)] flex items-center justify-between text-xs font-mono text-neutral-500">
+        <div className="pt-4 mt-4 border-t border-[var(--border-primary)] flex items-center justify-between text-xs font-mono text-[var(--text-tertiary)]">
           <span>STATUS // PRODUCTION READY</span>
           {tech.github && (
             <a
               href={tech.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-cyan-400 hover:underline flex items-center gap-1.5"
+              className="text-[var(--text-accent)] hover:underline flex items-center gap-1.5"
             >
               <span>GitHub Repository</span>
               <ExternalLink className="w-3.5 h-3.5" />

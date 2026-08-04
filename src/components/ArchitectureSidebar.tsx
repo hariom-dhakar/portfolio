@@ -1,153 +1,108 @@
-import React from 'react';
+import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { ProjectData } from '../data/projectsData';
+import { Layers, Activity, GitBranch } from 'lucide-react';
+import { type ProjectData } from '../data/projectsData';
 
 interface ArchitectureSidebarProps {
   selectedProject: ProjectData;
   activeStepIndex: number;
 }
 
-export const ArchitectureSidebar: React.FC<ArchitectureSidebarProps> = ({
-  selectedProject,
-  activeStepIndex,
-}) => {
-  const steps = selectedProject.architecture;
+export const ArchitectureSidebar = memo(({ selectedProject, activeStepIndex }: ArchitectureSidebarProps) => {
+  const currentStep = selectedProject.architecture[activeStepIndex] || selectedProject.architecture[0];
+  const StepIcon = currentStep.icon;
 
   return (
-    <div className="w-full flex flex-col gap-4 p-5 glass-panel rounded-2xl border border-[var(--border-primary)] shadow-2xl relative overflow-hidden">
-      {/* Glow Backdrop */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
-
-      {/* Header */}
-      <div className="flex flex-col gap-1 border-b border-[var(--border-primary)] pb-3">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-400/80 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            Live Pipeline
-          </span>
-          <span className="font-mono text-[10px] text-neutral-500">
-            {activeStepIndex + 1}/{steps.length}
+    <div className="glass-card p-5 rounded-2xl border border-[var(--border-primary)] space-y-5 relative overflow-hidden font-sans">
+      
+      {/* Sidebar Header */}
+      <div className="border-b border-[var(--border-primary)] pb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Layers className="w-4 h-4 text-[var(--text-accent)]" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">
+            Execution Pipeline
           </span>
         </div>
-        <h3 className="font-display text-sm font-semibold text-text-primary tracking-tight truncate">
-          {selectedProject.title}
-        </h3>
+        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-primary)] font-mono text-[10px] text-[var(--text-accent)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          LIVE
+        </span>
       </div>
 
-      {/* Dynamic Animated Node Chain */}
+      {/* Selected Active Architecture Component Highlight Box */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={selectedProject.id}
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 10 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }}
-          className="flex flex-col relative py-1"
+          key={currentStep.id}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.2 }}
+          className="p-4 rounded-xl bg-[var(--brand-glow)] border border-[var(--border-glow)] space-y-2.5"
         >
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
-            const isCompleted = activeStepIndex >= idx;
-            const isActive = activeStepIndex === idx;
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[10px] text-[var(--text-accent)] uppercase tracking-wider font-semibold">
+              ACTIVE NODE // STEP 0{activeStepIndex + 1}
+            </span>
+            <div className="p-1.5 rounded-lg bg-[var(--bg-tertiary)] text-[var(--text-accent)] border border-[var(--border-glow)]">
+              <StepIcon className="w-4 h-4" />
+            </div>
+          </div>
+          
+          <h4 className="font-display font-bold text-base text-[var(--text-primary)] leading-tight">
+            {currentStep.title}
+          </h4>
 
-            return (
-              <div
-                key={step.id}
-                className="flex items-start gap-3.5 relative min-h-[48px] py-1 transition-all duration-300"
-              >
-                {/* Connector Line to Next Node */}
-                {idx < steps.length - 1 && (
-                  <div className="absolute left-[15px] top-[30px] w-[2px] h-[calc(100%-12px)] bg-neutral-850">
-                    <motion.div
-                      className="absolute top-0 left-0 right-0 bg-cyan-400 shadow-[0_0_8px_#06b6d4]"
-                      initial={{ height: 0 }}
-                      animate={{ height: activeStepIndex > idx ? '100%' : '0%' }}
-                      transition={{ duration: 0.35, ease: 'easeInOut' as const }}
-                    />
-                    {/* Traveling Light Dot */}
-                    {activeStepIndex === idx + 1 && (
-                      <motion.div
-                        className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_#fff]"
-                        animate={{ top: ['0%', '100%'] }}
-                        transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' as const }}
-                      />
-                    )}
-                  </div>
-                )}
+          <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed">
+            {currentStep.description}
+          </p>
 
-                {/* Node Circle */}
-                <div className="relative z-10 flex items-center justify-center w-8 h-8 shrink-0">
-                  <motion.div
-                    animate={{
-                      borderColor: isActive
-                        ? 'rgba(34, 211, 238, 1)'
-                        : isCompleted
-                          ? 'rgba(34, 211, 238, 0.45)'
-                          : 'rgba(255, 255, 255, 0.08)',
-                      scale: isActive ? 1.08 : 1,
-                    }}
-                    className={`w-8 h-8 rounded-lg border bg-neutral-950 flex items-center justify-center relative transition-all duration-300 ${
-                      isActive
-                        ? 'shadow-[0_0_14px_rgba(34,211,238,0.3)] bg-neutral-900'
-                        : isCompleted
-                          ? 'bg-neutral-950'
-                          : 'bg-neutral-950/60'
-                    }`}
-                  >
-                    {/* Active Pulsing Ring */}
-                    {isActive && (
-                      <motion.div
-                        className="absolute -inset-1 rounded-xl border border-cyan-400/40"
-                        animate={{ scale: [0.95, 1.15, 0.95], opacity: [0.3, 0.8, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' as const }}
-                      />
-                    )}
-
-                    <Icon
-                      className={`w-3.5 h-3.5 transition-colors duration-300 ${
-                        isActive
-                          ? 'text-cyan-300'
-                          : isCompleted
-                            ? 'text-cyan-400/80'
-                            : 'text-neutral-600'
-                      }`}
-                    />
-                  </motion.div>
-                </div>
-
-                {/* Step Metadata */}
-                <motion.div
-                  animate={{
-                    opacity: isCompleted ? 1 : 0.4,
-                    x: isActive ? 3 : 0,
-                  }}
-                  className="flex flex-col min-w-0 pt-0.5"
-                >
-                  <span
-                    className={`text-xs font-mono tracking-tight truncate transition-colors duration-300 ${
-                      isActive
-                        ? 'text-cyan-300 font-semibold'
-                        : isCompleted
-                          ? 'text-neutral-200 font-medium'
-                          : 'text-neutral-500'
-                    }`}
-                  >
-                    {step.title}
-                  </span>
-                  <span className="text-[10px] text-neutral-500 font-sans leading-tight line-clamp-1">
-                    {step.description}
-                  </span>
-                </motion.div>
-              </div>
-            );
-          })}
+          <div className="pt-2 border-t border-[var(--border-primary)]/40 flex items-center justify-between text-[10px] font-mono text-[var(--text-tertiary)]">
+            <span className="flex items-center gap-1">
+              <Activity className="w-3 h-3 text-[var(--text-accent)]" /> Latency: &lt;10ms
+            </span>
+            <span>Status: 200 OK</span>
+          </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Footer Info */}
-      <div className="pt-2 border-t border-[var(--border-primary)] flex items-center justify-between text-[10px] font-mono text-neutral-500">
-        <span>MODE // AGENTIC</span>
-        <span className="text-cyan-400/80 uppercase">{selectedProject.id}</span>
+      {/* Pipeline Node Step List */}
+      <div className="space-y-1.5">
+        <span className="font-mono text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider block mb-1">
+          Pipeline Sequence
+        </span>
+        {selectedProject.architecture.map((step, idx) => {
+          const isActive = idx === activeStepIndex;
+          const Icon = step.icon;
+          return (
+            <div
+              key={step.id}
+              className={`p-2.5 rounded-xl border flex items-center gap-3 transition-all duration-200 ${
+                isActive
+                  ? 'bg-[var(--bg-secondary)] border-[var(--border-glow)] text-[var(--text-primary)] shadow-sm'
+                  : 'bg-[var(--bg-secondary)]/40 border-[var(--border-primary)] text-[var(--text-tertiary)]'
+              }`}
+            >
+              <div className={`w-6 h-6 rounded-md flex items-center justify-center border text-xs font-mono shrink-0 ${
+                isActive ? 'bg-[var(--brand-glow)] border-[var(--border-glow)] text-[var(--text-accent)] font-bold' : 'bg-[var(--bg-tertiary)] border-[var(--border-primary)]'
+              }`}>
+                {idx + 1}
+              </div>
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[var(--text-accent)]' : 'opacity-60'}`} />
+                <span className={`text-xs truncate font-mono ${isActive ? 'font-semibold text-[var(--text-primary)]' : ''}`}>
+                  {step.title}
+                </span>
+              </div>
+              {isActive && (
+                <GitBranch className="w-3.5 h-3.5 text-[var(--text-accent)] shrink-0 animate-pulse" />
+              )}
+            </div>
+          );
+        })}
       </div>
+
     </div>
   );
-};
+});
+
+ArchitectureSidebar.displayName = 'ArchitectureSidebar';

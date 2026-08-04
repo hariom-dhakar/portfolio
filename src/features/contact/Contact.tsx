@@ -55,7 +55,7 @@ export const Contact = () => {
   return (
     <section 
       id="contact" 
-      className="py-16 md:py-24 bg-[var(--bg-primary)] relative flex items-center justify-center overflow-hidden border-t border-[var(--border-primary)]"
+      className="py-16 md:py-24 relative flex items-center justify-center overflow-hidden border-t border-[var(--border-primary)]"
       aria-label="Contact Section"
     >
       <motion.div
@@ -91,10 +91,10 @@ export const Contact = () => {
               target={link.href.startsWith('http') ? '_blank' : '_self'}
               rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
               aria-label={`${link.name}: ${link.value}`}
-              className="group p-4 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-secondary)]/40 hover:bg-[var(--bg-secondary)] hover:border-cyan-500/40 transition-all duration-300 flex flex-col gap-3 focus-visible:outline-2 focus-visible:outline-cyan-400"
+              className="group p-4 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-secondary)]/40 hover:bg-[var(--bg-secondary)] hover:border-[var(--border-glow)] transition-all duration-300 flex flex-col gap-3 focus-visible:outline-2 focus-visible:outline-cyan-400"
             >
               <div className="flex items-center justify-between text-[var(--text-tertiary)] group-hover:text-[var(--text-accent)] transition-colors">
-                <span className="p-2 rounded-lg bg-neutral-900 border border-neutral-800">
+                <span className="p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-primary)]">
                   {link.icon}
                 </span>
                 {link.href.startsWith('http') && (

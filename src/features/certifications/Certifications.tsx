@@ -13,27 +13,27 @@ export const Certifications = () => {
         initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
         animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 24, filter: 'blur(6px)' }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-        className="glass-card p-6 md:p-8 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8 border border-border-primary/60"
+        className="glass-card p-6 md:p-8 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8 border border-[var(--border-primary)]"
       >
         <div className="space-y-1">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-gold)] font-semibold">
             Verified Accreditation
           </span>
-          <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-text-primary">
+          <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-[var(--text-primary)]">
             Credentials & Certifications
           </h2>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3.5 group p-3 rounded-xl bg-neutral-950/60 border border-neutral-850 hover:border-cyan-500/40 transition-all">
-            <div className="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 group-hover:scale-105 transition-transform">
+          <div className="flex items-center gap-3.5 group p-3 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-gold)] hover:border-[var(--border-glow)] transition-all">
+            <div className="p-2.5 rounded-lg bg-[var(--bg-tertiary)] text-[var(--text-gold)] border border-[var(--border-gold)] group-hover:scale-105 transition-transform">
               <Award className="w-5 h-5" aria-hidden="true" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm md:text-base font-display font-semibold text-text-primary tracking-wide group-hover:text-cyan-300 transition-colors">
+              <span className="text-sm md:text-base font-display font-semibold text-[var(--text-primary)] tracking-wide group-hover:text-[var(--text-gold)] transition-colors">
                 Databricks Certified Generative AI Engineer Associate
               </span>
-              <span className="text-xs font-mono text-text-tertiary">
+              <span className="text-xs font-mono text-[var(--text-tertiary)]">
                 Issued 2025 • Industry Standard GenAI Certification
               </span>
             </div>

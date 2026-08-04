@@ -16,15 +16,15 @@ export default function App() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[var(--bg-primary)]">
-      {/* Global Canvas Background */}
+    <div className="relative min-h-screen overflow-x-hidden">
+      {/* Global Neural Network Background Canvas (z-0) */}
       <NeuralBackground />
 
-      {/* Navigation */}
+      {/* Navigation (z-50) */}
       <Navigation theme={theme} toggleTheme={toggleTheme} />
 
-      {/* Main Full-Width Content Flow */}
-      <main className="w-full">
+      {/* Main Full-Width Content Flow (z-10 above background canvas) */}
+      <main className="relative z-10 w-full">
         {/* Hero - Cinematic Intro */}
         <div id="hero">
           <Hero />
@@ -40,17 +40,17 @@ export default function App() {
           <Experience />
         </div>
 
-        {/* Projects - Dynamic Work Showcase with Local Sticky Architecture */}
+        {/* Projects - Dynamic Work Showcase */}
         <div id="projects">
           <Projects />
         </div>
 
-        {/* Skills - Tech Stack Constellation */}
+        {/* Skills - Obsidian Engineering Knowledge Base */}
         <div id="skills">
           <Skills />
         </div>
 
-        {/* Certifications - Minimal Credentials */}
+        {/* Certifications - Credentials */}
         <div id="certifications">
           <Certifications />
         </div>
