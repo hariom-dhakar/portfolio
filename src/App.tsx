@@ -4,7 +4,6 @@ import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
 import { NeuralBackground } from './features/background/NeuralBackground';
 import { Hero } from './features/hero/Hero';
-import AIPipeline from './features/pipeline/AIPipeline';
 import { About } from './features/about/About';
 import { Experience } from './features/experience/Experience';
 import { Projects } from './features/projects/Projects';
@@ -17,56 +16,51 @@ export default function App() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-hidden bg-[var(--bg-primary)]">
       {/* Global Canvas Background */}
       <NeuralBackground />
 
       {/* Navigation */}
       <Navigation theme={theme} toggleTheme={toggleTheme} />
 
-      {/* Main Content Flow */}
-      <main>
-        {/* Hero - Full viewport cinematic intro */}
+      {/* Main Full-Width Content Flow */}
+      <main className="w-full">
+        {/* Hero - Cinematic Intro */}
         <div id="hero">
           <Hero />
         </div>
 
-        {/* Pipeline - Sticky scroll AI pipeline storytelling */}
-        <div id="pipeline">
-          <AIPipeline />
-        </div>
-
-        {/* About - Metrics & typography */}
+        {/* About - Engineer Details & Metrics */}
         <div id="about">
           <About />
         </div>
 
-        {/* Experience - Deployment history */}
+        {/* Experience - Deployment History */}
         <div id="experience">
           <Experience />
         </div>
 
-        {/* Projects - Immersive full-width showcases */}
+        {/* Projects - Dynamic Work Showcase with Local Sticky Architecture */}
         <div id="projects">
           <Projects />
         </div>
 
-        {/* Skills - Typography constellation */}
+        {/* Skills - Tech Stack Constellation */}
         <div id="skills">
           <Skills />
         </div>
 
-        {/* Certifications - Minimal credentials */}
+        {/* Certifications - Minimal Credentials */}
         <div id="certifications">
           <Certifications />
         </div>
 
-        {/* Resume - Preview & Download */}
+        {/* Resume - Document Viewer */}
         <div id="resume">
           <ResumeViewer />
         </div>
 
-        {/* Contact - API endpoint dispatch */}
+        {/* Contact - Dispatch & Links */}
         <div id="contact">
           <Contact />
         </div>
