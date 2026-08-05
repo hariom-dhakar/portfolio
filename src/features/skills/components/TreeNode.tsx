@@ -146,23 +146,25 @@ export const TechFileItem = memo(({
   return (
     <button
       onClick={onSelect}
-      className={`w-full flex items-center justify-between py-1.5 px-3 rounded-lg text-left transition-all duration-200 cursor-pointer ${
+      className={`w-full flex items-center justify-between py-1 px-2.5 rounded-lg text-left transition-all duration-200 cursor-pointer ${
         isSelected
-          ? 'bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)] font-semibold shadow-sm'
+          ? 'bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)] font-semibold shadow-xs'
           : 'hover:bg-[var(--bg-secondary)] border border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
       }`}
     >
-      <div className="flex items-center gap-2.5 min-w-0">
-        <div className={`p-1 rounded ${isSelected ? 'text-[var(--text-accent)]' : 'text-[var(--text-tertiary)]'}`}>
+      <div className="flex items-center gap-2 min-w-0">
+        <div className={`p-0.5 rounded ${isSelected ? 'text-[var(--text-accent)]' : 'text-[var(--text-tertiary)]'}`}>
           <TechIcon name={tech.name} className="w-3.5 h-3.5" />
         </div>
-        <span className="text-xs font-mono truncate">{tech.name}.ts</span>
+        <span className="text-xs font-mono truncate">{tech.name}</span>
       </div>
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-1.5 shrink-0">
         {tech.certifications && <Shield className="w-3 h-3 text-[var(--text-gold)]" />}
-        <span className="text-[10px] font-mono text-[var(--text-tertiary)] opacity-80">
-          {tech.level}
-        </span>
+        {tech.projects && tech.projects.length > 0 && (
+          <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] border border-[var(--border-primary)]">
+            {tech.projects.length} proj
+          </span>
+        )}
       </div>
     </button>
   );
