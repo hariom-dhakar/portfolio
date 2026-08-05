@@ -9,7 +9,7 @@ export const ResumeViewer: React.FC = memo(() => {
   return (
     <section 
       id="resume" 
-      className="relative py-12 md:py-20 px-4 md:px-8 max-w-7xl mx-auto border-t border-[var(--border-primary)]"
+      className="relative py-12 md:py-20 px-6 max-w-[1000px] mx-auto border-t border-[var(--border-primary)]"
       aria-label="Resume Section"
     >
       <div className="max-w-4xl mx-auto relative z-10">

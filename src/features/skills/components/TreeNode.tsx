@@ -38,6 +38,21 @@ import {
   SiCplusplus,
   SiGithubactions
 } from 'react-icons/si';
+import {
+  OpenAILogo,
+  PythonLogo,
+  TypeScriptLogo,
+  ReactLogo,
+  FastAPILogo,
+  DockerLogo,
+  KubernetesLogo,
+  AzureLogo,
+  PyTorchLogo,
+  GitLogo,
+  PostgreSQLLogo,
+  RedisLogo,
+  DatabricksLogo
+} from '../../../components/icons/TechLogos';
 import { type CategoryFolder, type TechnologyNode } from '../../../data/knowledgeData';
 
 interface TreeNodeProps {
@@ -53,33 +68,35 @@ export const TechIcon = memo(({ name, className = "w-4 h-4" }: { name: string; c
   const lower = name.toLowerCase();
 
   // Exact Brand Icon Mappings
-  if (lower.includes('python')) return <SiPython className={className} />;
-  if (lower.includes('fastapi')) return <SiFastapi className={className} />;
+  if (lower.includes('python')) return <PythonLogo className={className} />;
+  if (lower.includes('fastapi')) return <FastAPILogo className={className} />;
   if (lower.includes('crewai')) return <Brain className={className} />;
   if (lower.includes('langchain')) return <SiLangchain className={className} />;
   if (lower.includes('langgraph')) return <Workflow className={className} />;
-  if (lower.includes('openai')) return <Sparkles className={className} />;
+  if (lower.includes('openai')) return <OpenAILogo className={className} />;
+  if (lower.includes('anthropic') || lower.includes('claude')) return <Sparkles className={className} />;
   if (lower.includes('gemini') || lower.includes('google')) return <SiGoogle className={className} />;
   if (lower.includes('huggingface') || lower.includes('transformers')) return <SiHuggingface className={className} />;
-  if (lower.includes('pytorch')) return <SiPytorch className={className} />;
+  if (lower.includes('pytorch')) return <PyTorchLogo className={className} />;
   if (lower.includes('tensorflow')) return <SiTensorflow className={className} />;
-  if (lower.includes('databricks')) return <SiDatabricks className={className} />;
-  if (lower.includes('azure')) return <Cloud className={className} />;
-  if (lower.includes('docker')) return <SiDocker className={className} />;
-  if (lower.includes('kubernetes')) return <SiKubernetes className={className} />;
-  if (lower.includes('postgres') || lower.includes('postgresql')) return <SiPostgresql className={className} />;
-  if (lower.includes('redis')) return <SiRedis className={className} />;
+  if (lower.includes('databricks')) return <DatabricksLogo className={className} />;
+  if (lower.includes('azure')) return <AzureLogo className={className} />;
+  if (lower.includes('docker')) return <DockerLogo className={className} />;
+  if (lower.includes('kubernetes')) return <KubernetesLogo className={className} />;
+  if (lower.includes('postgres') || lower.includes('postgresql')) return <PostgreSQLLogo className={className} />;
+  if (lower.includes('redis')) return <RedisLogo className={className} />;
   if (lower.includes('faiss')) return <SiMeta className={className} />;
   if (lower.includes('chroma')) return <Database className={className} />;
+  if (lower.includes('git') || lower.includes('github')) return <GitLogo className={className} />;
   if (lower.includes('pandas')) return <SiPandas className={className} />;
   if (lower.includes('numpy')) return <SiNumpy className={className} />;
   if (lower.includes('scikit')) return <SiScikitlearn className={className} />;
   if (lower.includes('mlflow')) return <SiMlflow className={className} />;
-  if (lower.includes('react')) return <SiReact className={className} />;
-  if (lower.includes('typescript')) return <SiTypescript className={className} />;
+  if (lower.includes('react')) return <ReactLogo className={className} />;
+  if (lower.includes('typescript')) return <TypeScriptLogo className={className} />;
   if (lower.includes('javascript')) return <SiJavascript className={className} />;
   if (lower.includes('c++') || lower.includes('cplusplus')) return <SiCplusplus className={className} />;
-  if (lower.includes('github') || lower.includes('actions')) return <SiGithubactions className={className} />;
+  if (lower.includes('actions')) return <SiGithubactions className={className} />;
   if (lower.includes('ragas') || lower.includes('rag')) return <Sparkles className={className} />;
   if (lower.includes('rest') || lower.includes('api')) return <Network className={className} />;
   if (lower.includes('backend') || lower.includes('microservices')) return <Server className={className} />;

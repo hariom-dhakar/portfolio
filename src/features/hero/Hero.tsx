@@ -23,13 +23,22 @@ export const Hero = memo(() => {
       {/* Radial gradient glow behind the main heading */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[45vw] h-[45vw] min-w-[300px] min-h-[300px] max-w-[600px] max-h-[600px] bg-brand-glow/20 rounded-full blur-[100px] md:blur-[140px] pointer-events-none -z-10" />
 
-      <div className="z-10 flex flex-col items-center text-center w-full max-w-5xl mx-auto space-y-6 md:space-y-8">
+      <div className="z-10 flex flex-col items-center text-center w-full max-w-[680px] mx-auto px-6 space-y-6 md:space-y-8">
         <m.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col items-center gap-4 w-full"
         >
+          {/* Live AI Systems Telemetry Indicator */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-tertiary)]/80 backdrop-blur-md border border-[var(--border-primary)] text-[10px] md:text-xs font-mono text-[var(--text-tertiary)] shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 -ml-4" />
+            <span className="text-[var(--text-primary)] font-semibold uppercase tracking-wider">AI Systems & Multi-Agent Engineer</span>
+            <span className="opacity-40">|</span>
+            <span>System Latency &lt;12ms</span>
+          </div>
+
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-text-primary to-text-secondary/60">
             Hariom Dhakar
           </h1>

@@ -7,7 +7,7 @@ export const Certifications = memo(() => {
   const isInView = useInView(containerRef, { once: true, margin: '-50px' });
 
   return (
-    <section id="certifications" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" aria-label="Credentials Section">
+    <section id="certifications" className="py-12 px-6 max-w-[1100px] mx-auto" aria-label="Credentials Section">
       <m.div
         ref={containerRef}
         initial={{ opacity: 0, y: 24 }}

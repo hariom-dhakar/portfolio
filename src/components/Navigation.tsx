@@ -146,7 +146,7 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
             : 'bg-transparent border-b border-transparent py-5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-[1180px] mx-auto px-6 flex items-center justify-between">
           {/* Brand Name */}
           <button
             onClick={() => handleNavClick('hero')}

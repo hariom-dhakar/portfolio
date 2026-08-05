@@ -4,7 +4,7 @@ import { m } from 'framer-motion';
 export const Footer = memo(() => {
   return (
     <footer className="relative w-full py-8 px-6 border-t border-[var(--border-primary)]/40">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1180px] mx-auto px-6">
         <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -21,7 +21,7 @@ export const Footer = memo(() => {
           </p>
 
           <p className="text-[10px] md:text-xs text-[var(--text-tertiary)]/60 font-mono">
-            © {new Date().getFullYear()} • Agentic AI & Systems Engineering
+            © {new Date().getFullYear()} • Agentic AI Engineer
           </p>
         </m.div>
       </div>

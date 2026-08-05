@@ -63,7 +63,7 @@ export const Contact = memo(() => {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="max-w-5xl mx-auto px-6 w-full flex flex-col items-start space-y-10"
+        className="max-w-[900px] mx-auto px-6 w-full flex flex-col items-start space-y-10"
       >
         <div className="space-y-3 max-w-2xl">
           <m.h2 

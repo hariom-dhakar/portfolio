@@ -35,7 +35,7 @@ export const Skills: React.FC = memo(() => {
       className="relative w-full py-16 md:py-24 px-4 md:px-8 border-t border-[var(--border-primary)] overflow-hidden"
       aria-label="Engineering Skills Section"
     >
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-[1100px] mx-auto px-6 space-y-8">
         
         {/* Section Top Header with Prominent View Toggle */}
         <m.div

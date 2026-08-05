@@ -30,7 +30,7 @@ export const Experience = memo(() => {
   return (
     <section 
       id="experience" 
-      className="py-16 md:py-24 px-4 md:px-8 max-w-6xl mx-auto border-t border-[var(--border-primary)]"
+      className="py-16 md:py-24 px-6 max-w-[1100px] mx-auto border-t border-[var(--border-primary)]"
       aria-label="Experience Section"
     >
       <m.div

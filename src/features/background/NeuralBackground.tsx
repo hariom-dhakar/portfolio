@@ -9,6 +9,227 @@ interface Particle {
   baseAlpha: number;
 }
 
+interface FloatingFormula {
+  text: string;
+  x: number;
+  y: number;
+  vy: number;
+  alpha: number;
+  size: number;
+}
+
+const MATH_SYMBOLS = [
+  // Transformer / Attention
+  'QKᵀ / √dₖ',
+  'Softmax(QKᵀ)V',
+  'Attention(Q,K,V)',
+  'MultiHead(Q,K,V)',
+  'SelfAttention(x)',
+  'CrossAttention(x)',
+  'RoPE(x)',
+  'KV Cache',
+  'Top-k Sampling',
+  'Top-p = 0.95',
+  'Temperature = 0.7',
+
+  // Embeddings
+  'Embedding(x)',
+  'e ∈ ℝ⁷⁶⁸',
+  '||x||₂',
+  'L2 Norm',
+  'CosineSim(A,B)',
+  'cos(θ)',
+  'ANN Search',
+  'HNSW',
+  'FAISS',
+  'ChromaDB',
+  'Pinecone',
+  'Vector → ℝ¹⁵³⁶',
+
+  // LLM / NLP
+  'P(y|x)',
+  'argmax P(y|x)',
+  'Token → Embedding',
+  'Next Token',
+  'BPE',
+  'SentencePiece',
+  'Prompt → Context',
+  'Context Window',
+  'RAG',
+  'Self-RAG',
+  'LangGraph(G,S)',
+  'CrewAI',
+  'Agent → Tool',
+  'Reflection Loop',
+  'Tool Calling',
+
+  // Probability
+  'P(A|B)',
+  'P(A∩B)',
+  'P(X=x)',
+  'P(θ|D)',
+  'Bayes Rule',
+  'E[X]',
+  'E[X|Y]',
+  'Var(X)',
+  'Cov(X,Y)',
+  'σ²',
+  'μ',
+  'π(x)',
+  'N(μ,σ²)',
+  'Bernoulli(p)',
+  'Binomial(n,p)',
+  'Poisson(λ)',
+  '𝓝(0,1)',
+
+  // Statistics
+  'R²',
+  'MAE',
+  'MSE',
+  'RMSE',
+  'Cross Validation',
+  'AUC',
+  'ROC',
+  'Precision',
+  'Recall',
+  'F1 Score',
+  'Confusion Matrix',
+  'p ≤ 0.05',
+  '95% CI',
+
+  // Optimization
+  '∇L(θ)',
+  '∂L/∂W',
+  'θ ← θ − η∇L',
+  'AdamW',
+  'SGD',
+  'Learning Rate',
+  'η = 0.001',
+  'Weight Decay',
+  'Momentum',
+  'Backprop',
+  'Gradient Clip',
+
+  // Loss Functions
+  'Loss = ||y−ŷ||²',
+  'CrossEntropy',
+  'Binary CE',
+  'KL Divergence',
+  'Huber Loss',
+  'Triplet Loss',
+  'Contrastive Loss',
+  'InfoNCE',
+  'Perplexity',
+  'BLEU',
+  'ROUGE',
+  'BERTScore',
+
+  // Neural Networks
+  'ReLU(Wx+b)',
+  'GELU(x)',
+  'SiLU(x)',
+  'LayerNorm',
+  'BatchNorm',
+  'Dropout',
+  'Residual(x)',
+  'MLP',
+  'FFN',
+  'Dense(768)',
+  'Conv2D',
+  'LSTM',
+  'GRU',
+
+  // Linear Algebra
+  'Ax = b',
+  'A⁻¹',
+  'Aᵀ',
+  'AᵀA',
+  'det(A)',
+  'rank(A)',
+  'λ',
+  'Eigenvector',
+  'SVD',
+  'PCA',
+  'QR',
+  'ℝⁿ',
+  'x ∈ ℝᵈ',
+  'W ∈ ℝ⁷⁶⁸ˣ⁷⁶⁸',
+  'v · w',
+  'x⊗y',
+  '||A||F',
+
+  // Deep Learning
+  'Epoch 42',
+  'Batch = 64',
+  'FP16',
+  'BF16',
+  'CUDA',
+  'Mixed Precision',
+  'Inference',
+  'Fine-Tuning',
+  'LoRA',
+  'QLoRA',
+  'PEFT',
+  'Checkpoint',
+
+  // Retrieval
+  'Semantic Search',
+  'Hybrid Search',
+  'BM25',
+  'Dense Retrieval',
+  'Sparse Retrieval',
+  'Chunk Size = 512',
+  'Retriever',
+  'Re-ranker',
+  'MMR',
+  'k = 5',
+
+  // Agentic AI
+  'Planner',
+  'Executor',
+  'Critic',
+  'Reflect',
+  'Memory',
+  'Tool Use',
+  'Workflow DAG',
+  'State Machine',
+  'Agent Loop',
+  'Decision Node',
+  'Execution Trace',
+
+  // Cloud / MLOps
+  'MLflow',
+  'Databricks',
+  'Unity Catalog',
+  'Delta Lake',
+  'Azure OpenAI',
+  'Azure ML',
+  'OpenTelemetry',
+  'Inference API',
+  'Serving Endpoint',
+  'Docker',
+  'Kubernetes',
+  'GPU Cluster',
+
+  // Misc Math
+  'Σ',
+  'Π',
+  '∀x',
+  '∃x',
+  'lim x→∞',
+  '∫f(x)dx',
+  '∑ᵢ',
+  '√Σ',
+  '∂',
+  '∞',
+  '⊕',
+  '⊗',
+  '≈',
+  '≠',
+  '≤',
+  '≥',
+];
+
 export const NeuralBackground: React.FC = memo(() => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -28,11 +249,12 @@ export const NeuralBackground: React.FC = memo(() => {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
+    let formulas: FloatingFormula[] = [];
     let isTabVisible = true;
     let isIntersecting = true;
 
-    let particleCount = 70;
-    let maxDistance = 135;
+    let particleCount = 120;
+    let maxDistance = 105;
     let maxDistanceSq = maxDistance * maxDistance;
     const mousePullDistSq = 160 * 160;
 
@@ -49,7 +271,7 @@ export const NeuralBackground: React.FC = memo(() => {
       if (!offCtx) return;
 
       offCtx.clearRect(0, 0, canvas.width, canvas.height);
-      const gridDotColor = isLight ? 'rgba(19, 94, 84, 0.15)' : 'rgba(191, 161, 129, 0.06)';
+      const gridDotColor = isLight ? 'rgba(19, 94, 84, 0.15)' : 'rgba(255, 255, 255, 0.07)';
       const gridSize = 50;
       offCtx.fillStyle = gridDotColor;
       for (let x = 0; x < canvas.width; x += gridSize) {
@@ -67,17 +289,18 @@ export const NeuralBackground: React.FC = memo(() => {
       canvas.height = window.innerHeight;
 
       if (window.innerWidth < 768) {
-        particleCount = 30;
-        maxDistance = 85;
+        particleCount = 50;
+        maxDistance = 75;
       } else {
-        particleCount = 70;
-        maxDistance = 135;
+        particleCount = 130;
+        maxDistance = 105;
       }
       maxDistanceSq = maxDistance * maxDistance;
 
       const isLight = document.documentElement.classList.contains('light');
       renderOffscreenGrid(isLight);
       initParticles();
+      initFormulas();
     };
 
     const initParticles = () => {
@@ -86,15 +309,29 @@ export const NeuralBackground: React.FC = memo(() => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.28,
-          vy: (Math.random() - 0.5) * 0.28,
+          vx: (Math.random() - 0.5) * 0.38,
+          vy: (Math.random() - 0.5) * 0.38,
           radius: Math.random() * 1.6 + 1.1,
-          baseAlpha: Math.random() * 0.35 + 0.35,
+          baseAlpha: Math.random() * 0.35 + 0.15,
         });
       }
     };
 
-    // Throttle mousemove events via RAF
+    const initFormulas = () => {
+      formulas = [];
+      const formulaCount = window.innerWidth < 768 ? 4 : 8;
+      for (let i = 0; i < formulaCount; i++) {
+        formulas.push({
+          text: MATH_SYMBOLS[i % MATH_SYMBOLS.length],
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vy: -0.25 - Math.random() * 0.25,
+          alpha: 0.20 + Math.random() * 0.25,
+          size: Math.floor(10 + Math.random() * 3),
+        });
+      }
+    };
+
     let mouseTicking = false;
     const handleMouseMove = (e: MouseEvent) => {
       if (!mouseTicking) {
@@ -126,7 +363,6 @@ export const NeuralBackground: React.FC = memo(() => {
       }
     };
 
-    // Pause RAF when canvas is scrolled off-screen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isIntersecting = entry.isIntersecting;
@@ -150,8 +386,8 @@ export const NeuralBackground: React.FC = memo(() => {
       if (!isTabVisible || !isIntersecting) return;
 
       const mouse = mouseRef.current;
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      mouse.x += (mouse.targetX - mouse.x) * 0.18;
+      mouse.y += (mouse.targetY - mouse.y) * 0.18;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -160,15 +396,30 @@ export const NeuralBackground: React.FC = memo(() => {
         renderOffscreenGrid(isLight);
       }
 
-      // 1. Draw Technical Grid Dots from Offscreen Canvas Cache
+      // 1. Draw Technical Grid Dots
       if (offscreenGridCanvas) {
         ctx.drawImage(offscreenGridCanvas, 0, 0);
       }
       
-      const baseColor = isLight ? '108, 158, 190' : '23, 133, 130';
-      const activeColor = isLight ? '126, 113, 244' : '105, 90, 202';
+      const baseColor = isLight ? '108, 158, 190' : '200, 200, 200';
+      const activeColor = isLight ? '126, 113, 244' : '20, 227, 216';
+      const formulaColor = isLight ? 'rgba(30, 41, 59,' : 'rgba(225, 225, 225,';
 
-      // 2. Draw Interactive Mouse Radial Spotlight
+      // 2. Draw Subtle Drifting Floating Math Formulas & Engineering Symbols
+      ctx.font = '11px monospace';
+      for (let k = 0; k < formulas.length; k++) {
+        const f = formulas[k];
+        f.y += f.vy;
+        if (f.y < -30) {
+          f.y = canvas.height + 20;
+          f.x = Math.random() * canvas.width;
+        }
+
+        ctx.fillStyle = `${formulaColor}${f.alpha})`;
+        ctx.fillText(f.text, f.x, f.y);
+      }
+
+      // 3. Draw Interactive Mouse Radial Spotlight
       if (mouse.x > 0 && mouse.y > 0) {
         const spotlightRadius = 450;
         const grad = ctx.createRadialGradient(
@@ -187,7 +438,7 @@ export const NeuralBackground: React.FC = memo(() => {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
-      // 3. Render Particles & Connectors (With pre-squared thresholding)
+      // 4. Render Particles & Neural Mesh Connectors
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
@@ -215,17 +466,17 @@ export const NeuralBackground: React.FC = memo(() => {
             p.x -= (dx / dist) * force * 1.2;
             p.y -= (dy / dist) * force * 1.2;
 
-            const alpha = (1 - dist / 160) * 0.48;
+            const alpha = (1 - dist / 160) * 0.8;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(mouse.x, mouse.y);
             ctx.strokeStyle = `rgba(${activeColor}, ${alpha})`;
-            ctx.lineWidth = 0.85;
+            ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
 
-        // Inter-particle connection lines (Pre-squared check skips expensive Math.sqrt calls)
+        // Inter-particle connection lines
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -272,10 +523,10 @@ export const NeuralBackground: React.FC = memo(() => {
         aria-hidden="true"
       />
 
-      {/* Ambient Drifting Aura Blobs - Scaled blur on mobile for GPU fill-rate efficiency */}
-      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-[#FF78AC]/10 rounded-full blur-[80px] md:blur-[140px] pointer-events-none animate-pulse-slow" />
-      <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-[#A8D5E3]/18 rounded-full blur-[80px] md:blur-[150px] pointer-events-none animate-pulse-slow" />
-      <div className="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-[#FF78AC]/8 rounded-full blur-[90px] md:blur-[160px] pointer-events-none" />
+      {/* Ambient Drifting Aura Blobs */}
+      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-[#14E3D8]/5 rounded-full blur-[100px] md:blur-[160px] pointer-events-none animate-pulse-slow" />
+      <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-[#14E3D8]/6 rounded-full blur-[100px] md:blur-[160px] pointer-events-none animate-pulse-slow" />
+      <div className="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-[#14E3D8]/4 rounded-full blur-[100px] md:blur-[160px] pointer-events-none" />
 
       {/* Subtle Noise Texture Overlay */}
       <svg className="absolute inset-0 w-full h-full opacity-[0.03] mix-blend-overlay pointer-events-none" aria-hidden="true">
