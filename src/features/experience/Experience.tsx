@@ -73,7 +73,7 @@ export const Experience = memo(() => {
             </m.span>
 
             <m.h2 variants={itemVariants} className="section-title">
-              Deployment History
+              Experiences
             </m.h2>
 
             <m.p variants={itemVariants} className="section-description">
@@ -91,7 +91,7 @@ export const Experience = memo(() => {
               <div className="flex flex-col md:flex-row md:items-center gap-4">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-mono text-[10px] tracking-wider border border-emerald-500/20 uppercase w-fit font-bold">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Active Deployment
+                  Current
                 </span>
 
                 <div>
