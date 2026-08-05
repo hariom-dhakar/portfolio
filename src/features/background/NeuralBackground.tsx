@@ -278,8 +278,8 @@ export const NeuralBackground: React.FC = memo(() => {
       canvas.height = window.innerHeight;
 
       if (window.innerWidth < 768) {
-        particleCount = 50;
-        maxDistance = 75;
+        particleCount = 30;
+        maxDistance = 70;
       } else {
         particleCount = 130;
         maxDistance = 105;
