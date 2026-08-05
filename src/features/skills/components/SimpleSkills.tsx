@@ -49,7 +49,7 @@ SimpleSkills.displayName = 'SimpleSkills';
 
 const SkillCategoryCard = memo(({ category }: { category: CategoryFolder }) => {
   return (
-    <div className="glass-card p-6 rounded-2xl border border-[var(--border-primary)] space-y-4 shadow-lg hover:border-[var(--border-glow)] transition-all">
+    <div className="card-primary p-5 space-y-4">
       
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border-primary)]">
         <div className="flex items-center gap-2.5">

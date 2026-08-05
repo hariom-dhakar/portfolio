@@ -28,7 +28,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
   if (!tech) {
     return (
-      <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-8 bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] text-center space-y-4 font-sans glass-panel">
+      <div className="card-secondary h-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center space-y-4 font-sans">
         <div className="p-4 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-[var(--text-accent)]">
           <BookOpen className="w-8 h-8" />
         </div>
@@ -62,7 +62,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="h-full bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] p-5 md:p-8 space-y-6 shadow-2xl flex flex-col justify-between overflow-hidden font-sans glass-card"
+        className="card-primary h-full p-5 md:p-6 space-y-6 flex flex-col justify-between overflow-hidden font-sans"
       >
         <div className="space-y-6">
           

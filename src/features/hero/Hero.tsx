@@ -2,10 +2,10 @@ import { useState, useEffect, memo } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
-const FOCUS_TAGS = ['Agentic AI', 'LLMs', 'RAG', 'Azure AI', 'Production AI Systems'];
+const FOCUS_TAGS = ['Agentic Systems', 'Custom RAG', 'FastAPI Backends', 'LLM Guardrails'];
 const SUBTITLES = [
-  'Building production AI systems that retrieve, reason, and act.',
-  'I design production-ready AI systems—from document intelligence to autonomous agents.',
+  'Production-grade agentic systems.',
+  'High-performance document intelligence.',
 ];
 
 export const Hero = memo(() => {
@@ -21,31 +21,31 @@ export const Hero = memo(() => {
   return (
     <section 
       id="hero"
-      className="relative min-h-[80vh] md:min-h-[85vh] w-full flex flex-col items-center justify-center overflow-hidden bg-transparent px-4 md:px-8 py-12"
+      className="relative h-[75vh] min-h-[580px] max-h-[750px] w-full flex flex-col items-center justify-center overflow-hidden bg-transparent px-4 md:px-8 py-6"
       aria-label="Introduction"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[45vw] h-[45vw] min-w-[300px] min-h-[300px] max-w-[600px] max-h-[600px] bg-brand-glow/20 rounded-full blur-[100px] md:blur-[140px] pointer-events-none -z-10" />
 
-      <div className="z-10 flex flex-col items-center text-center w-full max-w-[760px] mx-auto px-6 space-y-6 md:space-y-8">
+      <div className="z-10 flex flex-col items-center text-center w-full max-w-[760px] mx-auto px-6 space-y-5 md:space-y-6">
         <m.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center gap-4 w-full"
+          className="flex flex-col items-center gap-3 w-full"
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-tertiary)]/80 backdrop-blur-md border border-[var(--border-primary)] text-[10px] md:text-xs font-mono text-[var(--text-tertiary)] shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="w-2 h-2 rounded-full bg-emerald-400 -ml-4" />
             <span className="text-[var(--text-primary)] font-semibold uppercase tracking-wider">AI Systems & Multi-Agent Engineer</span>
             <span className="opacity-40">|</span>
-            <span>System Latency &lt;12ms</span>
+            <span>Latency &lt;12ms</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-text-primary to-text-secondary/60">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-text-primary to-text-secondary/60">
             Hariom Dhakar
           </h1>
           
-          <div className="relative h-12 md:h-14 w-full flex items-center justify-center overflow-hidden">
+          <div className="relative h-10 md:h-12 w-full flex items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
               <m.span
                 key={SUBTITLES[currentSubtitleIndex]}
@@ -65,9 +65,9 @@ export const Hero = memo(() => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="text-sm sm:text-base md:text-lg text-[var(--text-secondary)] max-w-2xl font-light leading-relaxed"
+          className="text-xs sm:text-sm md:text-base text-[var(--text-secondary)] max-w-xl font-light leading-relaxed"
         >
-          Designing production-ready AI systems—from enterprise document intelligence & Self-RAG architectures to autonomous multi-agent teams.
+          Designing production-ready AI systems, document intelligence pipelines, and multi-agent workflows.
         </m.p>
 
         <m.div
@@ -79,7 +79,7 @@ export const Hero = memo(() => {
           {FOCUS_TAGS.map((tag) => (
             <span
               key={tag}
-              className="px-3 py-1 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-secondary)] shadow-xs"
+              className="px-3 py-1 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-[10px] md:text-xs font-mono text-[var(--text-secondary)] shadow-xs"
             >
               {tag}
             </span>
@@ -90,13 +90,13 @@ export const Hero = memo(() => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center gap-3.5 pt-2 w-full sm:w-auto"
+          className="flex flex-col sm:flex-row items-center gap-3 pt-2 w-full sm:w-auto"
         >
           <a 
             href="#projects" 
             className="btn-primary w-full sm:w-auto text-center justify-center focus-visible:outline-2 focus-visible:outline-cyan-400"
           >
-            Explore Work
+            Explore Projects
           </a>
           <a 
             href="#contact" 

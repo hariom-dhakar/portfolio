@@ -139,17 +139,125 @@ body {
   background: var(--text-tertiary);
 }
 
-@layer utilities {
-  .glass-panel {
+  .section-layout {
+    width: 100%;
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem; /* px-6 */
+    padding-right: 1.5rem; /* px-6 */
+    padding-top: 3.5rem; /* 56px */
+    padding-bottom: 3.5rem;
+  }
+  @media (min-width: 768px) {
+    .section-layout {
+      padding-top: 4.5rem; /* 72px */
+      padding-bottom: 4.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .section-layout {
+      padding-top: 6rem; /* 96px */
+      padding-bottom: 6rem;
+    }
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem; /* text-xs */
+    color: var(--text-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    margin-bottom: 0.375rem; /* 6px */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 2.25rem; /* text-3xl */
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 0.5rem; /* 8px */
+  }
+  @media (min-width: 768px) {
+    .section-title {
+      font-size: 3.5rem; /* text-5xl/6xl */
+    }
+  }
+
+  .section-description {
+    font-family: var(--font-sans);
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1.75rem; /* 28px */
+  }
+  @media (min-width: 768px) {
+    .section-description {
+      font-size: 1rem; /* text-base */
+    }
+  }
+
+  /* DESIGN SYSTEM - 3 CARD VARIANTS */
+  
+  /* 1. Primary Card (Solid elevated surface) */
+  .card-primary {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 1rem; /* 16px */
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-primary:hover {
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-card), var(--glow-effect);
+    transform: translateY(-2px) translateZ(0);
+  }
+
+  /* 2. Secondary Card (Inner / lighter surface) */
+  .card-secondary {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 1rem; /* 16px */
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-secondary:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-1px) translateZ(0);
+  }
+
+  /* 3. Glass Overlay (Translucent with heavy blur) */
+  .card-glass {
     background: var(--bg-glass);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border-primary);
+    border-radius: 1rem; /* 16px */
+    box-shadow: var(--shadow-card);
     transform: translateZ(0);
     backface-visibility: hidden;
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-glass:hover {
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-card), var(--glow-effect);
+    transform: translateY(-2px) translateZ(0);
   }
 
+  @media (max-width: 768px) {
+    .card-glass {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+  }
+
+  /* Compatibility mappings */
   .glass-card {
     background: var(--bg-glass);
     backdrop-filter: blur(16px);
@@ -159,35 +267,36 @@ body {
     box-shadow: var(--shadow-card);
     transform: translateZ(0);
     backface-visibility: hidden;
-    transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-
-  @media (max-width: 768px) {
-    .glass-panel,
-    .glass-card {
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-  }
-
   .glass-card:hover {
     border-color: var(--border-glow);
     box-shadow: var(--shadow-card), var(--glow-effect);
-    transform: translateY(-3px) translateZ(0);
+    transform: translateY(-2px) translateZ(0);
+  }
+  .glass-panel {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 1rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glass-panel:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-1px) translateZ(0);
   }
 
   .btn-primary {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.875rem 2rem;
+    padding: 0.75rem 1.75rem;
     border-radius: 9999px;
     font-weight: 600;
-    font-size: 0.9375rem;
-    background: #101010;
-    color: #FFFFFF;
-    border: 1px solid #242424;
-    transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+    font-size: 0.9rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
   }
 
@@ -195,35 +304,34 @@ body {
     border-color: var(--text-accent);
     color: var(--text-accent);
     box-shadow: 0 0 20px var(--text-accent-glow);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 
   .btn-ghost {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.875rem 2rem;
+    padding: 0.75rem 1.75rem;
     border-radius: 9999px;
     font-weight: 500;
-    font-size: 0.9375rem;
-    background: #090909;
-    color: #CFCFCF;
-    border: 1px solid #1F1F1F;
+    font-size: 0.9rem;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
   }
 
   .btn-ghost:hover {
     border-color: var(--border-glow);
-    color: #FFFFFF;
+    color: var(--text-primary);
     box-shadow: 0 0 20px var(--text-accent-glow);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 
   .glow-text-gold {
     color: var(--text-gold);
     text-shadow: 0 0 20px var(--text-gold-glow);
   }
-}

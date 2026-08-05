@@ -32,7 +32,7 @@ export const EngineeringPhilosophy = memo(() => {
   return (
     <section
       id="philosophy"
-      className="py-16 md:py-24 px-6 max-w-[1000px] mx-auto border-t border-[var(--border-primary)]"
+      className="border-t border-[var(--border-primary)]"
       aria-label="Engineering Philosophy Section"
     >
       <m.div
@@ -40,17 +40,15 @@ export const EngineeringPhilosophy = memo(() => {
         initial={{ opacity: 0, y: 24 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="space-y-8"
+        className="section-layout space-y-8"
       >
         <div className="space-y-3 max-w-2xl">
-          <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest px-3 py-1 rounded-full border border-[var(--border-gold)] bg-[var(--bg-tertiary)] inline-flex items-center gap-1.5 font-semibold">
+          <span className="section-label inline-flex items-center gap-1.5">
             <Compass className="w-3.5 h-3.5 text-[var(--text-gold)]" /> System Mindset
           </span>
-          <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-[var(--text-primary)]">
-            Engineering Philosophy
-          </h2>
-          <p className="text-sm md:text-base text-[var(--text-secondary)] font-light leading-relaxed">
-            I approach AI engineering with a production-first mindset: an LLM is only as effective as the software architecture surrounding it. My focus is on building modular, observable, and deterministic AI systems that balance raw model capability with real-world engineering tradeoffs. By treating prompt versioning, structured evaluation, and fallback gateways as core infrastructure, I build systems designed for long-term reliability and scalability.
+          <h2 className="section-title">Engineering Philosophy</h2>
+          <p className="section-description">
+            An LLM is only as effective as the architecture surrounding it. I build modular, observable AI systems that balance model capability with real-world engineering tradeoffs.
           </p>
         </div>
 
@@ -60,7 +58,7 @@ export const EngineeringPhilosophy = memo(() => {
             return (
               <div
                 key={i}
-                className="glass-card p-4 md:p-5 rounded-2xl border border-[var(--border-primary)] space-y-2 hover:border-[var(--border-glow)] transition-all shadow-md flex flex-col justify-between"
+                className="card-secondary p-4 md:p-5 space-y-2 flex flex-col justify-between"
               >
                 <div className="p-2 rounded-xl bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)] w-fit">
                   <Icon className="w-4 h-4" />

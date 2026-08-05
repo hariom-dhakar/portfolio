@@ -27,10 +27,10 @@ export const Skills: React.FC = memo(() => {
     <section
       id="skills"
       ref={containerRef}
-      className="relative w-full py-16 md:py-24 px-4 md:px-8 border-t border-[var(--border-primary)] overflow-hidden"
+      className="relative w-full border-t border-[var(--border-primary)] overflow-hidden"
       aria-label="Engineering Skills Section"
     >
-      <div className="max-w-[1100px] mx-auto px-6 space-y-8">
+      <div className="section-layout space-y-8">
         
         <m.div
           initial={{ opacity: 0, y: 24 }}
@@ -39,14 +39,12 @@ export const Skills: React.FC = memo(() => {
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--border-primary)] pb-6"
         >
           <div className="space-y-2">
-            <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest px-3 py-1 rounded-full border border-[var(--border-gold)] bg-[var(--bg-tertiary)] inline-flex items-center gap-1.5 font-semibold">
+            <span className="section-label inline-flex items-center gap-1.5">
               <BookOpen className="w-3.5 h-3.5" /> Technical Expertise
             </span>
-            <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight text-[var(--text-primary)]">
-              Tech Stack & Capabilities
-            </h2>
-            <p className="text-[var(--text-secondary)] text-sm md:text-base font-light max-w-2xl">
-              Explore my production technologies, multi-agent frameworks, and architectural capabilities.
+            <h2 className="section-title">Tech Stack </h2>
+            <p className="section-description">
+              Production technologies, multi-agent frameworks, and architectural capabilities.
             </p>
           </div>
 

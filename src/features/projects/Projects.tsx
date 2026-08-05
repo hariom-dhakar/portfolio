@@ -44,32 +44,27 @@ function onScrollEnd(callback: () => void, idleMs = 150): () => void {
 
 export const Projects = memo(() => {
   return (
-    <section id="projects" className="w-full py-12 md:py-16 overflow-hidden px-6 border-t border-[var(--border-primary)]">
-      <div className="max-w-[1100px] mx-auto mb-8 md:mb-10">
+    <section id="projects" className="w-full overflow-hidden border-t border-[var(--border-primary)]">
+      <div className="section-layout">
         <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center justify-center text-center space-y-3"
+          className="flex flex-col mb-8 md:mb-10"
         >
-          <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest px-3 py-1 rounded-full border border-[var(--border-gold)] bg-[var(--bg-tertiary)] font-semibold">
-            System Showcases
-          </span>
-          <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tighter text-[var(--text-primary)]">
-            Selected Work
-          </h2>
-          <p className="text-[var(--text-secondary)] max-w-2xl mx-auto text-sm md:text-base font-light">
-            Production-grade AI systems, multi-agent orchestrations, and LLM pipelines with custom execution architectures.
+          <span className="section-label">System Showcases</span>
+          <h2 className="section-title">Selected Work</h2>
+          <p className="section-description">
+            Production systems with custom execution architectures and multi-agent pipelines.
           </p>
-          <div className="w-24 h-px bg-[var(--border-gold)] opacity-50" />
         </m.div>
-      </div>
 
-      <div className="max-w-[1100px] mx-auto flex flex-col gap-10 md:gap-14">
-        {PROJECTS_DATA.map((project, idx) => (
-          <ProjectCard key={project.id} project={project} index={idx} />
-        ))}
+        <div className="flex flex-col gap-10 md:gap-12">
+          {PROJECTS_DATA.map((project, idx) => (
+            <ProjectCard key={project.id} project={project} index={idx} />
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -155,20 +150,19 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
       whileInView="visible"
       viewport={{ once: true, margin: "-10%" }}
       variants={variants}
-      className="glass-card p-5 md:p-7 rounded-3xl border border-[var(--border-primary)] shadow-2xl relative w-full"
+      className="card-primary p-5 md:p-6 relative w-full"
     >
-      <div className="w-full flex flex-col gap-5">
+      <div className="w-full flex flex-col gap-4">
         
         <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 border-b border-[var(--border-primary)] pb-3">
           <div className="space-y-1">
-            <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest flex items-center gap-2 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-gold)] animate-pulse" />
+            <span className="font-mono text-[10px] text-[var(--text-gold)] uppercase tracking-widest flex items-center gap-2 font-semibold">
               PROJECT 0{index + 1}
             </span>
-            <h3 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-[var(--text-primary)]">
+            <h3 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-[var(--text-primary)]">
               {project.title}
             </h3>
-            <p className="text-base md:text-lg text-[var(--text-secondary)] font-light leading-relaxed max-w-2xl">
+            <p className="text-sm text-[var(--text-secondary)] font-light leading-relaxed max-w-2xl">
               {project.tagline}
             </p>
           </div>
@@ -184,13 +178,13 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           </a>
         </div>
 
-        <div className="flex flex-wrap gap-6 md:gap-10 py-1">
+        <div className="flex flex-wrap gap-6 md:gap-8 py-1">
           {project.metrics.map((metric, i) => (
             <div key={i} className="flex flex-col gap-0.5">
-              <span className="text-3xl md:text-4xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
+              <span className="text-2xl md:text-3xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
                 {metric.value}
               </span>
-              <span className="text-[10px] md:text-xs uppercase tracking-widest text-[var(--text-tertiary)] font-mono">
+              <span className="text-[9px] md:text-[10px] uppercase tracking-widest text-[var(--text-tertiary)] font-mono">
                 {metric.label}
               </span>
             </div>

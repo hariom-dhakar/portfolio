@@ -9,10 +9,10 @@ export const ResumeViewer: React.FC = memo(() => {
   return (
     <section 
       id="resume" 
-      className="relative py-12 md:py-20 px-6 max-w-[1000px] mx-auto border-t border-[var(--border-primary)]"
+      className="relative border-t border-[var(--border-primary)]"
       aria-label="Resume Section"
     >
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="section-layout">
         
         <div className="text-center mb-8">
           <m.div
@@ -20,67 +20,49 @@ export const ResumeViewer: React.FC = memo(() => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border-glow)] bg-[var(--brand-glow)] text-[var(--text-accent)] text-[11px] font-mono mb-3"
+            className="flex flex-col items-center gap-3"
           >
-            <FileText className="w-3.5 h-3.5" aria-hidden="true" /> Resume
-          </m.div>
-          <m.h2 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl md:text-5xl font-display font-bold tracking-tight text-[var(--text-primary)] mb-3"
-          >
-            Curriculum Vitae
-          </m.h2>
-          <m.p 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-[var(--text-secondary)] max-w-2xl mx-auto text-xs md:text-sm font-light leading-relaxed mb-6"
-          >
-            Download my detailed CV or toggle the interactive document preview below.
-          </m.p>
+            <span className="section-label inline-flex items-center gap-2">
+              <FileText className="w-3.5 h-3.5" aria-hidden="true" /> Resume
+            </span>
+            <h2 className="section-title">Curriculum Vitae</h2>
+            <p className="section-description text-center mx-auto">
+              Download my CV or preview the document below.
+            </p>
 
-          <m.div 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3.5"
-          >
-            <a
-              href={resumePdf}
-              download="Hariom_Dhakar_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary w-full sm:w-auto text-xs md:text-sm py-2.5 px-6 focus-visible:outline-2 focus-visible:outline-cyan-400"
-              aria-label="Download Resume PDF"
-            >
-              <Download className="w-4 h-4" aria-hidden="true" />
-              <span>Download Resume</span>
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
+              <a
+                href={resumePdf}
+                download="Hariom_Dhakar_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary w-full sm:w-auto text-xs md:text-sm py-2.5 px-6 focus-visible:outline-2 focus-visible:outline-cyan-400"
+                aria-label="Download Resume PDF"
+              >
+                <Download className="w-4 h-4" aria-hidden="true" />
+                <span>Download Resume</span>
+              </a>
 
-            <button
-              onClick={() => setIsExpanded((prev) => !prev)}
-              className="btn-ghost w-full sm:w-auto text-xs md:text-sm py-2.5 px-6 focus-visible:outline-2 focus-visible:outline-cyan-400"
-              aria-expanded={isExpanded}
-              aria-controls="resume-preview-container"
-              aria-label={isExpanded ? "Hide document preview" : "Preview document"}
-            >
-              {isExpanded ? (
-                <>
-                  <EyeOff className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
-                  <span>Hide Preview</span>
-                </>
-              ) : (
-                <>
-                  <Eye className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
-                  <span>Preview Resume</span>
-                </>
-              )}
-            </button>
+              <button
+                onClick={() => setIsExpanded((prev) => !prev)}
+                className="btn-ghost w-full sm:w-auto text-xs md:text-sm py-2.5 px-6 focus-visible:outline-2 focus-visible:outline-cyan-400"
+                aria-expanded={isExpanded}
+                aria-controls="resume-preview-container"
+                aria-label={isExpanded ? "Hide document preview" : "Preview document"}
+              >
+                {isExpanded ? (
+                  <>
+                    <EyeOff className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
+                    <span>Hide Preview</span>
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
+                    <span>Preview Resume</span>
+                  </>
+                )}
+              </button>
+            </div>
           </m.div>
         </div>
 
@@ -95,7 +77,7 @@ export const ResumeViewer: React.FC = memo(() => {
               className="overflow-hidden pt-4"
             >
               <div className="space-y-4">
-                <div className="glass-panel rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+                <div className="card-glass p-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
                   <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                     <FileText className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
                     <span>Hariom_Dhakar_CV.pdf</span>
