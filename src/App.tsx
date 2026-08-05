@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { LazyMotion } from 'framer-motion';
 import './index.css';
 import { useTheme } from './hooks/useTheme';
@@ -6,7 +6,9 @@ import { Navigation } from './components/Navigation';
 import { NeuralBackground } from './features/background/NeuralBackground';
 import { Hero } from './features/hero/Hero';
 import { About } from './features/about/About';
+import { EngineeringPhilosophy } from './features/philosophy/EngineeringPhilosophy';
 import { Experience } from './features/experience/Experience';
+import { LoadingIntro } from './components/LoadingIntro';
 
 const loadFeatures = () => import('framer-motion').then((res) => res.domMax);
 
@@ -19,18 +21,36 @@ const Footer = lazy(() => import('./components/Footer').then((m) => ({ default: 
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
+  const [isLoading, setIsLoading] = useState(() => {
+    return !sessionStorage.getItem('intro_seen');
+  });
+
+  const handleLoadingComplete = () => {
+    sessionStorage.setItem('intro_seen', 'true');
+    setIsLoading(false);
+  };
 
   return (
     <LazyMotion features={loadFeatures}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[10000] focus:px-4 focus:py-2 focus:bg-[var(--bg-secondary)] focus:text-[var(--text-accent)] focus:border focus:border-[var(--border-glow)] focus:rounded-xl focus:font-mono focus:text-xs shadow-lg"
+      >
+        Skip to main content
+      </a>
+
+      {isLoading && <LoadingIntro onComplete={handleLoadingComplete} />}
       <div className="relative min-h-screen overflow-x-hidden">
       <NeuralBackground />
 
       <Navigation theme={theme} toggleTheme={toggleTheme} />
 
-      <main className="relative z-10 w-full">
+      <main id="main-content" className="relative z-10 w-full">
         <Hero />
 
         <About />
+
+        <EngineeringPhilosophy />
 
         <Experience />
 

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import { Search, FolderTree } from 'lucide-react';
+import { FolderTree } from 'lucide-react';
 import { KNOWLEDGE_TREE_DATA, type CategoryFolder, type TechnologyNode } from '../../../data/knowledgeData';
 import { TreeNode } from './TreeNode';
 
@@ -14,7 +14,6 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
   selectedTechId,
   onSelectTech,
   searchQuery,
-  onSearchChange
 }) => {
   const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
     'ai-llm': true,
@@ -69,18 +68,7 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
           </span>
         </div>
 
-        <div className="relative">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search technology, RAG, CrewAI..."
-            className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] focus:border-[var(--border-glow)] rounded-xl py-2 pl-9 pr-3 text-xs font-mono text-[var(--text-primary)] placeholder-[var(--text-tertiary)] outline-none transition-all"
-          />
-        </div>
-
-        <div className="space-y-2 max-h-[550px] overflow-y-auto pr-1 scrollbar-thin">
+        <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1 scrollbar-thin">
           {filteredTree.length === 0 ? (
             <div className="py-8 text-center text-xs font-mono text-[var(--text-tertiary)]">
               No matching knowledge nodes found.
@@ -91,7 +79,11 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
                 key={folder.id}
                 node={folder}
                 isFolder={true}
-                expandedFolders={expandedFolders}
+                expandedFolders={
+                  searchQuery.trim()
+                    ? { ...expandedFolders, [folder.id]: true }
+                    : expandedFolders
+                }
                 selectedTechId={selectedTechId}
                 onToggleFolder={handleToggleFolder}
                 onSelectTech={onSelectTech}

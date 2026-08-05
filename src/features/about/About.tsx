@@ -35,96 +35,105 @@ export const About = memo(() => {
     <section 
       id="about"
       ref={containerRef}
-      className="relative w-full flex items-center justify-center py-16 md:py-24 px-4 md:px-8 overflow-hidden border-t border-[var(--border-primary)]"
+      className="relative w-full overflow-hidden border-t border-[var(--border-primary)]"
       aria-label="About Section"
     >
-      <div className="max-w-[1000px] w-full mx-auto px-6 flex flex-col gap-12 md:gap-16">
-        <div className="flex flex-col gap-3 max-w-[700px]">
-          <m.h2 
+      <div className="section-layout">
+        <div className="flex flex-col mb-8 md:mb-10">
+          <m.span 
             custom={1}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={fadeUpVariant}
-            className="text-4xl md:text-6xl font-display font-bold text-[var(--text-primary)] tracking-tight"
+            className="section-label"
           >
-            The Engineer
-          </m.h2>
-          <m.p 
+            Profile
+          </m.span>
+          <m.h2 
             custom={2}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={fadeUpVariant}
-            className="text-lg md:text-2xl font-sans font-light text-[var(--text-secondary)] max-w-3xl leading-relaxed"
+            className="section-title"
           >
-            Designing production AI systems that reason, retrieve, and respond.
+            The Engineer
+          </m.h2>
+          <m.p 
+            custom={3}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={fadeUpVariant}
+            className="section-description"
+          >
+            Designing production systems that retrieve, reason, and act.
           </m.p>
         </div>
-
-        <m.div 
-          custom={3}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={fadeUpVariant}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 border-y border-[var(--border-primary)] py-10"
-        >
-          <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
-              <AnimatedNumber value={3} />
-            </span>
-            <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
-              Production Systems
-            </span>
-          </div>
-          <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
-              <AnimatedNumber value={7} />
-            </span>
-            <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
-              AI Agents Deployed
-            </span>
-          </div>
-          <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
-              <AnimatedNumber value={70} suffix="%" />
-            </span>
-            <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
-              Automation Achieved
-            </span>
-          </div>
-          <div className="flex flex-col gap-1 p-4 rounded-xl glass-panel">
-            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
-              <AnimatedNumber value={500} suffix="+" />
-            </span>
-            <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
-              DSA Problems Solved
-            </span>
-          </div>
-        </m.div>
 
         <m.div 
           custom={4}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={fadeUpVariant}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 border-y border-[var(--border-primary)] py-8 mb-10"
+        >
+          <div className="flex flex-col gap-1 p-4 rounded-xl card-secondary">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
+              <AnimatedNumber value={3} />
+            </span>
+            <span className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
+              Production Systems
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 p-4 rounded-xl card-secondary">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
+              <AnimatedNumber value={7} />
+            </span>
+            <span className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
+              Agents Deployed
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 p-4 rounded-xl card-secondary">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
+              <AnimatedNumber value={70} suffix="%" />
+            </span>
+            <span className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
+              Automation Achieved
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 p-4 rounded-xl card-secondary">
+            <span className="text-3xl md:text-5xl font-display font-medium text-[var(--text-gold)] glow-text-gold">
+              <AnimatedNumber value={500} suffix="+" />
+            </span>
+            <span className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
+              DSA Solved
+            </span>
+          </div>
+        </m.div>
+
+        <m.div 
+          custom={5}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={fadeUpVariant}
+          className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
         >
           <div className="flex flex-col gap-4">
-            <p className="text-base md:text-lg font-sans font-light text-[var(--text-secondary)] leading-relaxed">
-              Early-career AI/ML engineer specializing in multi-agent orchestration, retrieval-augmented generation (RAG), and high-performance FastAPI backends. Focused on building production systems that eliminate hallucinations and automate complex analytical workflows.
+            <p className="text-sm md:text-base font-sans font-light text-[var(--text-secondary)] leading-relaxed">
+              AI systems engineer specializing in multi-agent orchestration, custom RAG pipelines, and high-performance FastAPI backends, focused on building production-grade solutions that eliminate hallucinations.
             </p>
           </div>
           
-          <div className="glass-card p-6 md:p-8 rounded-2xl flex flex-col gap-6 border border-[var(--border-primary)]">
+          <div className="card-primary p-6 flex flex-col gap-6">
             <div className="flex flex-col gap-1 border-b border-[var(--border-primary)] pb-4">
               <span className="text-xs font-mono text-[var(--text-gold)] uppercase tracking-widest font-semibold">Education</span>
-              <span className="text-[var(--text-primary)] font-display font-bold text-lg md:text-xl">B.Tech in Computer Science Engineering</span>
+              <span className="text-[var(--text-primary)] font-display font-bold text-base md:text-lg">B.Tech in Computer Science Engineering</span>
               <span className="text-[var(--text-secondary)] font-light text-sm">Arya College of Engineering & IT, Jaipur • 2022-2026</span>
               <span className="text-[var(--text-gold)] font-mono text-xs mt-1 font-semibold">CGPA 7.70</span>
             </div>
 
             <div className="flex flex-col gap-1">
               <span className="text-xs font-mono text-[var(--text-gold)] uppercase tracking-widest font-semibold">Credentials</span>
-              <span className="text-[var(--text-primary)] font-display font-bold text-base md:text-lg">Databricks Certified Generative AI Engineer Associate</span>
+              <span className="text-[var(--text-primary)] font-display font-bold text-sm md:text-base">Databricks Certified Generative AI Engineer Associate</span>
             </div>
           </div>
         </m.div>
