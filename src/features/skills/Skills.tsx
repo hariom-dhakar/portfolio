@@ -30,40 +30,53 @@ export const Skills: React.FC = memo(() => {
       className="relative w-full border-t border-[var(--border-primary)] overflow-hidden"
       aria-label="Engineering Skills Section"
     >
-      <div className="section-layout space-y-8">
+      <div className="section-layout space-y-6">
         
+        {/* COMPRESSED HEADER */}
         <m.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--border-primary)] pb-6"
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-4 border-b border-[var(--border-primary)] pb-4"
         >
-          <div className="space-y-2">
+          {/* TITLE & LABEL WITH NODES/CATEGORIES BADGE */}
+          <div className="space-y-1">
             <span className="section-label inline-flex items-center gap-1.5">
               <BookOpen className="w-3.5 h-3.5" /> Technical Expertise
             </span>
-            <h2 className="section-title">Tech Stack </h2>
-            <p className="section-description">
-              Production technologies, multi-agent frameworks, and architectural capabilities.
-            </p>
+            <div className="flex flex-wrap items-baseline gap-3">
+              <h2 className="section-title">Tech Stack</h2>
+              <span className="text-xs font-mono text-[var(--text-tertiary)] bg-[var(--bg-tertiary)] px-2.5 py-0.5 rounded-full border border-[var(--border-primary)] font-medium">
+                34 Nodes • 7 Categories
+              </span>
+            </div>
           </div>
 
-          <ViewToggle
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-          />
-        </m.div>
+          {/* CONTROLS BAR: SEARCH IN MIDDLE | VIEW TOGGLE ON RIGHT */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* SEARCH INPUT IN MIDDLE */}
+            <div className="w-full sm:max-w-md">
+              <div className="relative w-full">
+                <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search technologies, RAG, CrewAI..."
+                  className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] focus:border-[var(--border-glow)] rounded-xl py-2 pl-10 pr-4 text-xs font-mono text-[var(--text-primary)] placeholder-[var(--text-tertiary)] outline-none transition-all shadow-sm"
+                />
+              </div>
+            </div>
 
-        <div className="relative max-w-md">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search technologies, frameworks, RAG..."
-            className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] focus:border-[var(--border-glow)] rounded-xl py-2.5 pl-10 pr-4 text-xs md:text-sm font-mono text-[var(--text-primary)] placeholder-[var(--text-tertiary)] outline-none transition-all shadow-sm"
-          />
-        </div>
+            {/* VIEW TOGGLE ON RIGHT */}
+            <div className="flex items-center justify-end shrink-0">
+              <ViewToggle
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+              />
+            </div>
+          </div>
+        </m.div>
 
         <AnimatePresence mode="wait">
           {viewMode === 'interactive' ? (
@@ -72,10 +85,11 @@ export const Skills: React.FC = memo(() => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
             >
-              <div className="lg:col-span-5 w-full">
+              {/* STICKY EXPLORER PANEL (34% / 4 Cols) */}
+              <div className="lg:col-span-4 w-full sticky top-24 z-10 self-start">
                 <KnowledgeTree
                   selectedTechId={selectedTech?.id || null}
                   onSelectTech={setSelectedTech}
@@ -84,7 +98,8 @@ export const Skills: React.FC = memo(() => {
                 />
               </div>
 
-              <div className="lg:col-span-7 w-full">
+              {/* DETAILS PANEL (66% / 8 Cols) */}
+              <div className="lg:col-span-8 w-full">
                 <InspectorPanel
                   tech={selectedTech}
                   onSelectTechById={handleSelectTechById}
@@ -97,7 +112,7 @@ export const Skills: React.FC = memo(() => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             >
               <SimpleSkills searchQuery={searchQuery} />
             </m.div>
