@@ -32,13 +32,20 @@ export default function App() {
 
   return (
     <LazyMotion features={loadFeatures}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[10000] focus:px-4 focus:py-2 focus:bg-[var(--bg-secondary)] focus:text-[var(--text-accent)] focus:border focus:border-[var(--border-glow)] focus:rounded-xl focus:font-mono focus:text-xs shadow-lg"
+      >
+        Skip to main content
+      </a>
+
       {isLoading && <LoadingIntro onComplete={handleLoadingComplete} />}
       <div className="relative min-h-screen overflow-x-hidden">
       <NeuralBackground />
 
       <Navigation theme={theme} toggleTheme={toggleTheme} />
 
-      <main className="relative z-10 w-full">
+      <main id="main-content" className="relative z-10 w-full">
         <Hero />
 
         <About />
