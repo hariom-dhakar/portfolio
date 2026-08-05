@@ -28,8 +28,8 @@ export const Contact = memo(() => {
   const links = [
     {
       name: "Email",
-      value: "hariomdhakar85@gmail.com",
-      href: "mailto:hariomdhakar85@gmail.com",
+      value: "harudhakar@gmail.com",
+      href: "mailto:harudhakar@gmail.com",
       icon: <Mail className="w-5 h-5" aria-hidden="true" />
     },
     {
@@ -40,8 +40,8 @@ export const Contact = memo(() => {
     },
     {
       name: "LinkedIn",
-      value: "linkedin.com/in/hariom-dhakar",
-      href: "https://linkedin.com/in/hariom-dhakar",
+      value: "linkedin.com/in/hariomdhakar11",
+      href: "https://linkedin.com/in/hariomdhakar11",
       icon: <LinkedinIcon className="w-5 h-5" aria-hidden="true" />
     },
     {
