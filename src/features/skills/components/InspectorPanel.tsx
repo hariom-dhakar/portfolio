@@ -232,13 +232,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                 {relatedTechNodes.map((rel) => (
                   <React.Fragment key={rel.id}>
                     <ArrowRight className="w-3.5 h-3.5 text-[var(--text-tertiary)] shrink-0" />
-                    <button
-                      onClick={() => onSelectTechById(rel.id)}
-                      className="px-2.5 py-1 rounded bg-[var(--bg-secondary)] hover:bg-[var(--bg-primary)] border border-[var(--border-primary)] text-[var(--text-secondary)] hover:text-[var(--text-accent)] flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <TechIcon name={rel.name} className="w-3.5 h-3.5 text-[var(--text-accent)]" />
-                      <span>{rel.name}</span>
-                    </button>
+                    <RelatedTechButton techNode={rel} onSelect={onSelectTechById} />
                   </React.Fragment>
                 ))}
               </div>
@@ -273,3 +267,27 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
     </AnimatePresence>
   );
 };
+
+const RelatedTechButton = React.memo(({
+  techNode,
+  onSelect
+}: {
+  techNode: TechnologyNode;
+  onSelect: (id: string) => void;
+}) => {
+  const handleClick = React.useCallback(() => {
+    onSelect(techNode.id);
+  }, [techNode.id, onSelect]);
+
+  return (
+    <button
+      onClick={handleClick}
+      className="px-2.5 py-1 rounded bg-[var(--bg-secondary)] hover:bg-[var(--bg-primary)] border border-[var(--border-primary)] text-[var(--text-secondary)] hover:text-[var(--text-accent)] flex items-center gap-1.5 transition-colors cursor-pointer"
+    >
+      <TechIcon name={techNode.name} className="w-3.5 h-3.5 text-[var(--text-accent)]" />
+      <span>{techNode.name}</span>
+    </button>
+  );
+});
+
+RelatedTechButton.displayName = 'RelatedTechButton';

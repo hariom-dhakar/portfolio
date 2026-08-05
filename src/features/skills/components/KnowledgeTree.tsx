@@ -80,7 +80,11 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
                 key={folder.id}
                 node={folder}
                 isFolder={true}
-                expandedFolders={expandedFolders}
+                expandedFolders={
+                  searchQuery.trim()
+                    ? { ...expandedFolders, [folder.id]: true }
+                    : expandedFolders
+                }
                 selectedTechId={selectedTechId}
                 onToggleFolder={handleToggleFolder}
                 onSelectTech={onSelectTech}
