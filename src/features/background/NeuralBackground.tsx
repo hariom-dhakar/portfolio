@@ -14,7 +14,9 @@ interface FloatingFormula {
   x: number;
   y: number;
   vy: number;
-  alpha: number;
+  targetAlpha: number;
+  currentAlpha: number;
+  isFadingOut: boolean;
   size: number;
 }
 
@@ -234,6 +236,7 @@ export const NeuralBackground: React.FC = memo(() => {
     if (!ctx) return;
 
     let animationFrameId: number;
+    let formulaIntervalId: ReturnType<typeof setInterval>;
     let particles: Particle[] = [];
     let formulas: FloatingFormula[] = [];
     let isTabVisible = true;
@@ -304,15 +307,28 @@ export const NeuralBackground: React.FC = memo(() => {
     };
 
     const initFormulas = () => {
+      const isMobile = window.innerWidth < 768;
+      const count = isMobile ? Math.floor(Math.random() * 3) + 5 : Math.floor(Math.random() * 6) + 10;
+      const shuffled = [...MATH_SYMBOLS].sort(() => 0.5 - Math.random());
+      
+      if (formulas.length > 0) {
+        formulas.forEach((f) => {
+          f.isFadingOut = true;
+        });
+        return;
+      }
+
       formulas = [];
-      const formulaCount = window.innerWidth < 768 ? 4 : 8;
-      for (let i = 0; i < formulaCount; i++) {
+      for (let i = 0; i < Math.min(count, shuffled.length); i++) {
+        const baseAlpha = 0.12 + Math.random() * 0.14;
         formulas.push({
-          text: MATH_SYMBOLS[i % MATH_SYMBOLS.length],
+          text: shuffled[i],
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vy: -0.25 - Math.random() * 0.25,
-          alpha: 0.20 + Math.random() * 0.25,
+          vy: -0.2 - Math.random() * 0.2,
+          targetAlpha: baseAlpha,
+          currentAlpha: 0,
+          isFadingOut: false,
           size: Math.floor(10 + Math.random() * 3),
         });
       }
@@ -367,6 +383,11 @@ export const NeuralBackground: React.FC = memo(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     handleResize();
+    formulaIntervalId = setInterval(() => {
+      if (isTabVisible && isIntersecting) {
+        initFormulas();
+      }
+    }, 7000);
 
     const animate = () => {
       if (!isTabVisible || !isIntersecting) return;
@@ -394,13 +415,45 @@ export const NeuralBackground: React.FC = memo(() => {
       for (let k = 0; k < formulas.length; k++) {
         const f = formulas[k];
         f.y += f.vy;
+
+        // Smooth fade-away or fade-in transition
+        if (f.isFadingOut) {
+          f.currentAlpha -= 0.012;
+          if (f.currentAlpha <= 0) {
+            f.text = MATH_SYMBOLS[Math.floor(Math.random() * MATH_SYMBOLS.length)];
+            f.x = Math.random() * canvas.width;
+            f.y = canvas.height - Math.random() * (canvas.height * 0.7);
+            f.currentAlpha = 0;
+            f.isFadingOut = false;
+          }
+        } else {
+          if (f.currentAlpha < f.targetAlpha) {
+            f.currentAlpha += 0.01;
+          }
+        }
+
+        // Top edge and bottom edge fadeaway
+        let edgeFade = 1;
+        if (f.y < 140) {
+          edgeFade = Math.max(0, f.y / 140);
+        } else if (f.y > canvas.height - 80) {
+          edgeFade = Math.max(0, (canvas.height - f.y) / 80);
+        }
+
+        const renderAlpha = Math.max(0, f.currentAlpha * edgeFade);
+
         if (f.y < -30) {
           f.y = canvas.height + 20;
           f.x = Math.random() * canvas.width;
+          f.text = MATH_SYMBOLS[Math.floor(Math.random() * MATH_SYMBOLS.length)];
+          f.currentAlpha = 0;
+          f.isFadingOut = false;
         }
 
-        ctx.fillStyle = `${formulaColor}${f.alpha})`;
-        ctx.fillText(f.text, f.x, f.y);
+        if (renderAlpha > 0.005) {
+          ctx.fillStyle = `${formulaColor}${renderAlpha.toFixed(3)})`;
+          ctx.fillText(f.text, f.x, f.y);
+        }
       }
 
       if (mouse.x > 0 && mouse.y > 0) {
@@ -481,6 +534,7 @@ export const NeuralBackground: React.FC = memo(() => {
     animate();
 
     return () => {
+      clearInterval(formulaIntervalId);
       observer.disconnect();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
