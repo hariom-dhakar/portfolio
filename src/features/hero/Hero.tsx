@@ -33,13 +33,13 @@ export const Hero = memo(() => {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col items-center gap-3 w-full"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-tertiary)]/80 backdrop-blur-md border border-[var(--border-primary)] text-[10px] md:text-xs font-mono text-[var(--text-tertiary)] shadow-sm">
+          {/* <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-tertiary)]/80 backdrop-blur-md border border-[var(--border-primary)] text-[10px] md:text-xs font-mono text-[var(--text-tertiary)] shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="w-2 h-2 rounded-full bg-emerald-400 -ml-4" />
             <span className="text-[var(--text-primary)] font-semibold uppercase tracking-wider">AI Systems & Multi-Agent Engineer</span>
             <span className="opacity-40">|</span>
             <span>Latency &lt;12ms</span>
-          </div>
+          </div> */}
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-text-primary to-text-secondary/60">
             Hariom Dhakar
@@ -96,7 +96,7 @@ export const Hero = memo(() => {
             href="#projects" 
             className="btn-primary w-full sm:w-auto text-center justify-center focus-visible:outline-2 focus-visible:outline-cyan-400"
           >
-            Explore Projects
+            Hire Me
           </a>
           <a 
             href="#contact" 
