@@ -119,7 +119,7 @@ export const About = memo(() => {
         >
           <div className="flex flex-col gap-4">
             <p className="text-sm md:text-base font-sans font-light text-[var(--text-secondary)] leading-relaxed">
-              AI systems engineer specializing in multi-agent orchestration, custom RAG pipelines, and high-performance FastAPI backends, focused on building production-grade solutions that eliminate hallucinations.
+              AI engineer specializing in multi-agent orchestration, custom RAG pipelines, and high-performance FastAPI backends, focused on building production-grade solutions that eliminate hallucinations.
             </p>
           </div>
           

@@ -4,8 +4,9 @@ import { ChevronDown } from 'lucide-react';
 
 const FOCUS_TAGS = ['Agentic Systems', 'Custom RAG', 'FastAPI Backends', 'LLM Guardrails'];
 const SUBTITLES = [
-  'Production-grade agentic systems.',
-  'High-performance document intelligence.',
+  'AI Engineer',
+  'Gen AI Engineer',
+  'Agentic AI Engineer',
 ];
 
 export const Hero = memo(() => {
