@@ -1,5 +1,5 @@
 import React, { useMemo, memo } from 'react';
-import { Shield, Cpu, Layers, Sparkles } from 'lucide-react';
+import { Shield, Sparkles } from 'lucide-react';
 import { KNOWLEDGE_TREE_DATA, type CategoryFolder, type TechnologyNode } from '../../../data/knowledgeData';
 import { TechIcon } from './TreeNode';
 

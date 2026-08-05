@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import { Search, FolderTree } from 'lucide-react';
+import { FolderTree } from 'lucide-react';
 import { KNOWLEDGE_TREE_DATA, type CategoryFolder, type TechnologyNode } from '../../../data/knowledgeData';
 import { TreeNode } from './TreeNode';
 
@@ -14,7 +14,6 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
   selectedTechId,
   onSelectTech,
   searchQuery,
-  onSearchChange
 }) => {
   const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
     'ai-llm': true,
