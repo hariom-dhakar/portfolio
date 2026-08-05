@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { LazyMotion } from 'framer-motion';
 import './index.css';
 import { useTheme } from './hooks/useTheme';
@@ -8,6 +8,7 @@ import { Hero } from './features/hero/Hero';
 import { About } from './features/about/About';
 import { EngineeringPhilosophy } from './features/philosophy/EngineeringPhilosophy';
 import { Experience } from './features/experience/Experience';
+import { LoadingIntro } from './components/LoadingIntro';
 
 const loadFeatures = () => import('framer-motion').then((res) => res.domMax);
 
@@ -20,9 +21,18 @@ const Footer = lazy(() => import('./components/Footer').then((m) => ({ default: 
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
+  const [isLoading, setIsLoading] = useState(() => {
+    return !sessionStorage.getItem('intro_seen');
+  });
+
+  const handleLoadingComplete = () => {
+    sessionStorage.setItem('intro_seen', 'true');
+    setIsLoading(false);
+  };
 
   return (
     <LazyMotion features={loadFeatures}>
+      {isLoading && <LoadingIntro onComplete={handleLoadingComplete} />}
       <div className="relative min-h-screen overflow-x-hidden">
       <NeuralBackground />
 
