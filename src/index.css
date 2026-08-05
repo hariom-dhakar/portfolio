@@ -212,7 +212,7 @@ body {
     border: 1px solid var(--border-primary);
     border-radius: 1rem; /* 16px */
     box-shadow: var(--shadow-card);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .card-primary:hover {
     border-color: var(--border-glow);
@@ -225,7 +225,7 @@ body {
     background: var(--bg-tertiary);
     border: 1px solid var(--border-primary);
     border-radius: 1rem; /* 16px */
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .card-secondary:hover {
     border-color: var(--border-glow);
@@ -242,7 +242,7 @@ body {
     box-shadow: var(--shadow-card);
     transform: translateZ(0);
     backface-visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .card-glass:hover {
     border-color: var(--border-glow);
@@ -267,7 +267,7 @@ body {
     box-shadow: var(--shadow-card);
     transform: translateZ(0);
     backface-visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .glass-card:hover {
     border-color: var(--border-glow);
@@ -278,7 +278,7 @@ body {
     background: var(--bg-tertiary);
     border: 1px solid var(--border-primary);
     border-radius: 1rem;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .glass-panel:hover {
     border-color: var(--border-glow);
@@ -296,7 +296,7 @@ body {
     background: var(--bg-secondary);
     color: var(--text-primary);
     border: 1px solid var(--border-primary);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
   }
 
@@ -320,7 +320,7 @@ body {
     border: 1px solid var(--border-primary);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
   }
 
