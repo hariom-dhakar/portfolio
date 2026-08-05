@@ -53,9 +53,9 @@ task = Task(
 
 crew = Crew(agents=[researcher], tasks=[task], process=Process.sequential)`,
         keyConcepts: ['Role Delegation', 'Sequential Handoffs', 'Custom Tools', 'Memory Persistence'],
-        projects: ['MedInsight Agent', 'CrewAI EDA Analyzer'],
+        projects: ['CrewAI EDA Analyzer'],
         relatedTech: ['python', 'fastapi', 'langchain', 'openai'],
-        github: 'https://github.com/hariom-dhakar/MedInsight-Agent'
+        github: 'https://github.com/hariom-dhakar'
       },
       {
         id: 'langchain',
@@ -75,7 +75,7 @@ vectorstore = FAISS.load_local("index", embeddings)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
 chain = create_retrieval_chain(retriever, ChatOpenAI(model="gpt-4o"))`,
         keyConcepts: ['Retrieval Chains', 'Document Loaders', 'Prompt Templates', 'Vector Retrievers'],
-        projects: ['AI Proposal Generator', 'MedInsight Agent'],
+        projects: ['ProposalAI', 'MedInsight'],
         relatedTech: ['langgraph', 'rag', 'faiss', 'chromadb', 'openai'],
         github: 'https://github.com/hariom-dhakar/AI-Proposal-Agent'
       },
@@ -97,7 +97,7 @@ builder.add_edge("analyzer", "writer")
 builder.add_edge("writer", END)
 graph = builder.compile()`,
         keyConcepts: ['Stateful Graphs', 'Cyclic Handoffs', 'Human-in-the-Loop', 'Parallel Execution'],
-        projects: ['AI Proposal Generator'],
+        projects: ['ProposalAI', 'MedInsight'],
         relatedTech: ['langchain', 'crewai', 'python', 'fastapi'],
         github: 'https://github.com/hariom-dhakar/AI-Proposal-Agent'
       },
@@ -115,7 +115,7 @@ def evaluate_grounding(context: str, generation: str) -> bool:
     score = ragas_evaluator.measure_faithfulness(context, generation)
     return score >= 0.95  # Reject ungrounded claims`,
         keyConcepts: ['Context Grounding', 'Self-Reflection', 'Hallucination Filter', 'RAGAS Evals'],
-        projects: ['MedInsight Agent'],
+        projects: ['MedInsight'],
         relatedTech: ['langchain', 'faiss', 'chromadb', 'huggingface'],
         github: 'https://github.com/hariom-dhakar/MedInsight-Agent'
       },
@@ -136,7 +136,7 @@ index = faiss.IndexFlatIP(dimension)  # Inner product for cosine similarity
 faiss.normalize_L2(vectors)
 index.add(vectors)`,
         keyConcepts: ['Dense Vector Search', 'Cosine Distance', 'Flat Indexing', 'L2 Normalization'],
-        projects: ['MedInsight Agent', 'AI Proposal Generator'],
+        projects: ['ProposalAI'],
         relatedTech: ['chromadb', 'rag', 'langchain', 'python']
       },
       {
@@ -158,7 +158,7 @@ collection.add(
     ids=["chunk_01"]
 )`,
         keyConcepts: ['Persistent Vector Storage', 'Metadata Filtering', 'Document Embedding'],
-        projects: ['AI Proposal Generator'],
+        projects: ['ProposalAI', 'MedInsight'],
         relatedTech: ['faiss', 'langchain', 'rag', 'python']
       },
       {
@@ -176,7 +176,7 @@ model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")`,
         keyConcepts: ['Open Models', 'LoRA / QLoRA', 'Tokenization', 'Local Inference'],
-        projects: ['MedInsight Agent'],
+        projects: ['MedInsight'],
         relatedTech: ['python', 'pytorch', 'rag', 'openai']
       }
     ]
@@ -205,7 +205,7 @@ async def run_pipeline(config: AgentConfig) -> dict:
     # Async execution engine
     pass`,
         keyConcepts: ['AsyncIO', 'Type Hinting', 'Data Classes', 'Decorators', 'Generators'],
-        projects: ['MedInsight Agent', 'AI Proposal Generator', 'CrewAI EDA Analyzer', 'LLM Gateway'],
+        projects: ['MedInsight', 'ProposalAI', 'CrewAI EDA Analyzer', 'LLM Gateway'],
         relatedTech: ['fastapi', 'crewai', 'langchain', 'pandas']
       },
       {
@@ -281,7 +281,7 @@ async def dispatch_agent(req: PromptRequest):
     result = await agent_runner.process(req.query)
     return {"status": "success", "data": result}`,
         keyConcepts: ['Pydantic Validation', 'Async Route Handlers', 'Dependency Injection', 'OpenAPI Specs'],
-        projects: ['MedInsight Agent', 'AI Proposal Generator', 'CrewAI EDA Analyzer'],
+        projects: ['MedInsight', 'ProposalAI', 'CrewAI EDA Analyzer'],
         relatedTech: ['python', 'redis', 'docker']
       },
       {
@@ -299,7 +299,7 @@ POST   /api/v1/proposals          # Create proposal
 GET    /api/v1/proposals/{id}     # Retrieve detail
 DELETE /api/v1/proposals/{id}     # Remove proposal`,
         keyConcepts: ['Stateless Routing', 'HTTP Status Codes', 'JSON Serialization', 'Rate Limiting'],
-        projects: ['MedInsight Agent', 'AI Proposal Generator'],
+        projects: ['MedInsight', 'ProposalAI'],
         relatedTech: ['fastapi', 'python', 'docker']
       },
       {
@@ -413,7 +413,7 @@ COPY . .
 EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]`,
         keyConcepts: ['Multi-Stage Builds', 'Container Isolation', 'Docker Compose', 'Image Optimization'],
-        projects: ['MedInsight Agent', 'AI Proposal Generator', 'CrewAI EDA Analyzer'],
+        projects: ['MedInsight', 'ProposalAI', 'CrewAI EDA Analyzer'],
         relatedTech: ['kubernetes', 'fastapi', 'python', 'git']
       },
       {

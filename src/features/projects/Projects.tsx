@@ -1,8 +1,54 @@
-import { useRef, useEffect, useState, useCallback, memo } from 'react';
+import { useRef, useEffect, useState, useCallback, memo, forwardRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { PROJECTS_DATA, type ProjectData, type ArchitectureStep } from '../../data/projectsData';
 import { ArchitectureSidebar } from '../../components/ArchitectureSidebar';
+
+/**
+ * Detects when the browser finishes scrolling.
+ * Uses the native 'scrollend' event where available, with a scroll-idle
+ * fallback (no scroll activity for `idleMs` milliseconds).
+ * Returns a cleanup function to tear down listeners early.
+ */
+function onScrollEnd(callback: () => void, idleMs = 150): () => void {
+  let idleTimer: ReturnType<typeof setTimeout> | null = null;
+  let settled = false;
+
+  const settle = () => {
+    if (settled) return;
+    settled = true;
+    teardown();
+    callback();
+  };
+
+  const onScroll = () => {
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = setTimeout(settle, idleMs);
+  };
+
+  // Kick off an initial idle timer so that if scrollIntoView is a no-op
+  // (element already centered), we still release the lock promptly.
+  idleTimer = setTimeout(settle, idleMs);
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  if ('onscrollend' in window) {
+    window.addEventListener('scrollend', settle, { once: true });
+  }
+
+  function teardown() {
+    window.removeEventListener('scroll', onScroll);
+    if ('onscrollend' in window) {
+      window.removeEventListener('scrollend', settle);
+    }
+    if (idleTimer) {
+      clearTimeout(idleTimer);
+      idleTimer = null;
+    }
+  }
+
+  return teardown;
+}
 
 export const Projects = memo(() => {
   return (
@@ -43,9 +89,63 @@ Projects.displayName = 'Projects';
 const ProjectCard = memo(({ project, index }: { project: ProjectData; index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const isProgrammaticScroll = useRef(false);
+  const scrollCleanupRef = useRef<(() => void) | null>(null);
+  const observerDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleStepSelect = useCallback((idx: number) => {
-    setActiveStepIndex((prev) => (prev !== idx ? idx : prev));
+  // Tear down scroll-end listener and observer debounce on unmount
+  useEffect(() => {
+    return () => {
+      scrollCleanupRef.current?.();
+      if (observerDebounceRef.current) clearTimeout(observerDebounceRef.current);
+    };
+  }, []);
+
+  const handleStepSelect = useCallback((idx: number, isClick = false) => {
+    if (isClick) {
+      // Cancel any pending observer debounce so it cannot override the click
+      if (observerDebounceRef.current) {
+        clearTimeout(observerDebounceRef.current);
+        observerDebounceRef.current = null;
+      }
+
+      // Tear down any previous scroll-end listener (handles rapid clicks)
+      scrollCleanupRef.current?.();
+
+      // Immediate, authoritative state update
+      setActiveStepIndex(idx);
+
+      const targetEl = stepRefs.current[idx];
+      if (targetEl) {
+        // Lock observer-driven updates for the duration of the scroll
+        isProgrammaticScroll.current = true;
+
+        targetEl.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+
+        // Release the lock only after scrolling has actually finished
+        scrollCleanupRef.current = onScrollEnd(() => {
+          isProgrammaticScroll.current = false;
+          scrollCleanupRef.current = null;
+        });
+      }
+    } else {
+      // Observer-driven update: debounce to coalesce rapid IntersectionObserver
+      // callbacks from multiple cards entering/leaving the viewport at once.
+      if (observerDebounceRef.current) {
+        clearTimeout(observerDebounceRef.current);
+      }
+      observerDebounceRef.current = setTimeout(() => {
+        // Re-check the guard — a click may have fired during the debounce window
+        if (!isProgrammaticScroll.current) {
+          setActiveStepIndex(idx);
+        }
+        observerDebounceRef.current = null;
+      }, 80);
+    }
   }, []);
 
   const variants = {
@@ -81,6 +181,7 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           <ArchitectureSidebar 
             selectedProject={project} 
             activeStepIndex={activeStepIndex} 
+            onStepSelect={(idx) => handleStepSelect(idx, true)}
           />
         </div>
 
@@ -142,10 +243,15 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
               {project.architecture.map((step, stepIdx) => (
                 <StepItemCard 
                   key={step.id}
+                  ref={(el) => {
+                    stepRefs.current[stepIdx] = el;
+                  }}
                   step={step}
                   stepIdx={stepIdx}
                   isActive={activeStepIndex === stepIdx}
-                  onStepSelect={() => handleStepSelect(stepIdx)}
+                  isProgrammaticScrollRef={isProgrammaticScroll}
+                  onStepSelect={(idx) => handleStepSelect(idx, false)}
+                  onStepClick={(idx) => handleStepSelect(idx, true)}
                 />
               ))}
             </div>
@@ -173,56 +279,72 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
 
 ProjectCard.displayName = 'ProjectCard';
 
-const StepItemCard = memo(({ 
-  step, 
-  stepIdx, 
-  isActive, 
-  onStepSelect 
-}: { 
-  step: ArchitectureStep; 
-  stepIdx: number; 
-  isActive: boolean; 
-  onStepSelect: () => void; 
-}) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(itemRef, { margin: "-30% 0px -40% 0px" });
+interface StepItemCardProps {
+  step: ArchitectureStep;
+  stepIdx: number;
+  isActive: boolean;
+  isProgrammaticScrollRef: React.RefObject<boolean>;
+  onStepSelect: (idx: number) => void;
+  onStepClick: (idx: number) => void;
+}
 
-  useEffect(() => {
-    if (isInView) {
-      onStepSelect();
-    }
-  }, [isInView, onStepSelect]);
+const StepItemCard = memo(
+  forwardRef<HTMLDivElement, StepItemCardProps>(
+    ({ step, stepIdx, isActive, isProgrammaticScrollRef, onStepSelect, onStepClick }, ref) => {
+      const cardContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const Icon = step.icon;
+      const setRef = useCallback(
+        (node: HTMLDivElement | null) => {
+          cardContainerRef.current = node;
+          if (typeof ref === 'function') {
+            ref(node);
+          } else if (ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          }
+        },
+        [ref]
+      );
 
-  return (
-    <div
-      ref={itemRef}
-      onClick={onStepSelect}
-      className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 ${
-        isActive
-          ? 'bg-[var(--brand-glow)] border-[var(--border-glow)] shadow-sm'
-          : 'bg-[var(--bg-secondary)] border-[var(--border-primary)] hover:border-[var(--border-glow)]'
-      }`}
-    >
-      <div className={`w-7 h-7 rounded-lg flex items-center justify-center border shrink-0 transition-colors ${
-        isActive ? 'bg-[var(--brand-glow)] text-[var(--text-accent)] border-[var(--border-glow)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] border-[var(--border-primary)]'
-      }`}>
-        <Icon className="w-3.5 h-3.5" />
-      </div>
-      <div className="flex flex-col gap-0.5 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] text-[var(--text-tertiary)]">Step 0{stepIdx + 1}</span>
-          <span className={`text-xs font-display font-medium truncate ${isActive ? 'text-[var(--text-accent)]' : 'text-[var(--text-primary)]'}`}>
-            {step.title}
-          </span>
+      const isInView = useInView(cardContainerRef, { margin: "-30% 0px -40% 0px" });
+
+      useEffect(() => {
+        if (isInView && !isProgrammaticScrollRef.current) {
+          onStepSelect(stepIdx);
+        }
+      }, [isInView, stepIdx, onStepSelect, isProgrammaticScrollRef]);
+
+      const Icon = step.icon;
+
+      return (
+        <div
+          ref={setRef}
+          onClick={() => onStepClick(stepIdx)}
+          className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer flex items-start gap-3.5 ${
+            isActive
+              ? 'bg-[var(--brand-glow)] border-[var(--border-glow)] shadow-sm'
+              : 'bg-[var(--bg-secondary)] border-[var(--border-primary)] hover:border-[var(--border-glow)]'
+          }`}
+        >
+          <div className={`w-7 h-7 rounded-lg flex items-center justify-center border shrink-0 transition-colors ${
+            isActive ? 'bg-[var(--brand-glow)] text-[var(--text-accent)] border-[var(--border-glow)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] border-[var(--border-primary)]'
+          }`}>
+            <Icon className="w-3.5 h-3.5" />
+          </div>
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[10px] text-[var(--text-tertiary)]">Step 0{stepIdx + 1}</span>
+              <span className={`text-xs font-display font-medium truncate ${isActive ? 'text-[var(--text-accent)]' : 'text-[var(--text-primary)]'}`}>
+                {step.title}
+              </span>
+            </div>
+            <p className="text-xs text-[var(--text-secondary)] font-light leading-snug">
+              {step.description}
+            </p>
+          </div>
         </div>
-        <p className="text-xs text-[var(--text-secondary)] font-light leading-snug">
-          {step.description}
-        </p>
-      </div>
-    </div>
-  );
-});
+      );
+    }
+  )
+);
 
 StepItemCard.displayName = 'StepItemCard';

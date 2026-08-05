@@ -6,9 +6,10 @@ import { type ProjectData } from '../data/projectsData';
 interface ArchitectureSidebarProps {
   selectedProject: ProjectData;
   activeStepIndex: number;
+  onStepSelect?: (index: number) => void;
 }
 
-export const ArchitectureSidebar = memo(({ selectedProject, activeStepIndex }: ArchitectureSidebarProps) => {
+export const ArchitectureSidebar = memo(({ selectedProject, activeStepIndex, onStepSelect }: ArchitectureSidebarProps) => {
   const currentStep = selectedProject.architecture[activeStepIndex] || selectedProject.architecture[0];
   const StepIcon = currentStep.icon;
 
@@ -74,12 +75,14 @@ export const ArchitectureSidebar = memo(({ selectedProject, activeStepIndex }: A
           const isActive = idx === activeStepIndex;
           const Icon = step.icon;
           return (
-            <div
+            <button
               key={step.id}
-              className={`p-2.5 rounded-xl border flex items-center gap-3 transition-all duration-200 ${
+              type="button"
+              onClick={() => onStepSelect?.(idx)}
+              className={`p-2.5 rounded-xl border flex items-center gap-3 transition-all duration-200 w-full text-left cursor-pointer ${
                 isActive
                   ? 'bg-[var(--bg-secondary)] border-[var(--border-glow)] text-[var(--text-primary)] shadow-sm'
-                  : 'bg-[var(--bg-secondary)]/40 border-[var(--border-primary)] text-[var(--text-tertiary)]'
+                  : 'bg-[var(--bg-secondary)]/40 border-[var(--border-primary)] text-[var(--text-tertiary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               <div className={`w-6 h-6 rounded-md flex items-center justify-center border text-xs font-mono shrink-0 ${
@@ -96,7 +99,7 @@ export const ArchitectureSidebar = memo(({ selectedProject, activeStepIndex }: A
               {isActive && (
                 <GitBranch className="w-3.5 h-3.5 text-[var(--text-accent)] shrink-0 animate-pulse" />
               )}
-            </div>
+            </button>
           );
         })}
       </div>
