@@ -1,5 +1,5 @@
 import { memo, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { Award } from 'lucide-react';
 
 export const Certifications = memo(() => {
@@ -8,7 +8,7 @@ export const Certifications = memo(() => {
 
   return (
     <section id="certifications" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" aria-label="Credentials Section">
-      <motion.div
+      <m.div
         ref={containerRef}
         initial={{ opacity: 0, y: 24 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
@@ -39,7 +39,7 @@ export const Certifications = memo(() => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 });

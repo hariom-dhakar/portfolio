@@ -1,5 +1,5 @@
 import { memo, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { Mail, Phone, ExternalLink } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../../components/icons';
 
@@ -58,7 +58,7 @@ export const Contact = memo(() => {
       className="py-16 md:py-24 relative flex items-center justify-center overflow-hidden border-t border-[var(--border-primary)]"
       aria-label="Contact Section"
     >
-      <motion.div
+      <m.div
         ref={ref}
         variants={containerVariants}
         initial="hidden"
@@ -66,21 +66,21 @@ export const Contact = memo(() => {
         className="max-w-5xl mx-auto px-6 w-full flex flex-col items-start space-y-10"
       >
         <div className="space-y-3 max-w-2xl">
-          <motion.h2 
+          <m.h2 
             variants={itemVariants}
             className="text-4xl md:text-6xl font-display font-medium tracking-tight text-[var(--text-primary)]"
           >
             Let's Connect
-          </motion.h2>
-          <motion.p 
+          </m.h2>
+          <m.p 
             variants={itemVariants}
             className="text-lg md:text-xl text-[var(--text-secondary)] font-sans font-light leading-relaxed"
           >
             Have an AI engineering opportunity or multi-agent project in mind? Let's build together.
-          </motion.p>
+          </m.p>
         </div>
 
-        <motion.div 
+        <m.div 
           variants={itemVariants}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full"
         >
@@ -112,9 +112,9 @@ export const Contact = memo(() => {
               </div>
             </a>
           ))}
-        </motion.div>
+        </m.div>
 
-        <motion.div 
+        <m.div 
           variants={itemVariants}
           className="flex items-center gap-3 pt-6 border-t border-[var(--border-primary)]/40 w-full"
         >
@@ -125,8 +125,8 @@ export const Contact = memo(() => {
           <span className="text-xs md:text-sm font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
             Available for new opportunities & role invitations
           </span>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </section>
   );
 });

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, memo } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { m, useInView, AnimatePresence } from 'framer-motion';
 import { BookOpen, Search } from 'lucide-react';
 import { KNOWLEDGE_TREE_DATA, type TechnologyNode } from '../../data/knowledgeData';
 import { KnowledgeTree } from './components/KnowledgeTree';
@@ -38,9 +38,9 @@ export const Skills: React.FC = memo(() => {
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Section Top Header with Prominent View Toggle */}
-        <motion.div
-          initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
-          animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+        <m.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--border-primary)] pb-6"
         >
@@ -61,7 +61,7 @@ export const Skills: React.FC = memo(() => {
             viewMode={viewMode}
             onViewModeChange={setViewMode}
           />
-        </motion.div>
+        </m.div>
 
         {/* Global Search Bar Bar across modes */}
         <div className="relative max-w-md">
@@ -78,7 +78,7 @@ export const Skills: React.FC = memo(() => {
         {/* View Mode Container with Smooth Fade Animation & Memory Management */}
         <AnimatePresence mode="wait">
           {viewMode === 'interactive' ? (
-            <motion.div
+            <m.div
               key="interactive-view"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -103,9 +103,9 @@ export const Skills: React.FC = memo(() => {
                   onSelectTechById={handleSelectTechById}
                 />
               </div>
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key="simple-view"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -113,7 +113,7 @@ export const Skills: React.FC = memo(() => {
               transition={{ duration: 0.3 }}
             >
               <SimpleSkills searchQuery={searchQuery} />
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 

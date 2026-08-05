@@ -1,5 +1,5 @@
 import React, { useState, memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Download, FileText, Eye, EyeOff } from 'lucide-react';
 import resumePdf from '../../assets/Hariom_Dhakar_CV.pdf';
 
@@ -16,7 +16,7 @@ export const ResumeViewer: React.FC = memo(() => {
         
         {/* Section Header */}
         <div className="text-center mb-8">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -24,8 +24,8 @@ export const ResumeViewer: React.FC = memo(() => {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border-glow)] bg-[var(--brand-glow)] text-[var(--text-accent)] text-[11px] font-mono mb-3"
           >
             <FileText className="w-3.5 h-3.5" aria-hidden="true" /> Resume
-          </motion.div>
-          <motion.h2 
+          </m.div>
+          <m.h2 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -33,8 +33,8 @@ export const ResumeViewer: React.FC = memo(() => {
             className="text-3xl md:text-5xl font-display font-bold tracking-tight text-[var(--text-primary)] mb-3"
           >
             Curriculum Vitae
-          </motion.h2>
-          <motion.p 
+          </m.h2>
+          <m.p 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -42,10 +42,10 @@ export const ResumeViewer: React.FC = memo(() => {
             className="text-[var(--text-secondary)] max-w-2xl mx-auto text-xs md:text-sm font-light leading-relaxed mb-6"
           >
             Download my detailed CV or toggle the interactive document preview below.
-          </motion.p>
+          </m.p>
 
           {/* Action CTAs */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -83,13 +83,13 @@ export const ResumeViewer: React.FC = memo(() => {
                 </>
               )}
             </button>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Collapsible Document Viewer (Hidden by Default) */}
         <AnimatePresence>
           {isExpanded && (
-            <motion.div
+            <m.div
               id="resume-preview-container"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -125,7 +125,7 @@ export const ResumeViewer: React.FC = memo(() => {
                   />
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback, memo, forwardRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { PROJECTS_DATA, type ProjectData, type ArchitectureStep } from '../../data/projectsData';
 import { ArchitectureSidebar } from '../../components/ArchitectureSidebar';
@@ -54,7 +54,7 @@ export const Projects = memo(() => {
   return (
     <section id="projects" className="w-full py-16 md:py-24 overflow-hidden px-4 md:px-8 border-t border-[var(--border-primary)]">
       <div className="max-w-[1600px] mx-auto mb-12 md:mb-16">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
@@ -71,7 +71,7 @@ export const Projects = memo(() => {
             Production-grade AI systems, multi-agent orchestrations, and LLM pipelines with custom execution architectures.
           </p>
           <div className="w-24 h-px bg-[var(--border-gold)] opacity-50" />
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Projects List */}
@@ -166,7 +166,7 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
   };
 
   return (
-    <motion.div 
+    <m.div 
       ref={cardRef}
       initial="hidden"
       whileInView="visible"
@@ -273,7 +273,7 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
         </div>
 
       </div>
-    </motion.div>
+    </m.div>
   );
 });
 

@@ -24,7 +24,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // 1. Passive RAF-throttled header background scroll detection
   useEffect(() => {
     let ticking = false;
 
@@ -46,45 +45,97 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
 
   // 2. High-performance IntersectionObserver for active section tracking (Zero layout thrashing)
   useEffect(() => {
-    const observerCallback: IntersectionObserverCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
+    const sectionHeights = new Map<string, number>();
+    const observedIds = new Set<string>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            sectionHeights.set(entry.target.id, entry.intersectionRect.height);
+          } else {
+            sectionHeights.set(entry.target.id, 0);
+          }
+        });
+
+        // Check if user is at the absolute bottom of the page
+        const isAtBottom =
+          window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 20;
+
+        let bestSection = '';
+        let maxVisibleHeight = 0;
+
+        if (isAtBottom) {
+          bestSection = NAV_ITEMS[NAV_ITEMS.length - 1].id;
+        } else {
+          sectionHeights.forEach((height, id) => {
+            // Ignore tiny edge intersections (< 25px)
+            if (height > 25 && height > maxVisibleHeight) {
+              maxVisibleHeight = height;
+              bestSection = id;
+            }
+          });
+        }
+
+        if (bestSection) {
+          setActiveSection((prev) => (prev !== bestSection ? bestSection : prev));
+        }
+      },
+      {
+        root: null,
+        rootMargin: '-80px 0px 0px 0px',
+        threshold: Array.from({ length: 51 }, (_, i) => i / 50),
+      }
+    );
+
+    const observeElements = () => {
+      NAV_ITEMS.forEach(({ id }) => {
+        if (!observedIds.has(id)) {
+          const el = document.getElementById(id);
+          if (el) {
+            observer.observe(el);
+            observedIds.add(id);
+          }
         }
       });
     };
 
-    const observer = new IntersectionObserver(observerCallback, {
-      rootMargin: '-30% 0px -40% 0px',
-      threshold: 0,
-    });
+    observeElements();
 
-    NAV_ITEMS.forEach((item) => {
-      const element = document.getElementById(item.id);
-      if (element) observer.observe(element);
-    });
+    // Catch lazy-loaded section components when they mount into the DOM
+    let mutationObserver: MutationObserver | null = null;
+    if (observedIds.size < NAV_ITEMS.length) {
+      mutationObserver = new MutationObserver(() => {
+        observeElements();
+        if (observedIds.size === NAV_ITEMS.length && mutationObserver) {
+          mutationObserver.disconnect();
+          mutationObserver = null;
+        }
+      });
+      mutationObserver.observe(document.body, { childList: true, subtree: true });
+    }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (mutationObserver) mutationObserver.disconnect();
+    };
   }, []);
 
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isMobileMenuOpen]);
-
   const handleNavClick = (id: string) => {
-    setIsMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  setIsMobileMenuOpen(false);
+
+  const element = document.getElementById(id);
+
+  if (!element) return;
+
+  setActiveSection(id);
+
+  element.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+};
 
   return (
     <>

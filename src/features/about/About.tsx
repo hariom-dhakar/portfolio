@@ -1,5 +1,5 @@
 import { useRef, useEffect, memo } from 'react';
-import { motion, useInView, useSpring, useTransform } from 'framer-motion';
+import { m, useInView, useSpring, useTransform } from 'framer-motion';
 
 const AnimatedNumber = memo(({ value, suffix = "" }: { value: number, suffix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -13,7 +13,7 @@ const AnimatedNumber = memo(({ value, suffix = "" }: { value: number, suffix?: s
     }
   }, [isInView, spring, value]);
 
-  return <motion.span ref={ref} className="tabular-nums font-display font-semibold">{display}</motion.span>;
+  return <m.span ref={ref} className="tabular-nums font-display font-semibold">{display}</m.span>;
 });
 
 AnimatedNumber.displayName = 'AnimatedNumber';
@@ -41,7 +41,7 @@ export const About = memo(() => {
       <div className="max-w-7xl w-full mx-auto flex flex-col gap-12 md:gap-16">
         {/* Header Section */}
         <div className="flex flex-col gap-3">
-          <motion.h2 
+          <m.h2 
             custom={1}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -49,8 +49,8 @@ export const About = memo(() => {
             className="text-4xl md:text-6xl font-display font-bold text-[var(--text-primary)] tracking-tight"
           >
             The Engineer
-          </motion.h2>
-          <motion.p 
+          </m.h2>
+          <m.p 
             custom={2}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -58,11 +58,11 @@ export const About = memo(() => {
             className="text-lg md:text-2xl font-sans font-light text-[var(--text-secondary)] max-w-3xl leading-relaxed"
           >
             Designing production AI systems that reason, retrieve, and respond.
-          </motion.p>
+          </m.p>
         </div>
 
         {/* Metrics Section */}
-        <motion.div 
+        <m.div 
           custom={3}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
@@ -101,10 +101,10 @@ export const About = memo(() => {
               DSA Problems Solved
             </span>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Content Section */}
-        <motion.div 
+        <m.div 
           custom={4}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
@@ -130,7 +130,7 @@ export const About = memo(() => {
               <span className="text-[var(--text-primary)] font-display font-bold text-base md:text-lg">Databricks Certified Generative AI Engineer Associate</span>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

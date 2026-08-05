@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Layers, Activity, GitBranch } from 'lucide-react';
 import { type ProjectData } from '../data/projectsData';
 
@@ -32,7 +32,7 @@ export const ArchitectureSidebar = memo(({ selectedProject, activeStepIndex, onS
 
       {/* Selected Active Architecture Component Highlight Box */}
       <AnimatePresence mode="wait">
-        <motion.div
+        <m.div
           key={currentStep.id}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export const ArchitectureSidebar = memo(({ selectedProject, activeStepIndex, onS
             </span>
             <span>Status: 200 OK</span>
           </div>
-        </motion.div>
+        </m.div>
       </AnimatePresence>
 
       {/* Pipeline Node Step List */}

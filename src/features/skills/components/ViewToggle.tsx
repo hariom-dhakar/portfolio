@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FolderTree, LayoutGrid } from 'lucide-react';
 
 export type SkillsViewMode = 'interactive' | 'simple';
@@ -32,7 +32,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = memo(({
         <FolderTree className="w-3.5 h-3.5" />
         <span>Interactive Explorer</span>
         {viewMode === 'interactive' && (
-          <motion.div
+          <m.div
             layoutId="skillsViewPill"
             className="absolute inset-0 bg-[var(--brand-glow)] border border-[var(--border-glow)] rounded-xl -z-10 shadow-sm"
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
@@ -53,7 +53,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = memo(({
         <LayoutGrid className="w-3.5 h-3.5" />
         <span>Quick Skills View</span>
         {viewMode === 'simple' && (
-          <motion.div
+          <m.div
             layoutId="skillsViewPill"
             className="absolute inset-0 bg-[var(--brand-glow)] border border-[var(--border-glow)] rounded-xl -z-10 shadow-sm"
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}

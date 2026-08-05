@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -33,7 +33,7 @@ export const Experience = memo(() => {
       className="py-16 md:py-24 px-4 md:px-8 max-w-6xl mx-auto border-t border-[var(--border-primary)]"
       aria-label="Experience Section"
     >
-      <motion.div
+      <m.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -42,22 +42,22 @@ export const Experience = memo(() => {
       >
         {/* Header */}
         <div className="space-y-2">
-          <motion.h2 
+          <m.h2 
             variants={itemVariants}
             className="font-display text-4xl md:text-6xl font-bold tracking-tight text-[var(--text-primary)]"
           >
             Deployment History
-          </motion.h2>
-          <motion.p 
+          </m.h2>
+          <m.p 
             variants={itemVariants}
             className="text-[var(--text-gold)] text-xs md:text-sm font-mono tracking-wider"
           >
             SYSTEM LOG // RECENT PRODUCTION RELEASES
-          </motion.p>
+          </m.p>
         </div>
 
         {/* Deployment Record Card */}
-        <motion.div variants={itemVariants} className="glass-card p-6 md:p-10 rounded-3xl border border-[var(--border-primary)] space-y-8 relative overflow-hidden">
+        <m.div variants={itemVariants} className="glass-card p-6 md:p-10 rounded-3xl border border-[var(--border-primary)] space-y-8 relative overflow-hidden">
           
           {/* Top Status Header */}
           <div className="border-b border-[var(--border-primary)] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -80,7 +80,7 @@ export const Experience = memo(() => {
           <div className="relative pl-6 space-y-6 border-l-2 border-[var(--border-glow)]">
             
             {/* Animated Pulse Beam down the line */}
-            <motion.div
+            <m.div
               className="absolute left-[-2px] top-0 w-[2px] h-full bg-[var(--text-accent)] shadow-[0_0_10px_var(--text-accent-glow)]"
               initial={{ height: 0 }}
               whileInView={{ height: '100%' }}
@@ -89,7 +89,7 @@ export const Experience = memo(() => {
             />
 
             {deliverables.map((item, index) => (
-              <motion.div 
+              <m.div 
                 key={index}
                 variants={itemVariants}
                 className="relative flex flex-col gap-1 p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-[var(--border-glow)] transition-colors"
@@ -100,12 +100,12 @@ export const Experience = memo(() => {
                 <span className="font-mono text-[var(--text-gold)] text-[10px] uppercase tracking-widest font-semibold">DELIVERABLE_0{index + 1}</span>
                 <span className="font-display text-lg md:text-xl font-semibold text-[var(--text-primary)]">{item.title}</span>
                 <span className="font-mono text-[var(--text-accent)] text-xs md:text-sm">&gt; {item.impact}</span>
-              </motion.div>
+              </m.div>
             ))}
           </div>
 
           {/* Tech Tags */}
-          <motion.div 
+          <m.div 
             variants={itemVariants}
             className="flex flex-wrap gap-2 pt-4 border-t border-[var(--border-primary)]"
           >
@@ -118,11 +118,11 @@ export const Experience = memo(() => {
                 #{tag}
               </span>
             ))}
-          </motion.div>
+          </m.div>
 
-        </motion.div>
+        </m.div>
 
-      </motion.div>
+      </m.div>
     </section>
   );
 });

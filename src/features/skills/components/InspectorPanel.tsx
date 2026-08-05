@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import {
   FileText,
   Copy,
@@ -56,7 +56,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+      <m.div
         key={tech.id}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -239,7 +239,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           )}
         </div>
 
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 };
