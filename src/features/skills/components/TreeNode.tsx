@@ -11,7 +11,8 @@ import {
   Server,
   Network,
   Cpu,
-  Workflow
+  Workflow,
+  Zap
 } from 'lucide-react';
 import {
   SiLangchain,
@@ -28,7 +29,6 @@ import {
   SiGithubactions
 } from 'react-icons/si';
 import {
-  OpenAILogo,
   PythonLogo,
   TypeScriptLogo,
   ReactLogo,
@@ -61,9 +61,10 @@ export const TechIcon = memo(({ name, className = "w-4 h-4" }: { name: string; c
   if (lower.includes('crewai')) return <Brain className={className} />;
   if (lower.includes('langchain')) return <SiLangchain className={className} />;
   if (lower.includes('langgraph')) return <Workflow className={className} />;
-  if (lower.includes('openai')) return <OpenAILogo className={className} />;
-  if (lower.includes('anthropic') || lower.includes('claude')) return <Sparkles className={className} />;
+  if (lower.includes('groq')) return <Zap className={className} />;
   if (lower.includes('gemini') || lower.includes('google')) return <SiGoogle className={className} />;
+  if (lower.includes('nvidia')) return <Cpu className={className} />;
+  if (lower.includes('llama') || lower.includes('meta')) return <SiMeta className={className} />;
   if (lower.includes('huggingface') || lower.includes('transformers')) return <SiHuggingface className={className} />;
   if (lower.includes('pytorch')) return <PyTorchLogo className={className} />;
   if (lower.includes('tensorflow')) return <SiTensorflow className={className} />;

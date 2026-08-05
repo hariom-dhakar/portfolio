@@ -54,7 +54,29 @@ task = Task(
 crew = Crew(agents=[researcher], tasks=[task], process=Process.sequential)`,
         keyConcepts: ['Role Delegation', 'Sequential Handoffs', 'Custom Tools', 'Memory Persistence'],
         projects: ['CrewAI EDA Analyzer'],
-        relatedTech: ['python', 'fastapi', 'langchain', 'openai'],
+        relatedTech: ['python', 'fastapi', 'langchain', 'groq'],
+        github: 'https://github.com/hariom-dhakar'
+      },
+      {
+        id: 'groq',
+        name: 'Groq Llama 3.3',
+        categoryId: 'ai-llm',
+        categoryName: 'AI & LLM',
+        level: 'Expert',
+        years: '1+ yrs',
+        description: 'Ultra-low latency inference engine for running open-weights models (Llama 3.3 70B) at 300+ tokens/sec.',
+        usage: 'Powering real-time multi-agent loops, document drafting, and rapid evaluation steps with minimal latency.',
+        codeSnippet: `from langchain_groq import ChatGroq
+
+llm = ChatGroq(
+    temperature=0.1,
+    model_name="llama-3.3-70b-versatile",
+    groq_api_key="gsk_..."
+)
+response = llm.invoke("Synthesize clinical findings from vector context.")`,
+        keyConcepts: ['LPU Architecture', 'Ultra-Low Latency', 'Llama 3.3 70B', 'Open Models'],
+        projects: ['ProposalAI', 'MedInsight'],
+        relatedTech: ['langgraph', 'langchain', 'fastapi', 'python'],
         github: 'https://github.com/hariom-dhakar'
       },
       {
@@ -67,16 +89,16 @@ crew = Crew(agents=[researcher], tasks=[task], process=Process.sequential)`,
         description: 'Framework for constructing context-aware LLM chains, custom document retrievers, and prompt templates.',
         usage: 'Structuring RAG pipelines, parsing multi-format documents, and connecting vector stores with multi-provider LLMs.',
         codeSnippet: `from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_groq import ChatGroq
 from langchain.chains import create_retrieval_chain
 
-embeddings = OpenAIEmbeddings()
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 vectorstore = FAISS.load_local("index", embeddings)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
-chain = create_retrieval_chain(retriever, ChatOpenAI(model="gpt-4o"))`,
+chain = create_retrieval_chain(retriever, ChatGroq(model="llama-3.3-70b-versatile"))`,
         keyConcepts: ['Retrieval Chains', 'Document Loaders', 'Prompt Templates', 'Vector Retrievers'],
         projects: ['ProposalAI', 'MedInsight'],
-        relatedTech: ['langgraph', 'rag', 'faiss', 'chromadb', 'openai'],
+        relatedTech: ['langgraph', 'rag', 'faiss', 'chromadb', 'groq'],
         github: 'https://github.com/hariom-dhakar/AI-Proposal-Agent'
       },
       {
@@ -177,7 +199,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")`,
         keyConcepts: ['Open Models', 'LoRA / QLoRA', 'Tokenization', 'Local Inference'],
         projects: ['MedInsight'],
-        relatedTech: ['python', 'pytorch', 'rag', 'openai']
+        relatedTech: ['python', 'pytorch', 'rag', 'groq']
       }
     ]
   },
@@ -198,7 +220,7 @@ model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")`,
         codeSnippet: `@dataclass(frozen=True)
 class AgentConfig:
     name: str
-    model: str = "gpt-4o"
+    model: str = "llama-3.3-70b-versatile"
     temperature: float = 0.2
     
 async def run_pipeline(config: AgentConfig) -> dict:
@@ -365,7 +387,7 @@ from azure.keyvault.secrets import SecretClient
 
 vault_url = "https://ai-vault.vault.azure.net/"
 client = SecretClient(vault_url=vault_url, credential=DefaultAzureCredential())
-openai_key = client.get_secret("OPENAI-API-KEY").value`,
+groq_key = client.get_secret("GROQ-API-KEY").value`,
         keyConcepts: ['Key Vault Secrets', 'App Services', 'DefaultAzureCredential', 'Cloud Gateways'],
         projects: ['Celebal Technologies Projects'],
         relatedTech: ['databricks', 'docker', 'python']

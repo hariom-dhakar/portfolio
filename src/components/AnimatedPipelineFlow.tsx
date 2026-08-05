@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { m, useInView, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { CheckCircle2, Clock, Cpu, Hash, RotateCcw, Activity } from 'lucide-react';
 import type { ArchitectureStep } from '../data/projectsData';
 
@@ -21,34 +21,90 @@ interface TelemetryData {
 }
 
 const getTelemetryForStep = (index: number, projectId: string): TelemetryData => {
-  const models = ['GPT-4.1', 'Llama-3.3-70B', 'Claude-3.5-Sonnet', 'DeepSeek-R1', 'Groq-Llama-3'];
-  const times = ['0.4s', '1.2s', '0.8s', '1.8s', '0.3s', '2.1s', '0.9s'];
-  
-  const modelIndex = (index + projectId.length) % models.length;
-  const timeIndex = (index * 3) % times.length;
-  
+  if (projectId === 'medinsight') {
+    const steps = [
+      { model: 'text-embedding-004', executionTime: '0.15s', promptTokens: 120, outputTokens: 0, retries: 0 },
+      { model: 'Gemini-1.5-Flash', executionTime: '1.40s', promptTokens: 1500, outputTokens: 800, retries: 0 },
+      { model: 'Groq-Llama-3-70B', executionTime: '0.85s', promptTokens: 1100, outputTokens: 450, retries: 0 },
+      { model: 'Groq-Llama-3-70B', executionTime: '1.60s', promptTokens: 2200, outputTokens: 900, retries: 0 },
+      { model: 'Groq-Llama-3-70B', executionTime: '0.50s', promptTokens: 600, outputTokens: 150, retries: 0 },
+    ];
+    return {
+      status: '200 OK',
+      ...(steps[index] || { model: 'Gemini-1.5-Flash', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
+    };
+  }
+
+  if (projectId === 'proposal') {
+    const steps = [
+      { model: 'Groq-Llama-3.3', executionTime: '1.80s', promptTokens: 1200, outputTokens: 800, retries: 0 },
+      { model: 'gemini-embedding-001', executionTime: '1.20s', promptTokens: 1000, outputTokens: 0, retries: 0 },
+      { model: 'Groq-Llama-3.3', executionTime: '8.40s', promptTokens: 4500, outputTokens: 2500, retries: 0 },
+      { model: 'Groq-Llama-3.3', executionTime: '3.20s', promptTokens: 1800, outputTokens: 700, retries: 1 },
+      { model: 'System Node', executionTime: '0.05s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'ReportLab Engine', executionTime: '3.50s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'MongoDB', executionTime: '0.30s', promptTokens: 0, outputTokens: 0, retries: 0 },
+    ];
+    return {
+      status: '200 OK',
+      ...(steps[index] || { model: 'Groq-Llama-3.3', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
+    };
+  }
+
+  if (projectId === 'eda') {
+    const steps = [
+      { model: 'Pandas Profiler', executionTime: '0.20s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'Pandas / NumPy', executionTime: '0.80s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'Pandas / SciPy', executionTime: '1.10s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'CrewAI (Llama-3)', executionTime: '1.50s', promptTokens: 1200, outputTokens: 400, retries: 0 },
+      { model: 'Sandboxed Python', executionTime: '2.30s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'Matplotlib', executionTime: '1.80s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'CrewAI (Llama-3)', executionTime: '3.20s', promptTokens: 2500, outputTokens: 1200, retries: 0 },
+    ];
+    return {
+      status: '200 OK',
+      ...(steps[index] || { model: 'CrewAI (Llama-3)', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
+    };
+  }
+
+  if (projectId === 'observability') {
+    const steps = [
+      { model: 'FastAPI Gateway', executionTime: '0.05s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'Guardrails / PII', executionTime: '0.15s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'Groq-Llama-3-70B', executionTime: '0.25s', promptTokens: 400, outputTokens: 100, retries: 0 },
+      { model: 'Inference Router', executionTime: '1.20s', promptTokens: 850, outputTokens: 450, retries: 0 },
+      { model: 'Langfuse / OTel', executionTime: '0.08s', promptTokens: 0, outputTokens: 0, retries: 0 },
+      { model: 'RAGAS / LLM-Judge', executionTime: '1.80s', promptTokens: 1800, outputTokens: 800, retries: 0 },
+      { model: 'FastAPI Gateway', executionTime: '0.02s', promptTokens: 0, outputTokens: 0, retries: 0 },
+    ];
+    return {
+      status: '200 OK',
+      ...(steps[index] || { model: 'Inference Router', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
+    };
+  }
+
+  // Fallback
   return {
-    executionTime: times[timeIndex],
+    executionTime: '1.0s',
     status: '200 OK',
-    model: models[modelIndex],
-    promptTokens: 850 + index * 340,
-    outputTokens: 180 + index * 120,
-    retries: index === 3 ? 1 : 0,
+    model: 'Groq-Llama-3.3',
+    promptTokens: 1000,
+    outputTokens: 500,
+    retries: 0,
   };
 };
 
 export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
   architecture,
   projectId,
-  activeStepIndex,
   onStepSelect,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const pipelineScrollRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
   const isUserInteractingRef = useRef<boolean>(false);
-  const isInView = useInView(containerRef, { amount: 0.2 });
   const shouldReduceMotion = useReducedMotion();
+  const startTimeRef = useRef<number>(performance.now());
 
   const [activeNodeIndex, setActiveNodeIndex] = useState<number>(0);
   const [hoveredNodeIndex, setHoveredNodeIndex] = useState<number | null>(null);
@@ -57,21 +113,20 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
   const nodeCount = architecture.length;
 
   useEffect(() => {
-    if (!isInView || shouldReduceMotion) return;
+    if (shouldReduceMotion) return;
 
     const intervalTime = 9000 / nodeCount;
-    const timer = setInterval(() => {
-      setActiveNodeIndex((prev) => (prev + 1) % nodeCount);
-    }, intervalTime);
+    const updateActiveNode = () => {
+      const elapsed = performance.now() - startTimeRef.current;
+      const currentStep = Math.floor((elapsed % 9000) / intervalTime) % nodeCount;
+      setActiveNodeIndex(currentStep);
+    };
+
+    updateActiveNode();
+    const timer = setInterval(updateActiveNode, 100);
 
     return () => clearInterval(timer);
-  }, [isInView, nodeCount, shouldReduceMotion]);
-
-  useEffect(() => {
-    if (hoveredNodeIndex === null) {
-      setActiveNodeIndex(activeStepIndex % nodeCount);
-    }
-  }, [activeStepIndex, nodeCount, hoveredNodeIndex]);
+  }, [nodeCount, shouldReduceMotion]);
 
   useEffect(() => {
     isUserInteractingRef.current = false;
@@ -253,14 +308,13 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
 
                   {isCurrentActive && !shouldReduceMotion && (
                     <m.div
+                      key={`packet-${index}`}
                       className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[var(--text-accent)] shadow-[0_0_10px_var(--text-accent-glow)] z-20"
                       initial={{ left: '0%' }}
                       animate={{ left: '100%' }}
                       transition={{
                         duration: 9000 / nodeCount / 1000,
                         ease: 'easeInOut',
-                        repeat: Infinity,
-                        repeatType: 'loop',
                       }}
                     />
                   )}

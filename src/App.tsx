@@ -6,6 +6,7 @@ import { Navigation } from './components/Navigation';
 import { NeuralBackground } from './features/background/NeuralBackground';
 import { Hero } from './features/hero/Hero';
 import { About } from './features/about/About';
+import { EngineeringPhilosophy } from './features/philosophy/EngineeringPhilosophy';
 import { Experience } from './features/experience/Experience';
 
 const loadFeatures = () => import('framer-motion').then((res) => res.domMax);
@@ -31,6 +32,8 @@ export default function App() {
         <Hero />
 
         <About />
+
+        <EngineeringPhilosophy />
 
         <Experience />
 

@@ -30,6 +30,16 @@ export interface Metric {
   value: string;
 }
 
+export interface ProductionConsideration {
+  title: string;
+  detail: string;
+}
+
+export interface LessonLearned {
+  title: string;
+  takeaway: string;
+}
+
 export interface ProjectData {
   id: string;
   title: string;
@@ -38,6 +48,8 @@ export interface ProjectData {
   tech: string[];
   github: string;
   architecture: ArchitectureStep[];
+  productionConsiderations: ProductionConsideration[];
+  lessonsLearned: LessonLearned[];
 }
 
 export const PROJECTS_DATA: ProjectData[] = [
@@ -58,6 +70,18 @@ export const PROJECTS_DATA: ProjectData[] = [
       { id: 'm3', title: 'Critic', description: 'Granular claim audit classifying assertions as Supported or Unsupported', icon: ShieldCheck },
       { id: 'm4', title: 'Evaluate', description: 'Parallel LLM-as-a-Judge scoring for groundedness, faithfulness, and relevance', icon: Activity },
       { id: 'm5', title: 'Reflect', description: 'Weighted confidence check (≥80.0) with up to 3 retry loops back to retrieval', icon: GitBranch },
+    ],
+    productionConsiderations: [
+      { title: 'Rate Limiting & Throttling', detail: 'Token-bucket rate limiting at gateway level to enforce provider RPM caps during batch literature ingestion.' },
+      { title: 'Retry & Fallback Strategy', detail: 'Exponential backoff with jitter on ChromaDB vector queries and automated LLM fallback on request timeouts.' },
+      { title: 'Observability & Tracing', detail: 'LangSmith span instrumentation tracking per-reflection token cost, groundedness score, and retrieval latency.' },
+      { title: 'HIPAA & PII Sanitization', detail: 'Client-side stripping of patient identifiers prior to dispatching prompt payloads to external LLM endpoints.' },
+      { title: 'Caching Layer', detail: 'Redis caching for high-frequency medical terminology embeddings and repeated clinical literature queries.' },
+    ],
+    lessonsLearned: [
+      { title: 'Reflection Loops vs Single Pass', takeaway: 'Single-pass prompt engineering was insufficient for clinical accuracy; multi-step LangGraph reflection loops reduced hallucination rates significantly.' },
+      { title: 'Domain Chunking Strategy', takeaway: 'Vector retrieval quality depended heavily on medical domain-aware chunking over generic fixed-character splitters.' },
+      { title: 'Isolated Critic Auditing', takeaway: 'Groundedness scoring via an isolated critic agent prevented unsupported medical assertions from reaching the final output.' },
     ],
   },
   {
@@ -80,6 +104,18 @@ export const PROJECTS_DATA: ProjectData[] = [
       { id: 'p6', title: 'Portrait PDF', description: 'Compiles corporate PDF with ReportLab, NumberedCanvas, and header rules', icon: BarChart },
       { id: 'p7', title: 'Mongo Persistence', description: 'Indexes run execution metadata, audit scores, and log history', icon: GitBranch },
     ],
+    productionConsiderations: [
+      { title: 'Async SSE Streaming', detail: 'Server-Sent Events (SSE) with background task queues to stream real-time section generation without HTTP timeouts.' },
+      { title: 'Prompt Versioning', detail: 'Immutable prompt templates stored with semantic version tags to guarantee consistent 19-section PDF structure.' },
+      { title: 'Caching & Cost Control', detail: 'Redis caching for Azure pricing catalogs and token usage caps per section to prevent budget overruns.' },
+      { title: 'State & Persistence', detail: 'MongoDB transaction indexing for execution audit trails, draft recovery, and automated error rollbacks.' },
+      { title: 'Document PDF Engine', detail: 'ReportLab NumberedCanvas for dynamic two-pass page numbering and multi-page corporate header rendering.' },
+    ],
+    lessonsLearned: [
+      { title: 'Async Non-Blocking Architecture', takeaway: 'Async FastAPI gateways were essential for orchestrating multi-agent workflows spanning 19 sections without blocking the main event loop.' },
+      { title: 'Automated Remediation Cutoffs', takeaway: 'Automated quality scoring with remediation thresholds (< 0.85) caught structural gaps before rendering final PDFs.' },
+      { title: 'Catalog Caching', takeaway: 'Caching static cloud pricing data reduced external API latency by 40% and stabilized cost estimation calculations.' },
+    ],
   },
   {
     id: 'eda',
@@ -101,6 +137,17 @@ export const PROJECTS_DATA: ProjectData[] = [
       { id: 'e6', title: 'Viz Engine', description: 'Dynamic plot generation & statistical charts', icon: BarChart },
       { id: 'e7', title: 'Insights Synthesis', description: 'LLM reasoning summary & executive report', icon: Zap },
     ],
+    productionConsiderations: [
+      { title: 'Sandboxed Python Execution', detail: 'Isolated Docker execution environment with strict CPU/memory limits to safely run generated Python data analysis scripts.' },
+      { title: 'Input Schema Enforcement', detail: 'Tabular file schema verification (CSV/JSON) and column profiling to catch corrupt or malicious uploads.' },
+      { title: 'Self-Healing Code Execution', detail: 'Execution error traceback capture fed back to the Python agent for automated script repair upon runtime exceptions.' },
+      { title: 'Worker Pool Concurrency', detail: 'Asynchronous task worker pools to process concurrent data profiling jobs without thread starvation.' },
+    ],
+    lessonsLearned: [
+      { title: 'Decoupled Agent Responsibilities', takeaway: 'Decoupling raw data profiling from visual chart synthesis allowed specialist agents to work in parallel, improving throughput by 70%.' },
+      { title: 'Execution Sandboxing', takeaway: 'Sandboxing Python execution was mandatory to prevent arbitrary code execution vulnerabilities during automated script generation.' },
+      { title: 'Imputation Impact', takeaway: 'Upstream data cleaning and null-value imputation quality directly dictated the accuracy of downstream LLM statistical insights.' },
+    ],
   },
   {
     id: 'observability',
@@ -121,6 +168,17 @@ export const PROJECTS_DATA: ProjectData[] = [
       { id: 'o5', title: 'Tracing Engine', description: 'Langfuse & OpenTelemetry span telemetry logging', icon: FileCode },
       { id: 'o6', title: 'Grounding Eval', description: 'RAGAS context relevance & faithfulness scoring', icon: CheckCircle2 },
       { id: 'o7', title: 'Secure Output', description: 'Validated response delivery & metrics dashboard', icon: ShieldCheck },
+    ],
+    productionConsiderations: [
+      { title: 'Authentication & Tenant Quotas', detail: 'Bearer token validation and tenant-based token bucket rate limiting at gateway ingress via Redis.' },
+      { title: 'Multi-Provider Fallback Routing', detail: 'Circuit breaker logic routing prompts to secondary LLM endpoints if primary model latency spikes or returns 5xx errors.' },
+      { title: 'Ingress Security & Guardrails', detail: 'Real-time PII masking and prompt injection detection before forwarding payloads to inference providers.' },
+      { title: 'Distributed Telemetry & Evals', detail: 'OpenTelemetry span tracing with automated RAGAS context relevance and faithfulness scoring dashboards.' },
+    ],
+    lessonsLearned: [
+      { title: 'Circuit Breaker Fallbacks', takeaway: 'A unified gateway layer with automated model fallback improved overall API availability to 99.9% despite upstream provider outages.' },
+      { title: 'Continuous Grounding Evals', takeaway: 'Real-time RAGAS evaluation pipelines were crucial for detecting hallucination drift across model provider updates.' },
+      { title: 'Ingress Guardrails', takeaway: 'Adding prompt injection guardrails at ingress prevented system prompt leaks and malicious jailbreak attempts.' },
     ],
   },
 ];

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useCallback, memo, forwardRef } from 'react';
-import { m, useInView } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { m, useInView, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ChevronDown, ChevronUp, Lightbulb, ShieldCheck } from 'lucide-react';
 import { PROJECTS_DATA, type ProjectData, type ArchitectureStep } from '../../data/projectsData';
 import { AnimatedPipelineFlow } from '../../components/AnimatedPipelineFlow';
 
@@ -80,6 +80,7 @@ Projects.displayName = 'Projects';
 const ProjectCard = memo(({ project, index }: { project: ProjectData; index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [isProdExpanded, setIsProdExpanded] = useState(false);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const isProgrammaticScroll = useRef(false);
   const scrollCleanupRef = useRef<(() => void) | null>(null);
@@ -242,6 +243,93 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
             </span>
           ))}
         </div>
+
+        {/* Lessons Learned Section */}
+        {project.lessonsLearned && project.lessonsLearned.length > 0 && (
+          <div className="border-t border-[var(--border-primary)]/60 pt-4 flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <Lightbulb className="w-4 h-4 text-[var(--text-gold)] shrink-0" />
+              <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-wider font-semibold">
+                Lessons Learned
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {project.lessonsLearned.map((lesson, lIdx) => (
+                <div 
+                  key={lIdx}
+                  className="p-3.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] space-y-1.5 hover:border-[var(--border-gold)]/40 transition-colors"
+                >
+                  <span className="font-mono text-xs font-semibold text-[var(--text-primary)] block">
+                    {lesson.title}
+                  </span>
+                  <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed">
+                    {lesson.takeaway}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Production Considerations Collapsible Section */}
+        {project.productionConsiderations && project.productionConsiderations.length > 0 && (
+          <div className="border-t border-[var(--border-primary)]/60 pt-3">
+            <button
+              onClick={() => setIsProdExpanded((prev) => !prev)}
+              className="w-full flex items-center justify-between p-3 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)] hover:border-[var(--border-glow)] transition-all cursor-pointer group"
+              aria-expanded={isProdExpanded}
+            >
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[var(--text-accent)] shrink-0" />
+                <span className="font-mono text-xs text-[var(--text-primary)] font-semibold uppercase tracking-wider">
+                  Production Considerations
+                </span>
+                <span className="text-[10px] font-mono text-[var(--text-tertiary)] px-2 py-0.5 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-primary)]">
+                  {project.productionConsiderations.length} items
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-tertiary)] group-hover:text-[var(--text-accent)] transition-colors">
+                <span>{isProdExpanded ? 'Collapse' : 'Expand'}</span>
+                {isProdExpanded ? (
+                  <ChevronUp className="w-4 h-4 text-[var(--text-accent)] shrink-0" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-[var(--text-tertiary)] group-hover:text-[var(--text-accent)] shrink-0" />
+                )}
+              </div>
+            </button>
+
+            <AnimatePresence>
+              {isProdExpanded && (
+                <m.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden pt-3"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
+                    {project.productionConsiderations.map((item, pIdx) => (
+                      <div
+                        key={pIdx}
+                        className="p-3.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] space-y-1.5 hover:border-[var(--border-glow)] transition-all"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-accent)] shrink-0" />
+                          <span className="font-mono text-xs font-semibold text-[var(--text-primary)]">
+                            {item.title}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed pl-3.5">
+                          {item.detail}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </m.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
 
       </div>
     </m.div>

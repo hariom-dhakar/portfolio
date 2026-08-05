@@ -2,15 +2,19 @@ import { useState, useEffect, memo } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
-const ROLES = ['AI Engineer', 'GenAI Engineer', 'Agentic AI Engineer'];
+const FOCUS_TAGS = ['Agentic AI', 'LLMs', 'RAG', 'Azure AI', 'Production AI Systems'];
+const SUBTITLES = [
+  'Building production AI systems that retrieve, reason, and act.',
+  'I design production-ready AI systems—from document intelligence to autonomous agents.',
+];
 
 export const Hero = memo(() => {
-  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentRoleIndex((prev) => (prev + 1) % ROLES.length);
-    }, 3500);
+      setCurrentSubtitleIndex((prev) => (prev + 1) % SUBTITLES.length);
+    }, 4500);
     return () => clearInterval(interval);
   }, []);
 
@@ -22,7 +26,7 @@ export const Hero = memo(() => {
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[45vw] h-[45vw] min-w-[300px] min-h-[300px] max-w-[600px] max-h-[600px] bg-brand-glow/20 rounded-full blur-[100px] md:blur-[140px] pointer-events-none -z-10" />
 
-      <div className="z-10 flex flex-col items-center text-center w-full max-w-[680px] mx-auto px-6 space-y-6 md:space-y-8">
+      <div className="z-10 flex flex-col items-center text-center w-full max-w-[760px] mx-auto px-6 space-y-6 md:space-y-8">
         <m.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -41,17 +45,17 @@ export const Hero = memo(() => {
             Hariom Dhakar
           </h1>
           
-          <div className="relative h-8 md:h-10 w-full flex items-center justify-center overflow-hidden">
+          <div className="relative h-12 md:h-14 w-full flex items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
               <m.span
-                key={ROLES[currentRoleIndex]}
+                key={SUBTITLES[currentSubtitleIndex]}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute text-base sm:text-lg md:text-xl text-text-accent font-light tracking-wide font-mono"
+                className="absolute text-base sm:text-lg md:text-xl text-[var(--text-accent)] font-medium tracking-wide font-display max-w-2xl px-2"
               >
-                {ROLES[currentRoleIndex]}
+                {SUBTITLES[currentSubtitleIndex]}
               </m.span>
             </AnimatePresence>
           </div>
@@ -61,10 +65,26 @@ export const Hero = memo(() => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="text-sm sm:text-base md:text-lg text-text-secondary max-w-xl font-light leading-relaxed"
+          className="text-sm sm:text-base md:text-lg text-[var(--text-secondary)] max-w-2xl font-light leading-relaxed"
         >
-          Building production multi-agent systems, Self-RAG architectures, and scalable LLM gateways.
+          Designing production-ready AI systems—from enterprise document intelligence & Self-RAG architectures to autonomous multi-agent teams.
         </m.p>
+
+        <m.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex flex-wrap items-center justify-center gap-2 max-w-xl"
+        >
+          {FOCUS_TAGS.map((tag) => (
+            <span
+              key={tag}
+              className="px-3 py-1 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-secondary)] shadow-xs"
+            >
+              {tag}
+            </span>
+          ))}
+        </m.div>
 
         <m.div
           initial={{ opacity: 0, y: 15 }}
@@ -93,12 +113,12 @@ export const Hero = memo(() => {
         transition={{ duration: 1, delay: 0.9 }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-[9px] md:text-xs uppercase tracking-[0.3em] text-text-tertiary font-mono">Scroll</span>
+        <span className="text-[9px] md:text-xs uppercase tracking-[0.3em] text-[var(--text-tertiary)] font-mono">Scroll</span>
         <m.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-3.5 h-3.5 md:w-4 md:h-4 text-text-tertiary" strokeWidth={1.5} aria-hidden="true" />
+          <ChevronDown className="w-3.5 h-3.5 md:w-4 md:h-4 text-[var(--text-tertiary)]" strokeWidth={1.5} aria-hidden="true" />
         </m.div>
       </m.div>
     </section>

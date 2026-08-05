@@ -189,7 +189,7 @@ const MATH_SYMBOLS = [
   'Databricks',
   'Unity Catalog',
   'Delta Lake',
-  'Azure OpenAI',
+  'Azure AI Studio',
   'Azure ML',
   'OpenTelemetry',
   'Inference API',
