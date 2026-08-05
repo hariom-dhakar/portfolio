@@ -44,6 +44,11 @@ export interface ProjectData {
   id: string;
   title: string;
   tagline: string;
+  motivation: string;
+  problem: string;
+  solution: string;
+  overview: string;
+  implementationHighlights: string[];
   metrics: Metric[];
   tech: string[];
   github: string;
@@ -57,6 +62,15 @@ export const PROJECTS_DATA: ProjectData[] = [
     id: 'medinsight',
     title: 'MedInsight',
     tagline: 'Clinical literature retrieval system with LangGraph self-correction.',
+    motivation: 'Bridge the gap between raw medical literature search and clinical decision-making by eliminating ungrounded AI assertions.',
+    problem: 'Manual clinical record review is slow and vulnerable to ungrounded LLM hallucinations in high-stakes medical contexts.',
+    solution: 'Engineered a self-correcting multi-agent RAG workflow with LangGraph that audits medical assertions against PubMed citations.',
+    overview: 'MedInsight ingests medical datasets and PubMed papers, orchestrating a 5-node agent graph with async ChromaDB vector retrieval, real-time claim auditing, and reflection fallback loops.',
+    implementationHighlights: [
+      'State-driven LangGraph conditional routing with self-correction retry loops.',
+      'Asynchronous ChromaDB vector retrieval with domain-aware medical text splitters.',
+      'Isolated Critic evaluator node classifying assertions into Supported vs Unsupported claims.'
+    ],
     metrics: [
       { label: 'Agents', value: '5' },
       { label: 'Records', value: '20k+' },
@@ -88,6 +102,15 @@ export const PROJECTS_DATA: ProjectData[] = [
     id: 'proposal',
     title: 'ProposalAI',
     tagline: 'Autonomous multi-agent proposal generator with ReportLab PDF compilation.',
+    motivation: 'Automate complex RFP proposal generation and cloud consumption estimation without compromising corporate document formatting standards.',
+    problem: 'Enterprise teams spend days drafting complex technical proposals, estimating cloud infrastructure costs, and formatting multi-section documents.',
+    solution: 'Built an autonomous multi-agent pipeline executing parallel cloud research, pricing estimation, self-auditing quality cutoffs, and ReportLab PDF compilation.',
+    overview: 'ProposalAI orchestrates specialist agents to parse briefs, execute parallel ChromaDB RAG queries, estimate cloud infrastructure costs, and compile boardroom-ready portrait PDFs.',
+    implementationHighlights: [
+      '19-section modular proposal generation engine with real-time SSE telemetry streaming.',
+      'Self-correcting audit loop with automated prompt remediation if evaluation score drops < 0.85.',
+      'ReportLab two-pass NumberedCanvas engine compiling pixel-perfect corporate PDFs.'
+    ],
     metrics: [
       { label: 'Proposal Sections', value: '19' },
       { label: 'Quality Cutoff', value: '0.85' },
@@ -121,6 +144,15 @@ export const PROJECTS_DATA: ProjectData[] = [
     id: 'eda',
     title: 'CrewAI EDA Analyzer',
     tagline: 'Tabular data profiling and analysis via multi-agent delegation.',
+    motivation: 'Replace manual exploratory data analysis boilerplate with autonomous Python code generation and sandboxed statistical execution.',
+    problem: 'Exploratory data analysis requires manual Python scripting for missing value imputation, correlation analysis, and chart generation.',
+    solution: 'Designed a multi-agent workflow that cleans tabular datasets, engineers features, and executes sandboxed Python code to produce automated data profiling reports.',
+    overview: 'CrewAI EDA Analyzer delegates data cleaning, feature engineering, and statistical chart generation to role-specialized agents executing in isolated environments.',
+    implementationHighlights: [
+      'Decoupled agent roles for data profiling, feature selection, and plot generation.',
+      'Containerized Python execution sandbox preventing unauthorized code injection.',
+      'Automated self-healing code loops that repair syntax and Pandas errors using execution tracebacks.'
+    ],
     metrics: [
       { label: 'Automation', value: '70%' },
       { label: 'Agents', value: '3' },
@@ -153,6 +185,15 @@ export const PROJECTS_DATA: ProjectData[] = [
     id: 'observability',
     title: 'LLM Observability Gateway',
     tagline: 'Inference gateway with safety guardrails and RAGAS evaluations.',
+    motivation: 'Provide enterprise AI applications with high-availability model routing, threat interception, and automated RAG evaluation metrics.',
+    problem: 'Production AI pipelines lack real-time visibility into prompt injection threats, model latency spikes, and evaluation scores.',
+    solution: 'Developed a high-throughput inference gateway with PII masking, dynamic provider fallback routing, OpenTelemetry tracing, and RAGAS evaluations.',
+    overview: 'The Observability Gateway acts as a central proxy for all LLM calls, enforcing PII sanitization, semantic fallback routing, distributed tracing, and real-time faithfulness evaluation.',
+    implementationHighlights: [
+      'Redis-backed rate limiting and token consumption tracking gateway.',
+      'Circuit-breaker multi-provider fallback routing preventing single-vendor downtime.',
+      'Asynchronous RAGAS context relevance and hallucination scoring pipeline.'
+    ],
     metrics: [
       { label: 'Latency Drop', value: '45%' },
       { label: 'Faithfulness', value: '98%' },
