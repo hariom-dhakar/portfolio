@@ -1,18 +1,15 @@
-import { useRef, useEffect, useState, useCallback, memo, forwardRef } from 'react';
+import { useRef, useState, useCallback, memo, forwardRef } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowRight, 
   ChevronDown, 
   ChevronUp, 
   Lightbulb, 
   ShieldCheck, 
-  BookOpen, 
   ExternalLink, 
   AlertTriangle, 
   CheckCircle2, 
   Cpu, 
   Activity,
-  Layers,
   Code2
 } from 'lucide-react';
 import { PROJECTS_DATA, type ProjectData, type ArchitectureStep } from '../../data/projectsData';
