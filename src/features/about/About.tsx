@@ -23,11 +23,10 @@ export const About = memo(() => {
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
   const fadeUpVariant = {
-    hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
+    hidden: { opacity: 0, y: 24 },
     visible: (custom: number) => ({
       opacity: 1,
       y: 0,
-      filter: 'blur(0px)',
       transition: { duration: 0.8, delay: custom * 0.12, ease: [0.16, 1, 0.3, 1] as const }
     })
   };

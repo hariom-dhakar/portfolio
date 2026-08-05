@@ -1,9 +1,9 @@
+import { memo, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { Mail, Phone, ExternalLink } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../../components/icons';
 
-export const Contact = () => {
+export const Contact = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
 
@@ -129,4 +129,6 @@ export const Contact = () => {
       </motion.div>
     </section>
   );
-};
+});
+
+Contact.displayName = 'Contact';

@@ -1,8 +1,8 @@
+import { memo, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { Award } from 'lucide-react';
 
-export const Certifications = () => {
+export const Certifications = memo(() => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-50px' });
 
@@ -10,8 +10,8 @@ export const Certifications = () => {
     <section id="certifications" className="py-12 px-4 md:px-8 max-w-7xl mx-auto" aria-label="Credentials Section">
       <motion.div
         ref={containerRef}
-        initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
-        animate={isInView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 24, filter: 'blur(6px)' }}
+        initial={{ opacity: 0, y: 24 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
         className="glass-card p-6 md:p-8 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8 border border-[var(--border-primary)]"
       >
@@ -42,4 +42,6 @@ export const Certifications = () => {
       </motion.div>
     </section>
   );
-};
+});
+
+Certifications.displayName = 'Certifications';

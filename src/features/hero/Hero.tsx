@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
 const ROLES = ['AI Engineer', 'GenAI Engineer', 'Agentic AI Engineer'];
 
-export function Hero() {
+export const Hero = memo(() => {
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
 
   useEffect(() => {
@@ -95,4 +95,6 @@ export function Hero() {
       </motion.div>
     </section>
   );
-}
+});
+
+Hero.displayName = 'Hero';

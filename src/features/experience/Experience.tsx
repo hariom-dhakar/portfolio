@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 
 const containerVariants = {
@@ -9,16 +10,15 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
 
-export const Experience = () => {
+export const Experience = memo(() => {
   const deliverables = [
     { title: 'CrewAI EDA Analyzer', impact: '70% reduction in manual data analysis effort for ML engineers' },
     { title: 'LLM Reasoning Pipeline', impact: 'Auto-generated executive business insights & structured reports' },
@@ -125,4 +125,6 @@ export const Experience = () => {
       </motion.div>
     </section>
   );
-};
+});
+
+Experience.displayName = 'Experience';

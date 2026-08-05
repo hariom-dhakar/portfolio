@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 
-export function Footer() {
+export const Footer = memo(() => {
   return (
     <footer className="relative w-full py-8 px-6 border-t border-[var(--border-primary)]/40">
       <div className="max-w-7xl mx-auto">
@@ -26,4 +27,6 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});
+
+Footer.displayName = 'Footer';

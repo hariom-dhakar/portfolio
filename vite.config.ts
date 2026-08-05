@@ -10,4 +10,26 @@ export default defineConfig({
     host: true,
     allowedHosts: [".loca.lt"],
   },
+  build: {
+    target: "esnext",
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react") || id.includes("react-dom")) {
+              return "react-vendor";
+            }
+            if (id.includes("framer-motion")) {
+              return "framer-motion-vendor";
+            }
+            if (id.includes("lucide-react") || id.includes("react-icons")) {
+              return "icons-vendor";
+            }
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
 });

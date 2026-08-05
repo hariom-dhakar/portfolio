@@ -36,6 +36,32 @@ export const NeuralBackground: React.FC = memo(() => {
     let maxDistanceSq = maxDistance * maxDistance;
     const mousePullDistSq = 160 * 160;
 
+    let offscreenGridCanvas: HTMLCanvasElement | null = null;
+    let cachedThemeIsLight: boolean | null = null;
+
+    const renderOffscreenGrid = (isLight: boolean) => {
+      if (!offscreenGridCanvas) {
+        offscreenGridCanvas = document.createElement('canvas');
+      }
+      offscreenGridCanvas.width = canvas.width;
+      offscreenGridCanvas.height = canvas.height;
+      const offCtx = offscreenGridCanvas.getContext('2d');
+      if (!offCtx) return;
+
+      offCtx.clearRect(0, 0, canvas.width, canvas.height);
+      const gridDotColor = isLight ? 'rgba(19, 94, 84, 0.15)' : 'rgba(191, 161, 129, 0.06)';
+      const gridSize = 50;
+      offCtx.fillStyle = gridDotColor;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        for (let y = 0; y < canvas.height; y += gridSize) {
+          offCtx.beginPath();
+          offCtx.arc(x, y, 1, 0, Math.PI * 2);
+          offCtx.fill();
+        }
+      }
+      cachedThemeIsLight = isLight;
+    };
+
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -49,6 +75,8 @@ export const NeuralBackground: React.FC = memo(() => {
       }
       maxDistanceSq = maxDistance * maxDistance;
 
+      const isLight = document.documentElement.classList.contains('light');
+      renderOffscreenGrid(isLight);
       initParticles();
     };
 
@@ -128,21 +156,17 @@ export const NeuralBackground: React.FC = memo(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const isLight = document.documentElement.classList.contains('light');
-      
-      const baseColor = isLight ? '168, 213, 227' : '23, 133, 130';
-      const activeColor = isLight ? '255, 120, 172' : '191, 161, 129';
-      const gridDotColor = isLight ? 'rgba(168, 213, 227, 0.25)' : 'rgba(191, 161, 129, 0.06)';
-
-      // 1. Draw Technical Grid Dots
-      const gridSize = 40;
-      ctx.fillStyle = gridDotColor;
-      for (let x = 0; x < canvas.width; x += gridSize) {
-        for (let y = 0; y < canvas.height; y += gridSize) {
-          ctx.beginPath();
-          ctx.arc(x, y, 0.85, 0, Math.PI * 2);
-          ctx.fill();
-        }
+      if (cachedThemeIsLight !== isLight) {
+        renderOffscreenGrid(isLight);
       }
+
+      // 1. Draw Technical Grid Dots from Offscreen Canvas Cache
+      if (offscreenGridCanvas) {
+        ctx.drawImage(offscreenGridCanvas, 0, 0);
+      }
+      
+      const baseColor = isLight ? '108, 158, 190' : '23, 133, 130';
+      const activeColor = isLight ? '126, 113, 244' : '105, 90, 202';
 
       // 2. Draw Interactive Mouse Radial Spotlight
       if (mouse.x > 0 && mouse.y > 0) {
@@ -155,7 +179,7 @@ export const NeuralBackground: React.FC = memo(() => {
           mouse.y,
           spotlightRadius
         );
-        grad.addColorStop(0, `rgba(${activeColor}, ${isLight ? '0.14' : '0.16'})`);
+        grad.addColorStop(0, `rgba(${activeColor}, ${isLight ? '0.20' : '0.16'})`);
         grad.addColorStop(0.5, `rgba(${baseColor}, ${isLight ? '0.08' : '0.06'})`);
         grad.addColorStop(1, 'transparent');
 
@@ -210,7 +234,7 @@ export const NeuralBackground: React.FC = memo(() => {
 
           if (distSq < maxDistanceSq) {
             const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / maxDistance) * (isLight ? 0.45 : 0.28);
+            const alpha = (1 - dist / maxDistance) * (isLight ? 0.70 : 0.28);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
@@ -248,15 +272,15 @@ export const NeuralBackground: React.FC = memo(() => {
         aria-hidden="true"
       />
 
-      {/* Ambient Drifting Aura Blobs */}
-      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-[#FF78AC]/10 rounded-full blur-[140px] pointer-events-none animate-pulse-slow" />
-      <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-[#A8D5E3]/18 rounded-full blur-[150px] pointer-events-none animate-pulse-slow" />
-      <div className="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-[#FF78AC]/8 rounded-full blur-[160px] pointer-events-none" />
+      {/* Ambient Drifting Aura Blobs - Scaled blur on mobile for GPU fill-rate efficiency */}
+      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-[#FF78AC]/10 rounded-full blur-[80px] md:blur-[140px] pointer-events-none animate-pulse-slow" />
+      <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-[#A8D5E3]/18 rounded-full blur-[80px] md:blur-[150px] pointer-events-none animate-pulse-slow" />
+      <div className="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-[#FF78AC]/8 rounded-full blur-[90px] md:blur-[160px] pointer-events-none" />
 
       {/* Subtle Noise Texture Overlay */}
       <svg className="absolute inset-0 w-full h-full opacity-[0.03] mix-blend-overlay pointer-events-none" aria-hidden="true">
         <filter id="noiseFilter">
-          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
         </filter>
         <rect width="100%" height="100%" filter="url(#noiseFilter)" />
       </svg>

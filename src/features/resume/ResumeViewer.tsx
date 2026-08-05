@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, FileText, Eye, EyeOff } from 'lucide-react';
 import resumePdf from '../../assets/Hariom_Dhakar_CV.pdf';
 
-export const ResumeViewer: React.FC = () => {
+export const ResumeViewer: React.FC = memo(() => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -132,4 +132,6 @@ export const ResumeViewer: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+ResumeViewer.displayName = 'ResumeViewer';
