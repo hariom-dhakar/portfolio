@@ -10,7 +10,6 @@ import {
   BookOpen,
   Zap,
   Code2,
-  CheckCircle2,
   ChevronDown,
   ChevronUp,
   ArrowRight
