@@ -20,7 +20,6 @@ export const Hero = memo(() => {
       className="relative min-h-[80vh] md:min-h-[85vh] w-full flex flex-col items-center justify-center overflow-hidden bg-transparent px-4 md:px-8 py-12"
       aria-label="Introduction"
     >
-      {/* Radial gradient glow behind the main heading */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[45vw] h-[45vw] min-w-[300px] min-h-[300px] max-w-[600px] max-h-[600px] bg-brand-glow/20 rounded-full blur-[100px] md:blur-[140px] pointer-events-none -z-10" />
 
       <div className="z-10 flex flex-col items-center text-center w-full max-w-[680px] mx-auto px-6 space-y-6 md:space-y-8">
@@ -30,7 +29,6 @@ export const Hero = memo(() => {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col items-center gap-4 w-full"
         >
-          {/* Live AI Systems Telemetry Indicator */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-tertiary)]/80 backdrop-blur-md border border-[var(--border-primary)] text-[10px] md:text-xs font-mono text-[var(--text-tertiary)] shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="w-2 h-2 rounded-full bg-emerald-400 -ml-4" />

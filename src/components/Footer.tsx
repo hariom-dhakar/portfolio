@@ -12,7 +12,6 @@ export const Footer = memo(() => {
           transition={{ duration: 0.8 }}
           className="flex flex-col items-center gap-3 text-center"
         >
-          {/* Subtle Glowing Divider */}
           <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent mb-3" />
 
           <p className="text-xs md:text-sm text-[var(--text-tertiary)] tracking-wide">

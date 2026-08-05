@@ -29,7 +29,6 @@
 }
 
 :root {
-  /* True Premium Black Theme Tokens (Linear, Vercel, OpenAI, Anthropic, Stripe Dark Inspired) */
   --bg-primary: #050505;
   --bg-secondary: #090909;
   --bg-tertiary: #101010;
@@ -42,14 +41,12 @@
   --text-tertiary: #8A8A8A;
   --text-muted: #6F6F6F;
 
-  /* Single Accent Cyan */
   --text-accent: #14E3D8;
   --text-accent-glow: rgba(20, 227, 216, 0.12);
 
   --text-gold: #14E3D8;
   --text-gold-glow: rgba(20, 227, 216, 0.08);
 
-  /* Subtle Gray 1px Borders */
   --border-primary: rgba(255, 255, 255, 0.08);
   --border-secondary: #1F1F1F;
   --border-glow: rgba(20, 227, 216, 0.35);
@@ -63,7 +60,6 @@
 }
 
 :root.light {
-  /* Light Theme Tokens - Warm Cream, Pink & Soft Teal Palette (Indira Prieto Inspired) */
   --bg-primary: #F2F0EA;
   --bg-secondary: #FAF9F5;
   --bg-tertiary: #FFFFFF;
@@ -92,7 +88,6 @@
   --btn-text: #FFFFFF;
 }
 
-/* Base styling & smooth theme transition */
 html {
   scroll-behavior: smooth;
 }
@@ -117,7 +112,6 @@ body {
   color: #fff;
 }
 
-/* Hardware Accelerated Compositing Utilities */
 .translate-z-0 {
   transform: translateZ(0);
 }
@@ -126,7 +120,6 @@ body {
   will-change: transform;
 }
 
-/* Premium Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -146,7 +139,6 @@ body {
   background: var(--text-tertiary);
 }
 
-/* Theme-Aware Components & Hardware-Accelerated Utilities */
 @layer utilities {
   .glass-panel {
     background: var(--bg-glass);

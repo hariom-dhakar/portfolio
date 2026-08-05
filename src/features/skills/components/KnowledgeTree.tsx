@@ -57,7 +57,6 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
     <div className="h-full bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] p-4 md:p-6 space-y-4 shadow-xl flex flex-col justify-between font-sans glass-card">
       <div className="space-y-4">
         
-        {/* Explorer Panel Header */}
         <div className="flex items-center justify-between pb-3 border-b border-[var(--border-primary)]">
           <div className="flex items-center gap-2">
             <FolderTree className="w-4 h-4 text-[var(--text-accent)]" />
@@ -70,7 +69,6 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
           </span>
         </div>
 
-        {/* Search Input Box */}
         <div className="relative">
           <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
           <input
@@ -82,7 +80,6 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
           />
         </div>
 
-        {/* Knowledge Tree List Container */}
         <div className="space-y-2 max-h-[550px] overflow-y-auto pr-1 scrollbar-thin">
           {filteredTree.length === 0 ? (
             <div className="py-8 text-center text-xs font-mono text-[var(--text-tertiary)]">
@@ -105,7 +102,6 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
 
       </div>
 
-      {/* Footer Info */}
       <div className="pt-3 border-t border-[var(--border-primary)] flex items-center justify-between text-[10px] font-mono text-[var(--text-tertiary)]">
         <span>OBSIDIAN_FORMAT_V2</span>
         <span>{KNOWLEDGE_TREE_DATA.length} CATEGORIES</span>

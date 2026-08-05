@@ -23,40 +23,28 @@ export default function App() {
   return (
     <LazyMotion features={loadFeatures}>
       <div className="relative min-h-screen overflow-x-hidden">
-      {/* Global Neural Network Background Canvas (z-0) */}
       <NeuralBackground />
 
-      {/* Navigation (z-50) */}
       <Navigation theme={theme} toggleTheme={toggleTheme} />
 
-      {/* Main Full-Width Content Flow (z-10 above background canvas) */}
       <main className="relative z-10 w-full">
-        {/* Hero - Cinematic Intro */}
         <Hero />
 
-        {/* About - Engineer Details & Metrics */}
         <About />
 
-        {/* Experience - Deployment History */}
         <Experience />
 
         <Suspense fallback={<div className="min-h-[200px]" />}>
-          {/* Projects - Dynamic Work Showcase */}
           <Projects />
 
-          {/* Skills - Obsidian Engineering Knowledge Base */}
           <Skills />
 
-          {/* Certifications - Credentials */}
           <Certifications />
 
-          {/* Resume - Document Viewer */}
           <ResumeViewer />
 
-          {/* Contact - Dispatch & Links */}
           <Contact />
 
-          {/* Footer */}
           <Footer />
         </Suspense>
       </main>

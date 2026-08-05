@@ -11,14 +11,9 @@ export const Skills: React.FC = memo(() => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-80px' });
 
-  // Session view mode state ('interactive' | 'simple')
   const [viewMode, setViewMode] = useState<SkillsViewMode>('interactive');
-
-  // Shared search query state
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  // Selected technology for Interactive Mode
-  const defaultTech = KNOWLEDGE_TREE_DATA[0].items[0]; // CrewAI
+  const defaultTech = KNOWLEDGE_TREE_DATA[0].items[0];
   const [selectedTech, setSelectedTech] = useState<TechnologyNode | null>(defaultTech);
 
   const handleSelectTechById = useCallback((id: string) => {
@@ -37,7 +32,6 @@ export const Skills: React.FC = memo(() => {
     >
       <div className="max-w-[1100px] mx-auto px-6 space-y-8">
         
-        {/* Section Top Header with Prominent View Toggle */}
         <m.div
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -56,14 +50,12 @@ export const Skills: React.FC = memo(() => {
             </p>
           </div>
 
-          {/* Prominent View Mode Segmented Control Toggle */}
           <ViewToggle
             viewMode={viewMode}
             onViewModeChange={setViewMode}
           />
         </m.div>
 
-        {/* Global Search Bar Bar across modes */}
         <div className="relative max-w-md">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
           <input
@@ -75,7 +67,6 @@ export const Skills: React.FC = memo(() => {
           />
         </div>
 
-        {/* View Mode Container with Smooth Fade Animation & Memory Management */}
         <AnimatePresence mode="wait">
           {viewMode === 'interactive' ? (
             <m.div
@@ -86,7 +77,6 @@ export const Skills: React.FC = memo(() => {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
             >
-              {/* Left Panel: Knowledge Tree (35% on Desktop) */}
               <div className="lg:col-span-5 w-full">
                 <KnowledgeTree
                   selectedTechId={selectedTech?.id || null}
@@ -96,7 +86,6 @@ export const Skills: React.FC = memo(() => {
                 />
               </div>
 
-              {/* Right Panel: Knowledge Inspector (65% on Desktop) */}
               <div className="lg:col-span-7 w-full">
                 <InspectorPanel
                   tech={selectedTech}

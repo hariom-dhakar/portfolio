@@ -66,7 +66,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
       >
         <div className="space-y-6">
           
-          {/* Header & Category Breadcrumb */}
           <div className="space-y-3 border-b border-[var(--border-primary)] pb-5">
             <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-gold)]">
               <span>AI Engineering</span>
@@ -106,7 +105,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             </p>
           </div>
 
-          {/* WHAT I USE IT FOR */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-gold)] font-semibold">
               <Zap className="w-3.5 h-3.5 text-[var(--text-gold)]" />
@@ -117,7 +115,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             </div>
           </div>
 
-          {/* KEY CONCEPTS */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
               <FileText className="w-3.5 h-3.5 text-[var(--text-accent)]" />
@@ -136,7 +133,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             </div>
           </div>
 
-          {/* CODE SNIPPET BOX */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
@@ -169,7 +165,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             </div>
           </div>
 
-          {/* INTEGRATED PROJECTS */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
               <CheckCircle2 className="w-3.5 h-3.5 text-[var(--text-accent)]" />
@@ -188,7 +183,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             </div>
           </div>
 
-          {/* RELATED TECHNOLOGIES */}
           {relatedTechNodes.length > 0 && (
             <div className="space-y-2 pt-2 border-t border-[var(--border-primary)]">
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
@@ -210,7 +204,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             </div>
           )}
 
-          {/* CERTIFICATIONS (IF APPLICABLE) */}
           {tech.certifications && (
             <div className="p-3.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-gold)] flex items-center gap-3 text-xs font-mono text-[var(--text-gold)] font-semibold">
               <Award className="w-5 h-5 shrink-0 text-[var(--text-gold)]" />
@@ -223,7 +216,6 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
         </div>
 
-        {/* Footer Links */}
         <div className="pt-4 mt-4 border-t border-[var(--border-primary)] flex items-center justify-between text-xs font-mono text-[var(--text-tertiary)]">
           <span>STATUS // PRODUCTION READY</span>
           {tech.github && (

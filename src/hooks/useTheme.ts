@@ -9,7 +9,6 @@ export function useTheme() {
       if (stored === 'light' || stored === 'dark') {
         return stored;
       }
-      // Default is dark mode per requirement ("dark-first with light mode support")
       return 'dark';
     }
     return 'dark';

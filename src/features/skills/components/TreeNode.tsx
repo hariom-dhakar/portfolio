@@ -11,29 +11,18 @@ import {
   Server,
   Network,
   Cpu,
-  Workflow,
-  Cloud
+  Workflow
 } from 'lucide-react';
 import {
-  SiPython,
-  SiFastapi,
   SiLangchain,
   SiGoogle,
   SiHuggingface,
-  SiPytorch,
   SiTensorflow,
-  SiDatabricks,
-  SiDocker,
-  SiKubernetes,
-  SiPostgresql,
-  SiRedis,
   SiMeta,
   SiPandas,
   SiNumpy,
   SiScikitlearn,
   SiMlflow,
-  SiReact,
-  SiTypescript,
   SiJavascript,
   SiCplusplus,
   SiGithubactions
@@ -67,7 +56,6 @@ interface TreeNodeProps {
 export const TechIcon = memo(({ name, className = "w-4 h-4" }: { name: string; className?: string }) => {
   const lower = name.toLowerCase();
 
-  // Exact Brand Icon Mappings
   if (lower.includes('python')) return <PythonLogo className={className} />;
   if (lower.includes('fastapi')) return <FastAPILogo className={className} />;
   if (lower.includes('crewai')) return <Brain className={className} />;

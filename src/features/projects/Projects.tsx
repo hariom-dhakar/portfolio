@@ -4,12 +4,6 @@ import { ArrowRight } from 'lucide-react';
 import { PROJECTS_DATA, type ProjectData, type ArchitectureStep } from '../../data/projectsData';
 import { AnimatedPipelineFlow } from '../../components/AnimatedPipelineFlow';
 
-/**
- * Detects when the browser finishes scrolling.
- * Uses the native 'scrollend' event where available, with a scroll-idle
- * fallback (no scroll activity for `idleMs` milliseconds).
- * Returns a cleanup function to tear down listeners early.
- */
 function onScrollEnd(callback: () => void, idleMs = 150): () => void {
   let idleTimer: ReturnType<typeof setTimeout> | null = null;
   let settled = false;
@@ -26,8 +20,6 @@ function onScrollEnd(callback: () => void, idleMs = 150): () => void {
     idleTimer = setTimeout(settle, idleMs);
   };
 
-  // Kick off an initial idle timer so that if scrollIntoView is a no-op
-  // (element already centered), we still release the lock promptly.
   idleTimer = setTimeout(settle, idleMs);
 
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -74,7 +66,6 @@ export const Projects = memo(() => {
         </m.div>
       </div>
 
-      {/* Projects List */}
       <div className="max-w-[1100px] mx-auto flex flex-col gap-10 md:gap-14">
         {PROJECTS_DATA.map((project, idx) => (
           <ProjectCard key={project.id} project={project} index={idx} />
@@ -94,7 +85,6 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
   const scrollCleanupRef = useRef<(() => void) | null>(null);
   const observerDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Tear down scroll-end listener and observer debounce on unmount
   useEffect(() => {
     return () => {
       scrollCleanupRef.current?.();
@@ -104,21 +94,17 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
 
   const handleStepSelect = useCallback((idx: number, isClick = false) => {
     if (isClick) {
-      // Cancel any pending observer debounce so it cannot override the click
       if (observerDebounceRef.current) {
         clearTimeout(observerDebounceRef.current);
         observerDebounceRef.current = null;
       }
 
-      // Tear down any previous scroll-end listener (handles rapid clicks)
       scrollCleanupRef.current?.();
 
-      // Immediate, authoritative state update
       setActiveStepIndex(idx);
 
       const targetEl = stepRefs.current[idx];
       if (targetEl) {
-        // Lock observer-driven updates for the duration of the scroll
         isProgrammaticScroll.current = true;
 
         targetEl.scrollIntoView({
@@ -126,20 +112,16 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           block: 'center',
         });
 
-        // Release the lock only after scrolling has actually finished
         scrollCleanupRef.current = onScrollEnd(() => {
           isProgrammaticScroll.current = false;
           scrollCleanupRef.current = null;
         });
       }
     } else {
-      // Observer-driven update: debounce to coalesce rapid IntersectionObserver
-      // callbacks from multiple cards entering/leaving the viewport at once.
       if (observerDebounceRef.current) {
         clearTimeout(observerDebounceRef.current);
       }
       observerDebounceRef.current = setTimeout(() => {
-        // Re-check the guard — a click may have fired during the debounce window
         if (!isProgrammaticScroll.current) {
           setActiveStepIndex(idx);
         }
@@ -176,7 +158,6 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
     >
       <div className="w-full flex flex-col gap-5">
         
-        {/* Header & Meta */}
         <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 border-b border-[var(--border-primary)] pb-3">
           <div className="space-y-1">
             <span className="font-mono text-xs text-[var(--text-gold)] uppercase tracking-widest flex items-center gap-2 font-semibold">
@@ -202,7 +183,6 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           </a>
         </div>
 
-        {/* Metrics Bar */}
         <div className="flex flex-wrap gap-6 md:gap-10 py-1">
           {project.metrics.map((metric, i) => (
             <div key={i} className="flex flex-col gap-0.5">
@@ -216,7 +196,6 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           ))}
         </div>
 
-        {/* Animated AI Request Flow Trace Pipeline (Datadog / LangSmith inspired) */}
         <AnimatedPipelineFlow 
           architecture={project.architecture}
           projectId={project.id}
@@ -224,7 +203,6 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           onStepSelect={(idx) => handleStepSelect(idx, true)}
         />
 
-        {/* Execution Steps & Workflow Breakdown Grid */}
         <div className="border-t border-[var(--border-primary)] pt-3.5 flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
             <span className="font-mono text-xs text-[var(--text-tertiary)] uppercase tracking-wider">
@@ -253,7 +231,6 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           </div>
         </div>
 
-        {/* Tech Badges */}
         <div className="flex flex-wrap items-center gap-2 pt-2.5 border-t border-[var(--border-primary)]/50">
           <span className="text-xs font-mono text-[var(--text-tertiary)] mr-2">Stack:</span>
           {project.tech.map((tech, i) => (

@@ -39,7 +39,6 @@ export const About = memo(() => {
       aria-label="About Section"
     >
       <div className="max-w-[1000px] w-full mx-auto px-6 flex flex-col gap-12 md:gap-16">
-        {/* Header Section */}
         <div className="flex flex-col gap-3 max-w-[700px]">
           <m.h2 
             custom={1}
@@ -61,7 +60,6 @@ export const About = memo(() => {
           </m.p>
         </div>
 
-        {/* Metrics Section */}
         <m.div 
           custom={3}
           initial="hidden"
@@ -103,7 +101,6 @@ export const About = memo(() => {
           </div>
         </m.div>
 
-        {/* Content Section */}
         <m.div 
           custom={4}
           initial="hidden"

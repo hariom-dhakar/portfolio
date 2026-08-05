@@ -8,7 +8,6 @@ interface SimpleSkillsProps {
 }
 
 export const SimpleSkills: React.FC<SimpleSkillsProps> = memo(({ searchQuery }) => {
-  // Filter tree categories & chips based on search query
   const filteredCategories = useMemo(() => {
     if (!searchQuery.trim()) return KNOWLEDGE_TREE_DATA;
 
@@ -52,7 +51,6 @@ const SkillCategoryCard = memo(({ category }: { category: CategoryFolder }) => {
   return (
     <div className="glass-card p-6 rounded-2xl border border-[var(--border-primary)] space-y-4 shadow-lg hover:border-[var(--border-glow)] transition-all">
       
-      {/* Category Header */}
       <div className="flex items-center justify-between pb-3 border-b border-[var(--border-primary)]">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-[var(--brand-glow)] text-[var(--text-accent)] border border-[var(--border-glow)]">
@@ -67,7 +65,6 @@ const SkillCategoryCard = memo(({ category }: { category: CategoryFolder }) => {
         </span>
       </div>
 
-      {/* Skills Chips Grid */}
       <div className="flex flex-wrap gap-2.5 pt-1">
         {category.items.map((tech: TechnologyNode) => (
           <SkillChip key={tech.id} tech={tech} />
@@ -91,7 +88,6 @@ const SkillChip = memo(({ tech }: { tech: TechnologyNode }) => {
         {tech.name}
       </span>
 
-      {/* Tiny Badge */}
       <div className="flex items-center gap-1 pl-1 border-l border-[var(--border-primary)]/60">
         {tech.certifications ? (
           <span className="inline-flex items-center gap-0.5 text-[9px] font-mono px-1.5 py-0.2 rounded bg-[var(--brand-glow)] text-[var(--text-gold)] border border-[var(--border-gold)] font-bold">

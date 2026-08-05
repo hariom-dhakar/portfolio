@@ -40,7 +40,6 @@ export const Experience = memo(() => {
         viewport={{ once: true, margin: '-80px' }}
         className="flex flex-col space-y-12"
       >
-        {/* Header */}
         <div className="space-y-2">
           <m.h2 
             variants={itemVariants}
@@ -56,10 +55,7 @@ export const Experience = memo(() => {
           </m.p>
         </div>
 
-        {/* Deployment Record Card */}
         <m.div variants={itemVariants} className="glass-card p-6 md:p-10 rounded-3xl border border-[var(--border-primary)] space-y-8 relative overflow-hidden">
-          
-          {/* Top Status Header */}
           <div className="border-b border-[var(--border-primary)] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex flex-col md:flex-row md:items-center gap-4">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-mono text-xs tracking-widest border border-emerald-500/20 uppercase w-fit shadow-sm">
@@ -76,10 +72,7 @@ export const Experience = memo(() => {
             </div>
           </div>
 
-          {/* Deliverables Vertical Timeline */}
           <div className="relative pl-6 space-y-6 border-l-2 border-[var(--border-glow)]">
-            
-            {/* Animated Pulse Beam down the line */}
             <m.div
               className="absolute left-[-2px] top-0 w-[2px] h-full bg-[var(--text-accent)] shadow-[0_0_10px_var(--text-accent-glow)]"
               initial={{ height: 0 }}
@@ -94,9 +87,6 @@ export const Experience = memo(() => {
                 variants={itemVariants}
                 className="relative flex flex-col gap-1 p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-[var(--border-glow)] transition-colors"
               >
-                {/* Node Bullet Dot */}
-                <div className="absolute -left-[31px] top-5 w-2.5 h-2.5 rounded-full bg-[var(--text-accent)] shadow-[0_0_8px_var(--text-accent-glow)] border border-[var(--bg-primary)]" />
-
                 <span className="font-mono text-[var(--text-gold)] text-[10px] uppercase tracking-widest font-semibold">DELIVERABLE_0{index + 1}</span>
                 <span className="font-display text-lg md:text-xl font-semibold text-[var(--text-primary)]">{item.title}</span>
                 <span className="font-mono text-[var(--text-accent)] text-xs md:text-sm">&gt; {item.impact}</span>
@@ -104,7 +94,6 @@ export const Experience = memo(() => {
             ))}
           </div>
 
-          {/* Tech Tags */}
           <m.div 
             variants={itemVariants}
             className="flex flex-wrap gap-2 pt-4 border-t border-[var(--border-primary)]"

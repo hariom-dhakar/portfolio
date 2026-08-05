@@ -19,7 +19,6 @@ export const ViewToggle: React.FC<ViewToggleProps> = memo(({
         View:
       </span>
 
-      {/* Interactive Mode Button */}
       <button
         onClick={() => onViewModeChange('interactive')}
         aria-pressed={viewMode === 'interactive'}
@@ -40,7 +39,6 @@ export const ViewToggle: React.FC<ViewToggleProps> = memo(({
         )}
       </button>
 
-      {/* Simple View Mode Button */}
       <button
         onClick={() => onViewModeChange('simple')}
         aria-pressed={viewMode === 'simple'}

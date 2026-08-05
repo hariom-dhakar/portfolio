@@ -19,7 +19,6 @@ interface FloatingFormula {
 }
 
 const MATH_SYMBOLS = [
-  // Transformer / Attention
   'QKᵀ / √dₖ',
   'Softmax(QKᵀ)V',
   'Attention(Q,K,V)',
@@ -32,7 +31,6 @@ const MATH_SYMBOLS = [
   'Top-p = 0.95',
   'Temperature = 0.7',
 
-  // Embeddings
   'Embedding(x)',
   'e ∈ ℝ⁷⁶⁸',
   '||x||₂',
@@ -46,7 +44,6 @@ const MATH_SYMBOLS = [
   'Pinecone',
   'Vector → ℝ¹⁵³⁶',
 
-  // LLM / NLP
   'P(y|x)',
   'argmax P(y|x)',
   'Token → Embedding',
@@ -63,7 +60,6 @@ const MATH_SYMBOLS = [
   'Reflection Loop',
   'Tool Calling',
 
-  // Probability
   'P(A|B)',
   'P(A∩B)',
   'P(X=x)',
@@ -82,7 +78,6 @@ const MATH_SYMBOLS = [
   'Poisson(λ)',
   '𝓝(0,1)',
 
-  // Statistics
   'R²',
   'MAE',
   'MSE',
@@ -97,7 +92,6 @@ const MATH_SYMBOLS = [
   'p ≤ 0.05',
   '95% CI',
 
-  // Optimization
   '∇L(θ)',
   '∂L/∂W',
   'θ ← θ − η∇L',
@@ -110,7 +104,6 @@ const MATH_SYMBOLS = [
   'Backprop',
   'Gradient Clip',
 
-  // Loss Functions
   'Loss = ||y−ŷ||²',
   'CrossEntropy',
   'Binary CE',
@@ -124,7 +117,6 @@ const MATH_SYMBOLS = [
   'ROUGE',
   'BERTScore',
 
-  // Neural Networks
   'ReLU(Wx+b)',
   'GELU(x)',
   'SiLU(x)',
@@ -139,7 +131,6 @@ const MATH_SYMBOLS = [
   'LSTM',
   'GRU',
 
-  // Linear Algebra
   'Ax = b',
   'A⁻¹',
   'Aᵀ',
@@ -158,7 +149,6 @@ const MATH_SYMBOLS = [
   'x⊗y',
   '||A||F',
 
-  // Deep Learning
   'Epoch 42',
   'Batch = 64',
   'FP16',
@@ -172,7 +162,6 @@ const MATH_SYMBOLS = [
   'PEFT',
   'Checkpoint',
 
-  // Retrieval
   'Semantic Search',
   'Hybrid Search',
   'BM25',
@@ -184,7 +173,6 @@ const MATH_SYMBOLS = [
   'MMR',
   'k = 5',
 
-  // Agentic AI
   'Planner',
   'Executor',
   'Critic',
@@ -197,7 +185,6 @@ const MATH_SYMBOLS = [
   'Decision Node',
   'Execution Trace',
 
-  // Cloud / MLOps
   'MLflow',
   'Databricks',
   'Unity Catalog',
@@ -211,7 +198,6 @@ const MATH_SYMBOLS = [
   'Kubernetes',
   'GPU Cluster',
 
-  // Misc Math
   'Σ',
   'Π',
   '∀x',
@@ -396,7 +382,6 @@ export const NeuralBackground: React.FC = memo(() => {
         renderOffscreenGrid(isLight);
       }
 
-      // 1. Draw Technical Grid Dots
       if (offscreenGridCanvas) {
         ctx.drawImage(offscreenGridCanvas, 0, 0);
       }
@@ -405,7 +390,6 @@ export const NeuralBackground: React.FC = memo(() => {
       const activeColor = isLight ? '126, 113, 244' : '20, 227, 216';
       const formulaColor = isLight ? 'rgba(30, 41, 59,' : 'rgba(225, 225, 225,';
 
-      // 2. Draw Subtle Drifting Floating Math Formulas & Engineering Symbols
       ctx.font = '11px monospace';
       for (let k = 0; k < formulas.length; k++) {
         const f = formulas[k];
@@ -419,7 +403,6 @@ export const NeuralBackground: React.FC = memo(() => {
         ctx.fillText(f.text, f.x, f.y);
       }
 
-      // 3. Draw Interactive Mouse Radial Spotlight
       if (mouse.x > 0 && mouse.y > 0) {
         const spotlightRadius = 450;
         const grad = ctx.createRadialGradient(
@@ -438,7 +421,6 @@ export const NeuralBackground: React.FC = memo(() => {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
-      // 4. Render Particles & Neural Mesh Connectors
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
@@ -448,13 +430,11 @@ export const NeuralBackground: React.FC = memo(() => {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        // Particle node
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${baseColor}, ${p.baseAlpha})`;
         ctx.fill();
 
-        // Mouse distance pull & active connector
         if (mouse.x > 0 && mouse.y > 0) {
           const dx = mouse.x - p.x;
           const dy = mouse.y - p.y;
@@ -476,7 +456,6 @@ export const NeuralBackground: React.FC = memo(() => {
           }
         }
 
-        // Inter-particle connection lines
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -516,19 +495,16 @@ export const NeuralBackground: React.FC = memo(() => {
       ref={containerRef}
       className="fixed inset-0 pointer-events-none z-0 overflow-hidden translate-z-0 will-change-transform"
     >
-      {/* Background Canvas Layer */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full bg-transparent transition-opacity duration-300"
         aria-hidden="true"
       />
 
-      {/* Ambient Drifting Aura Blobs */}
       <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-[#14E3D8]/5 rounded-full blur-[100px] md:blur-[160px] pointer-events-none animate-pulse-slow" />
       <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-[#14E3D8]/6 rounded-full blur-[100px] md:blur-[160px] pointer-events-none animate-pulse-slow" />
       <div className="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-[#14E3D8]/4 rounded-full blur-[100px] md:blur-[160px] pointer-events-none" />
 
-      {/* Subtle Noise Texture Overlay */}
       <svg className="absolute inset-0 w-full h-full opacity-[0.03] mix-blend-overlay pointer-events-none" aria-hidden="true">
         <filter id="noiseFilter">
           <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />

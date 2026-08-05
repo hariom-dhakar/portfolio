@@ -14,7 +14,6 @@ export const ResumeViewer: React.FC = memo(() => {
     >
       <div className="max-w-4xl mx-auto relative z-10">
         
-        {/* Section Header */}
         <div className="text-center mb-8">
           <m.div
             initial={{ opacity: 0, y: 15 }}
@@ -44,7 +43,6 @@ export const ResumeViewer: React.FC = memo(() => {
             Download my detailed CV or toggle the interactive document preview below.
           </m.p>
 
-          {/* Action CTAs */}
           <m.div 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -86,7 +84,6 @@ export const ResumeViewer: React.FC = memo(() => {
           </m.div>
         </div>
 
-        {/* Collapsible Document Viewer (Hidden by Default) */}
         <AnimatePresence>
           {isExpanded && (
             <m.div
@@ -98,7 +95,6 @@ export const ResumeViewer: React.FC = memo(() => {
               className="overflow-hidden pt-4"
             >
               <div className="space-y-4">
-                {/* Controls Toolbar */}
                 <div className="glass-panel rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
                   <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                     <FileText className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
@@ -116,7 +112,6 @@ export const ResumeViewer: React.FC = memo(() => {
                   </a>
                 </div>
 
-                {/* Paper View Container */}
                 <div className="w-full flex justify-center bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-primary)] h-[500px] sm:h-[650px] md:h-[800px] overflow-hidden shadow-2xl">
                   <iframe
                     src={`${resumePdf}#toolbar=0&navpanes=0&scrollbar=1`}

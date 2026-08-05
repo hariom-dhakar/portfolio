@@ -43,7 +43,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 2. High-performance IntersectionObserver for active section tracking (Zero layout thrashing)
   useEffect(() => {
     const sectionHeights = new Map<string, number>();
     const observedIds = new Set<string>();
@@ -58,7 +57,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
           }
         });
 
-        // Check if user is at the absolute bottom of the page
         const isAtBottom =
           window.innerHeight + window.scrollY >=
           document.documentElement.scrollHeight - 20;
@@ -70,7 +68,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
           bestSection = NAV_ITEMS[NAV_ITEMS.length - 1].id;
         } else {
           sectionHeights.forEach((height, id) => {
-            // Ignore tiny edge intersections (< 25px)
             if (height > 25 && height > maxVisibleHeight) {
               maxVisibleHeight = height;
               bestSection = id;
@@ -103,7 +100,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
 
     observeElements();
 
-    // Catch lazy-loaded section components when they mount into the DOM
     let mutationObserver: MutationObserver | null = null;
     if (observedIds.size < NAV_ITEMS.length) {
       mutationObserver = new MutationObserver(() => {
@@ -147,7 +143,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
         }`}
       >
         <div className="max-w-[1180px] mx-auto px-6 flex items-center justify-between">
-          {/* Brand Name */}
           <button
             onClick={() => handleNavClick('hero')}
             className="font-display font-semibold text-lg tracking-tight text-[var(--text-primary)] hover:text-[var(--text-accent)] transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1"
@@ -156,7 +151,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
             Hariom Dhakar
           </button>
 
-          {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-7" aria-label="Main Navigation">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
@@ -182,9 +176,7 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
             })}
           </nav>
 
-          {/* Right Action Controls */}
           <div className="flex items-center gap-2">
-            {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400"
@@ -197,7 +189,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
               )}
             </button>
 
-            {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors duration-200 cursor-pointer lg:hidden relative z-50 focus-visible:outline-2 focus-visible:outline-cyan-400"
@@ -211,7 +202,6 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
         </div>
       </header>
 
-      {/* Mobile Full-Screen Overlay Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
