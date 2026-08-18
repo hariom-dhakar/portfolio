@@ -32,12 +32,12 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
 
   if (!tech) {
     return (
-      <div className="card-secondary h-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center space-y-4 font-sans">
-        <div className="p-4 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-[var(--text-accent)]">
-          <BookOpen className="w-8 h-8" />
+      <div className="card-secondary h-full min-h-[320px] flex flex-col items-center justify-center p-6 text-center space-y-3 font-sans">
+        <div className="p-3 rounded-2xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-[var(--text-accent)]">
+          <BookOpen className="w-6 h-6" />
         </div>
         <div className="space-y-1 max-w-sm">
-          <h3 className="text-lg font-display font-semibold text-[var(--text-primary)]">
+          <h3 className="text-base font-display font-semibold text-[var(--text-primary)]">
             No Technology Selected
           </h3>
           <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed">
@@ -69,13 +69,13 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="card-primary h-full p-5 md:p-6 space-y-6 flex flex-col justify-between font-sans"
+        className="card-primary h-full p-4 sm:p-5 space-y-4 flex flex-col justify-between font-sans"
       >
-        <div className="space-y-6">
+        <div className="space-y-4">
           
           {/* HEADER (ENGINEERING FOCUSED, NO PROFICIENCY BADGES) */}
-          <div className="space-y-3 border-b border-[var(--border-primary)] pb-5">
-            <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-gold)]">
+          <div className="space-y-2.5 border-b border-[var(--border-primary)] pb-3.5">
+            <div className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-gold)]">
               <span>AI Stack</span>
               <span>&gt;</span>
               <span>{tech.categoryName}</span>
@@ -83,13 +83,13 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
               <span className="text-[var(--text-primary)] font-semibold">{tech.name}</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)]">
-                  <TechIcon name={tech.name} className="w-6 h-6" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2.5 rounded-xl bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)]">
+                  <TechIcon name={tech.name} className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-display font-bold text-[var(--text-primary)] tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-display font-bold text-[var(--text-primary)] tracking-tight">
                     {tech.name}
                   </h3>
                   <p className="text-xs text-[var(--text-tertiary)] font-mono">
@@ -105,7 +105,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                   {tech.projects.map((proj, pIdx) => (
                     <span 
                       key={pIdx}
-                      className="px-2.5 py-1 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-gold)]/40 text-[11px] font-mono text-[var(--text-gold)] font-medium"
+                      className="px-2 py-0.5 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-gold)]/40 text-[10px] font-mono text-[var(--text-gold)] font-medium"
                     >
                       {proj}
                     </span>
@@ -120,12 +120,12 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           </div>
 
           {/* PRODUCTION USAGE */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[var(--text-gold)] font-semibold">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[var(--text-gold)] font-semibold">
               <Zap className="w-3.5 h-3.5 text-[var(--text-gold)]" />
               <span>Production Integration & Capability</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[var(--bg-tertiary)] text-xs md:text-sm text-[var(--text-primary)] leading-relaxed font-light">
+            <div className="p-3 rounded-xl bg-[var(--bg-tertiary)] text-xs md:text-sm text-[var(--text-primary)] leading-relaxed font-light">
               {tech.usage}
             </div>
           </div>

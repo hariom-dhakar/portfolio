@@ -53,10 +53,10 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
   }, []);
 
   return (
-    <div className="h-full bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] p-4 md:p-6 space-y-4 shadow-xl flex flex-col justify-between font-sans glass-card">
-      <div className="space-y-4">
+    <div className="h-full bg-[var(--bg-glass)] rounded-2xl border border-[var(--border-primary)] p-3.5 sm:p-4 space-y-3 shadow-lg flex flex-col justify-between font-sans glass-card">
+      <div className="space-y-3">
         
-        <div className="flex items-center justify-between pb-3 border-b border-[var(--border-primary)]">
+        <div className="flex items-center justify-between pb-2.5 border-b border-[var(--border-primary)]">
           <div className="flex items-center gap-2">
             <FolderTree className="w-4 h-4 text-[var(--text-accent)]" />
             <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-primary)]">
@@ -68,9 +68,9 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
           </span>
         </div>
 
-        <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1 scrollbar-thin">
+        <div className="space-y-1.5 max-h-[480px] overflow-y-auto pr-1 scrollbar-thin">
           {filteredTree.length === 0 ? (
-            <div className="py-8 text-center text-xs font-mono text-[var(--text-tertiary)]">
+            <div className="py-6 text-center text-xs font-mono text-[var(--text-tertiary)]">
               No matching knowledge nodes found.
             </div>
           ) : (
@@ -94,7 +94,7 @@ export const KnowledgeTree: React.FC<KnowledgeTreeProps> = memo(({
 
       </div>
 
-      <div className="pt-3 border-t border-[var(--border-primary)] flex items-center justify-between text-[10px] font-mono text-[var(--text-tertiary)]">
+      <div className="pt-2.5 border-t border-[var(--border-primary)] flex items-center justify-between text-[10px] font-mono text-[var(--text-tertiary)]">
         <span>OBSIDIAN_FORMAT_V2</span>
         <span>{KNOWLEDGE_TREE_DATA.length} CATEGORIES</span>
       </div>

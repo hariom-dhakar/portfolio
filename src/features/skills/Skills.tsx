@@ -30,40 +30,43 @@ export const Skills: React.FC = memo(() => {
       className="relative w-full border-t border-[var(--border-primary)] overflow-hidden"
       aria-label="Engineering Skills Section"
     >
-      <div className="section-layout space-y-6">
+      <div className="section-layout space-y-4 md:space-y-5">
         
-        {/* COMPRESSED HEADER */}
+        {/* REFINED HEADER */}
         <m.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="space-y-4 border-b border-[var(--border-primary)] pb-4"
+          className="space-y-4 mb-6"
         >
-          {/* TITLE & LABEL WITH NODES/CATEGORIES BADGE */}
+          {/* TITLE & LABEL */}
           <div className="space-y-1">
-            <span className="section-label inline-flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5" /> Technical Expertise
+            <span className="section-label">
+              Knowledge // 04
             </span>
-            <div className="flex flex-wrap items-baseline gap-3">
-              <h2 className="section-title">Tech Stack</h2>
-              <span className="text-xs font-mono text-[var(--text-tertiary)] bg-[var(--bg-tertiary)] px-2.5 py-0.5 rounded-full border border-[var(--border-primary)] font-medium">
-                34 Nodes • 7 Categories
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h2 className="section-title">Technical Architecture & Stack</h2>
+              <span className="text-xs font-mono text-[var(--text-tertiary)] bg-[var(--bg-tertiary)] px-2.5 py-1 rounded-md border border-[var(--border-primary)]">
+                34 Nodes • 7 Core Domains
               </span>
             </div>
+            <p className="section-description">
+              Interactive architectural breakdown of frameworks, multi-agent orchestrators, and runtime environments.
+            </p>
           </div>
 
-          {/* CONTROLS BAR: SEARCH IN MIDDLE | VIEW TOGGLE ON RIGHT */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            {/* SEARCH INPUT IN MIDDLE */}
+          {/* CONTROLS BAR */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+            {/* SEARCH INPUT */}
             <div className="w-full sm:max-w-md">
               <div className="relative w-full">
-                <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search technologies, RAG, CrewAI..."
-                  className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] focus:border-[var(--border-glow)] rounded-xl py-2 pl-10 pr-4 text-xs font-mono text-[var(--text-primary)] placeholder-[var(--text-tertiary)] outline-none transition-all shadow-sm"
+                  placeholder="Search technologies (e.g., CrewAI, FastAPI, LangGraph)..."
+                  className="w-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] focus:border-[var(--border-glow)] rounded-lg py-1.5 pl-9 pr-3 text-xs font-mono text-[var(--text-primary)] placeholder-[var(--text-tertiary)] outline-none transition-colors"
                 />
               </div>
             </div>
@@ -86,7 +89,7 @@ export const Skills: React.FC = memo(() => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+              className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-5 items-start"
             >
               {/* STICKY EXPLORER PANEL (34% / 4 Cols) */}
               <div className="lg:col-span-4 w-full sticky top-24 z-10 self-start">

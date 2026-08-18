@@ -7,216 +7,15 @@ interface Particle {
   vy: number;
   radius: number;
   baseAlpha: number;
+  isHub: boolean;
 }
 
-interface FloatingFormula {
-  text: string;
-  x: number;
-  y: number;
-  vy: number;
-  targetAlpha: number;
-  currentAlpha: number;
-  isFadingOut: boolean;
-  size: number;
+interface Pulse {
+  fromIndex: number;
+  toIndex: number;
+  progress: number;
+  speed: number;
 }
-
-const MATH_SYMBOLS = [
-  'QKᵀ / √dₖ',
-  'Softmax(QKᵀ)V',
-  'Attention(Q,K,V)',
-  'MultiHead(Q,K,V)',
-  'SelfAttention(x)',
-  'CrossAttention(x)',
-  'RoPE(x)',
-  'KV Cache',
-  'Top-k Sampling',
-  'Top-p = 0.95',
-  'Temperature = 0.7',
-
-  'Embedding(x)',
-  'e ∈ ℝ⁷⁶⁸',
-  '||x||₂',
-  'L2 Norm',
-  'CosineSim(A,B)',
-  'cos(θ)',
-  'ANN Search',
-  'HNSW',
-  'FAISS',
-  'ChromaDB',
-  'Pinecone',
-  'Vector → ℝ¹⁵³⁶',
-
-  'P(y|x)',
-  'argmax P(y|x)',
-  'Token → Embedding',
-  'Next Token',
-  'BPE',
-  'SentencePiece',
-  'Prompt → Context',
-  'Context Window',
-  'RAG',
-  'Self-RAG',
-  'LangGraph(G,S)',
-  'CrewAI',
-  'Agent → Tool',
-  'Reflection Loop',
-  'Tool Calling',
-
-  'P(A|B)',
-  'P(A∩B)',
-  'P(X=x)',
-  'P(θ|D)',
-  'Bayes Rule',
-  'E[X]',
-  'E[X|Y]',
-  'Var(X)',
-  'Cov(X,Y)',
-  'σ²',
-  'μ',
-  'π(x)',
-  'N(μ,σ²)',
-  'Bernoulli(p)',
-  'Binomial(n,p)',
-  'Poisson(λ)',
-  '𝓝(0,1)',
-
-  'R²',
-  'MAE',
-  'MSE',
-  'RMSE',
-  'Cross Validation',
-  'AUC',
-  'ROC',
-  'Precision',
-  'Recall',
-  'F1 Score',
-  'Confusion Matrix',
-  'p ≤ 0.05',
-  '95% CI',
-
-  '∇L(θ)',
-  '∂L/∂W',
-  'θ ← θ − η∇L',
-  'AdamW',
-  'SGD',
-  'Learning Rate',
-  'η = 0.001',
-  'Weight Decay',
-  'Momentum',
-  'Backprop',
-  'Gradient Clip',
-
-  'Loss = ||y−ŷ||²',
-  'CrossEntropy',
-  'Binary CE',
-  'KL Divergence',
-  'Huber Loss',
-  'Triplet Loss',
-  'Contrastive Loss',
-  'InfoNCE',
-  'Perplexity',
-  'BLEU',
-  'ROUGE',
-  'BERTScore',
-
-  'ReLU(Wx+b)',
-  'GELU(x)',
-  'SiLU(x)',
-  'LayerNorm',
-  'BatchNorm',
-  'Dropout',
-  'Residual(x)',
-  'MLP',
-  'FFN',
-  'Dense(768)',
-  'Conv2D',
-  'LSTM',
-  'GRU',
-
-  'Ax = b',
-  'A⁻¹',
-  'Aᵀ',
-  'AᵀA',
-  'det(A)',
-  'rank(A)',
-  'λ',
-  'Eigenvector',
-  'SVD',
-  'PCA',
-  'QR',
-  'ℝⁿ',
-  'x ∈ ℝᵈ',
-  'W ∈ ℝ⁷⁶⁸ˣ⁷⁶⁸',
-  'v · w',
-  'x⊗y',
-  '||A||F',
-
-  'Epoch 42',
-  'Batch = 64',
-  'FP16',
-  'BF16',
-  'CUDA',
-  'Mixed Precision',
-  'Inference',
-  'Fine-Tuning',
-  'LoRA',
-  'QLoRA',
-  'PEFT',
-  'Checkpoint',
-
-  'Semantic Search',
-  'Hybrid Search',
-  'BM25',
-  'Dense Retrieval',
-  'Sparse Retrieval',
-  'Chunk Size = 512',
-  'Retriever',
-  'Re-ranker',
-  'MMR',
-  'k = 5',
-
-  'Planner',
-  'Executor',
-  'Critic',
-  'Reflect',
-  'Memory',
-  'Tool Use',
-  'Workflow DAG',
-  'State Machine',
-  'Agent Loop',
-  'Decision Node',
-  'Execution Trace',
-
-  'MLflow',
-  'Databricks',
-  'Unity Catalog',
-  'Delta Lake',
-  'Azure AI Studio',
-  'Azure ML',
-  'OpenTelemetry',
-  'Inference API',
-  'Serving Endpoint',
-  'Docker',
-  'Kubernetes',
-  'GPU Cluster',
-
-  'Σ',
-  'Π',
-  '∀x',
-  '∃x',
-  'lim x→∞',
-  '∫f(x)dx',
-  '∑ᵢ',
-  '√Σ',
-  '∂',
-  '∞',
-  '⊕',
-  '⊗',
-  '≈',
-  '≠',
-  '≤',
-  '≥',
-];
 
 export const NeuralBackground: React.FC = memo(() => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -236,16 +35,15 @@ export const NeuralBackground: React.FC = memo(() => {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let formulaIntervalId: ReturnType<typeof setInterval>;
     let particles: Particle[] = [];
-    let formulas: FloatingFormula[] = [];
+    let pulses: Pulse[] = [];
     let isTabVisible = true;
     let isIntersecting = true;
 
-    let particleCount = 120;
-    let maxDistance = 105;
+    let particleCount = 65;
+    let maxDistance = 140;
     let maxDistanceSq = maxDistance * maxDistance;
-    const mousePullDistSq = 160 * 160;
+    const mousePullDistSq = 180 * 180;
 
     let offscreenGridCanvas: HTMLCanvasElement | null = null;
     let cachedThemeIsLight: boolean | null = null;
@@ -260,13 +58,13 @@ export const NeuralBackground: React.FC = memo(() => {
       if (!offCtx) return;
 
       offCtx.clearRect(0, 0, canvas.width, canvas.height);
-      const gridDotColor = isLight ? 'rgba(19, 94, 84, 0.15)' : 'rgba(255, 255, 255, 0.07)';
-      const gridSize = 50;
+      const gridDotColor = isLight ? 'rgba(0, 0, 0, 0.045)' : 'rgba(255, 255, 255, 0.035)';
+      const gridSize = 44;
       offCtx.fillStyle = gridDotColor;
       for (let x = 0; x < canvas.width; x += gridSize) {
         for (let y = 0; y < canvas.height; y += gridSize) {
           offCtx.beginPath();
-          offCtx.arc(x, y, 1, 0, Math.PI * 2);
+          offCtx.arc(x, y, 0.9, 0, Math.PI * 2);
           offCtx.fill();
         }
       }
@@ -278,58 +76,38 @@ export const NeuralBackground: React.FC = memo(() => {
       canvas.height = window.innerHeight;
 
       if (window.innerWidth < 768) {
-        particleCount = 30;
-        maxDistance = 70;
+        particleCount = 28;
+        maxDistance = 100;
+      } else if (window.innerWidth < 1200) {
+        particleCount = 48;
+        maxDistance = 125;
       } else {
-        particleCount = 130;
-        maxDistance = 105;
+        particleCount = 68;
+        maxDistance = 145;
       }
       maxDistanceSq = maxDistance * maxDistance;
 
       const isLight = document.documentElement.classList.contains('light');
       renderOffscreenGrid(isLight);
       initParticles();
-      initFormulas();
     };
 
     const initParticles = () => {
       particles = [];
+      pulses = [];
+      const w = canvas.width;
+      const h = canvas.height;
+
       for (let i = 0; i < particleCount; i++) {
+        const isHub = i % 7 === 0;
         particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.38,
-          vy: (Math.random() - 0.5) * 0.38,
-          radius: Math.random() * 1.6 + 1.1,
-          baseAlpha: Math.random() * 0.35 + 0.15,
-        });
-      }
-    };
-
-    const initFormulas = () => {
-      const isMobile = window.innerWidth < 768;
-      const count = isMobile ? Math.floor(Math.random() * 3) + 5 : Math.floor(Math.random() * 6) + 10;
-      const shuffled = [...MATH_SYMBOLS].sort(() => 0.5 - Math.random());
-      
-      if (formulas.length > 0) {
-        formulas.forEach((f) => {
-          f.isFadingOut = true;
-        });
-        return;
-      }
-
-      formulas = [];
-      for (let i = 0; i < Math.min(count, shuffled.length); i++) {
-        const baseAlpha = 0.12 + Math.random() * 0.14;
-        formulas.push({
-          text: shuffled[i],
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vy: -0.2 - Math.random() * 0.2,
-          targetAlpha: baseAlpha,
-          currentAlpha: 0,
-          isFadingOut: false,
-          size: Math.floor(10 + Math.random() * 3),
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.28,
+          vy: (Math.random() - 0.5) * 0.28,
+          radius: isHub ? Math.random() * 1.5 + 2.5 : Math.random() * 1.2 + 1.2,
+          baseAlpha: isHub ? 0.65 : Math.random() * 0.35 + 0.30,
+          isHub,
         });
       }
     };
@@ -383,18 +161,15 @@ export const NeuralBackground: React.FC = memo(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     handleResize();
-    formulaIntervalId = setInterval(() => {
-      if (isTabVisible && isIntersecting) {
-        initFormulas();
-      }
-    }, 7000);
 
-    const animate = () => {
+    let lastPulseTime = 0;
+
+    const animate = (timestamp: number) => {
       if (!isTabVisible || !isIntersecting) return;
 
       const mouse = mouseRef.current;
-      mouse.x += (mouse.targetX - mouse.x) * 0.18;
-      mouse.y += (mouse.targetY - mouse.y) * 0.18;
+      mouse.x += (mouse.targetX - mouse.x) * 0.12;
+      mouse.y += (mouse.targetY - mouse.y) * 0.12;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -407,57 +182,14 @@ export const NeuralBackground: React.FC = memo(() => {
         ctx.drawImage(offscreenGridCanvas, 0, 0);
       }
       
-      const baseColor = isLight ? '108, 158, 190' : '200, 200, 200';
-      const activeColor = isLight ? '126, 113, 244' : '20, 227, 216';
-      const formulaColor = isLight ? 'rgba(30, 41, 59,' : 'rgba(225, 225, 225,';
+      const nodeColor = isLight ? '71, 85, 105' : '161, 161, 170';
+      const hubColor = isLight ? '8, 145, 178' : '6, 182, 212';
+      const lineColor = isLight ? '148, 163, 184' : '100, 116, 139';
+      const activeColor = isLight ? '8, 145, 178' : '6, 182, 212';
 
-      ctx.font = '11px monospace';
-      for (let k = 0; k < formulas.length; k++) {
-        const f = formulas[k];
-        f.y += f.vy;
-
-        // Smooth fade-away or fade-in transition
-        if (f.isFadingOut) {
-          f.currentAlpha -= 0.012;
-          if (f.currentAlpha <= 0) {
-            f.text = MATH_SYMBOLS[Math.floor(Math.random() * MATH_SYMBOLS.length)];
-            f.x = Math.random() * canvas.width;
-            f.y = canvas.height - Math.random() * (canvas.height * 0.7);
-            f.currentAlpha = 0;
-            f.isFadingOut = false;
-          }
-        } else {
-          if (f.currentAlpha < f.targetAlpha) {
-            f.currentAlpha += 0.01;
-          }
-        }
-
-        // Top edge and bottom edge fadeaway
-        let edgeFade = 1;
-        if (f.y < 140) {
-          edgeFade = Math.max(0, f.y / 140);
-        } else if (f.y > canvas.height - 80) {
-          edgeFade = Math.max(0, (canvas.height - f.y) / 80);
-        }
-
-        const renderAlpha = Math.max(0, f.currentAlpha * edgeFade);
-
-        if (f.y < -30) {
-          f.y = canvas.height + 20;
-          f.x = Math.random() * canvas.width;
-          f.text = MATH_SYMBOLS[Math.floor(Math.random() * MATH_SYMBOLS.length)];
-          f.currentAlpha = 0;
-          f.isFadingOut = false;
-        }
-
-        if (renderAlpha > 0.005) {
-          ctx.fillStyle = `${formulaColor}${renderAlpha.toFixed(3)})`;
-          ctx.fillText(f.text, f.x, f.y);
-        }
-      }
-
+      // Subtle mouse glow spotlight
       if (mouse.x > 0 && mouse.y > 0) {
-        const spotlightRadius = 450;
+        const spotlightRadius = 320;
         const grad = ctx.createRadialGradient(
           mouse.x,
           mouse.y,
@@ -466,14 +198,37 @@ export const NeuralBackground: React.FC = memo(() => {
           mouse.y,
           spotlightRadius
         );
-        grad.addColorStop(0, `rgba(${activeColor}, ${isLight ? '0.20' : '0.16'})`);
-        grad.addColorStop(0.5, `rgba(${baseColor}, ${isLight ? '0.08' : '0.06'})`);
+        grad.addColorStop(0, `rgba(${activeColor}, ${isLight ? '0.08' : '0.06'})`);
         grad.addColorStop(1, 'transparent');
 
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
+      // Randomly spawn synaptic pulses between close nodes
+      if (timestamp - lastPulseTime > 700 && particles.length > 2) {
+        const i1 = Math.floor(Math.random() * particles.length);
+        const p1 = particles[i1];
+        
+        for (let j = 0; j < particles.length; j++) {
+          if (i1 === j) continue;
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          if (dx * dx + dy * dy < maxDistanceSq) {
+            pulses.push({
+              fromIndex: i1,
+              toIndex: j,
+              progress: 0,
+              speed: 0.015 + Math.random() * 0.02,
+            });
+            lastPulseTime = timestamp;
+            break;
+          }
+        }
+      }
+
+      // 1. Draw connecting lines between particles
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
@@ -483,32 +238,6 @@ export const NeuralBackground: React.FC = memo(() => {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${baseColor}, ${p.baseAlpha})`;
-        ctx.fill();
-
-        if (mouse.x > 0 && mouse.y > 0) {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
-          const distSq = dx * dx + dy * dy;
-
-          if (distSq < mousePullDistSq) {
-            const dist = Math.sqrt(distSq);
-            const force = (160 - dist) / 160;
-            p.x -= (dx / dist) * force * 1.2;
-            p.y -= (dy / dist) * force * 1.2;
-
-            const alpha = (1 - dist / 160) * 0.8;
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(${activeColor}, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -517,24 +246,98 @@ export const NeuralBackground: React.FC = memo(() => {
 
           if (distSq < maxDistanceSq) {
             const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / maxDistance) * (isLight ? 0.70 : 0.28);
+            const alpha = (1 - dist / maxDistance) * (isLight ? 0.32 : 0.28);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(${baseColor}, ${alpha})`;
-            ctx.lineWidth = 0.75;
+            ctx.strokeStyle = (p.isHub || p2.isHub)
+              ? `rgba(${hubColor}, ${alpha * 1.3})`
+              : `rgba(${lineColor}, ${alpha})`;
+            ctx.lineWidth = (p.isHub || p2.isHub) ? 0.9 : 0.6;
             ctx.stroke();
           }
+        }
+      }
+
+      // 2. Draw synaptic pulses travelling across lines
+      for (let k = pulses.length - 1; k >= 0; k--) {
+        const pulse = pulses[k];
+        const p1 = particles[pulse.fromIndex];
+        const p2 = particles[pulse.toIndex];
+
+        if (!p1 || !p2) {
+          pulses.splice(k, 1);
+          continue;
+        }
+
+        pulse.progress += pulse.speed;
+        if (pulse.progress >= 1) {
+          pulses.splice(k, 1);
+          continue;
+        }
+
+        const px = p1.x + (p2.x - p1.x) * pulse.progress;
+        const py = p1.y + (p2.y - p1.y) * pulse.progress;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${hubColor}, 0.85)`;
+        ctx.shadowColor = `rgba(${hubColor}, 0.8)`;
+        ctx.shadowBlur = 6;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // 3. Draw nodes and mouse interaction
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        // Mouse gentle interaction
+        if (mouse.x > 0 && mouse.y > 0) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < mousePullDistSq) {
+            const dist = Math.sqrt(distSq);
+            const force = (180 - dist) / 180;
+            p.x -= (dx / dist) * force * 0.8;
+            p.y -= (dy / dist) * force * 0.8;
+
+            const alpha = (1 - dist / 180) * 0.45;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(${activeColor}, ${alpha})`;
+            ctx.lineWidth = 0.9;
+            ctx.stroke();
+          }
+        }
+
+        // Draw particle node
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.isHub
+          ? `rgba(${hubColor}, ${p.baseAlpha})`
+          : `rgba(${nodeColor}, ${p.baseAlpha})`;
+        ctx.fill();
+
+        // Hub node glowing ring
+        if (p.isHub) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius + 2, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${hubColor}, 0.25)`;
+          ctx.lineWidth = 0.75;
+          ctx.stroke();
         }
       }
 
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    animate();
+    animationFrameId = requestAnimationFrame(animate);
 
     return () => {
-      clearInterval(formulaIntervalId);
       observer.disconnect();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -551,20 +354,13 @@ export const NeuralBackground: React.FC = memo(() => {
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full bg-transparent transition-opacity duration-300"
+        className="absolute inset-0 w-full h-full bg-transparent"
         aria-hidden="true"
       />
 
-      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-[#14E3D8]/5 rounded-full blur-[100px] md:blur-[160px] pointer-events-none animate-pulse-slow" />
-      <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-[#14E3D8]/6 rounded-full blur-[100px] md:blur-[160px] pointer-events-none animate-pulse-slow" />
-      <div className="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-[#14E3D8]/4 rounded-full blur-[100px] md:blur-[160px] pointer-events-none" />
-
-      <svg className="absolute inset-0 w-full h-full opacity-[0.03] mix-blend-overlay pointer-events-none" aria-hidden="true">
-        <filter id="noiseFilter">
-          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-      </svg>
+      {/* Atmospheric ambient glows */}
+      <div className="absolute top-1/4 -right-20 w-[550px] h-[550px] bg-cyan-500/[0.04] rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute -bottom-32 left-1/4 w-[500px] h-[500px] bg-sky-500/[0.03] rounded-full blur-[140px] pointer-events-none" />
     </div>
   );
 });

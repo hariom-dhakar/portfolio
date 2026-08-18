@@ -14,51 +14,51 @@ export const ResumeViewer: React.FC = memo(() => {
     >
       <div className="section-layout">
         
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <m.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-center gap-3"
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center gap-1.5"
           >
-            <span className="section-label inline-flex items-center gap-2">
-              <FileText className="w-3.5 h-3.5" aria-hidden="true" /> Resume
+            <span className="section-label inline-flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5" aria-hidden="true" /> Curriculum Vitae // 06
             </span>
-            <h2 className="section-title">Curriculum Vitae</h2>
+            <h2 className="section-title">Resume & Background</h2>
             <p className="section-description text-center mx-auto">
-              Download my CV or preview the document below.
+              Download complete resume or inspect document preview.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
               <a
                 href={resumePdf}
-                download="Hariom_Dhakar_Resume.pdf"
+                download="Hariom_Dhakar_CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary w-full sm:w-auto text-xs md:text-sm py-2.5 px-6 focus-visible:outline-2 focus-visible:outline-cyan-400"
+                className="btn-primary w-full sm:w-auto text-xs md:text-sm py-2 px-5 focus-visible:outline-2 focus-visible:outline-cyan-400"
                 aria-label="Download Resume PDF"
               >
                 <Download className="w-4 h-4" aria-hidden="true" />
-                <span>Download Resume</span>
+                <span>Download CV</span>
               </a>
 
               <button
                 onClick={() => setIsExpanded((prev) => !prev)}
-                className="btn-ghost w-full sm:w-auto text-xs md:text-sm py-2.5 px-6 focus-visible:outline-2 focus-visible:outline-cyan-400"
+                className="btn-ghost w-full sm:w-auto text-xs md:text-sm py-2 px-5 focus-visible:outline-2 focus-visible:outline-cyan-400"
                 aria-expanded={isExpanded}
                 aria-controls="resume-preview-container"
                 aria-label={isExpanded ? "Hide document preview" : "Preview document"}
               >
                 {isExpanded ? (
                   <>
-                    <EyeOff className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
-                    <span>Hide Preview</span>
+                    <EyeOff className="w-4 h-4" aria-hidden="true" />
+                    <span>Hide Document</span>
                   </>
                 ) : (
                   <>
-                    <Eye className="w-4 h-4 text-[var(--text-accent)]" aria-hidden="true" />
-                    <span>Preview Resume</span>
+                    <Eye className="w-4 h-4" aria-hidden="true" />
+                    <span>Preview Document</span>
                   </>
                 )}
               </button>

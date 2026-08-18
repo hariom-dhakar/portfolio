@@ -63,26 +63,29 @@ export const Contact = memo(() => {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="section-layout flex flex-col items-start space-y-8"
+        className="section-layout flex flex-col items-start space-y-6"
       >
-        <div className="space-y-3 max-w-2xl">
+        <div className="space-y-1 max-w-2xl">
+          <m.span variants={itemVariants} className="section-label">
+            Inquiries // 07
+          </m.span>
           <m.h2 
             variants={itemVariants}
             className="section-title"
           >
-            Let's Connect
+            Get in Touch
           </m.h2>
           <m.p 
             variants={itemVariants}
-            className="section-description !text-base md:!text-lg"
+            className="section-description"
           >
-            Have an AI engineering opportunity in mind? Let's build together.
+            Open to AI engineering roles, multi-agent systems development, and high-impact engineering collaborations.
           </m.p>
         </div>
 
         <m.div 
           variants={itemVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full"
         >
           {links.map((link) => (
             <a
@@ -91,22 +94,22 @@ export const Contact = memo(() => {
               target={link.href.startsWith('http') ? '_blank' : '_self'}
               rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
               aria-label={`${link.name}: ${link.value}`}
-              className="card-secondary group p-4 flex flex-col gap-3 focus-visible:outline-2 focus-visible:outline-cyan-400"
+              className="card-primary group p-4 flex flex-col justify-between gap-3 focus-visible:outline-2 focus-visible:outline-cyan-400"
             >
-              <div className="flex items-center justify-between text-[var(--text-tertiary)] group-hover:text-[var(--text-accent)] transition-colors">
-                <span className="p-2 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-primary)]">
+              <div className="flex items-center justify-between text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)] transition-colors">
+                <span className="p-1.5 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)]">
                   {link.icon}
                 </span>
                 {link.href.startsWith('http') && (
-                  <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300" aria-hidden="true" />
+                  <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                 )}
               </div>
               
               <div className="flex flex-col gap-0.5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-tertiary)]">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-tertiary)]">
                   {link.name}
                 </span>
-                <span className="text-xs md:text-sm font-mono text-[var(--text-primary)] group-hover:text-[var(--text-accent)] truncate transition-colors">
+                <span className="text-xs font-mono text-[var(--text-primary)] truncate">
                   {link.value}
                 </span>
               </div>
@@ -116,11 +119,11 @@ export const Contact = memo(() => {
 
         <m.div 
           variants={itemVariants}
-          className="flex items-center gap-3 pt-4 border-t border-[var(--border-primary)]/40 w-full"
+          className="flex items-center gap-2 pt-2 border-t border-[var(--border-primary)] w-full"
         >
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
-            Available for new opportunities
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span className="text-xs font-mono text-[var(--text-tertiary)]">
+            Active status: Available for new engineering opportunities
           </span>
         </m.div>
       </m.div>

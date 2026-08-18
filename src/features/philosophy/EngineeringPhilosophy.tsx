@@ -40,9 +40,9 @@ export const EngineeringPhilosophy = memo(() => {
         initial={{ opacity: 0, y: 24 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="section-layout space-y-8"
+        className="section-layout space-y-4 md:space-y-5"
       >
-        <div className="space-y-3 max-w-2xl">
+        <div className="space-y-1 max-w-2xl">
           <span className="section-label inline-flex items-center gap-1.5">
             <Compass className="w-3.5 h-3.5 text-[var(--text-gold)]" /> System Mindset
           </span>
@@ -52,19 +52,19 @@ export const EngineeringPhilosophy = memo(() => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {pillars.map((pillar, i) => {
             const Icon = pillar.icon;
             return (
               <div
                 key={i}
-                className="card-secondary p-4 md:p-5 space-y-2 flex flex-col justify-between"
+                className="card-secondary p-3.5 sm:p-4 space-y-2 flex flex-col justify-between"
               >
                 <div className="p-2 rounded-xl bg-[var(--brand-glow)] border border-[var(--border-glow)] text-[var(--text-accent)] w-fit">
                   <Icon className="w-4 h-4" />
                 </div>
-                <div className="space-y-1 pt-1">
-                  <h3 className="font-display font-semibold text-sm text-[var(--text-primary)]">
+                <div className="space-y-1 pt-0.5">
+                  <h3 className="font-display font-semibold text-xs sm:text-sm text-[var(--text-primary)]">
                     {pillar.title}
                   </h3>
                   <p className="text-xs text-[var(--text-secondary)] font-light leading-snug">

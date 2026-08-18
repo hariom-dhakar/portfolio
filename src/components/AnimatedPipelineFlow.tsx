@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { m, useReducedMotion } from 'framer-motion';
-import { CheckCircle2, Clock, Cpu, Hash, RotateCcw, Activity } from 'lucide-react';
+import { CheckCircle2, Activity } from 'lucide-react';
 import type { ArchitectureStep } from '../data/projectsData';
 
 interface AnimatedPipelineFlowProps {
@@ -11,92 +11,9 @@ interface AnimatedPipelineFlowProps {
   onStepSelect?: (index: number) => void;
 }
 
-interface TelemetryData {
-  executionTime: string;
-  status: string;
-  model: string;
-  promptTokens: number;
-  outputTokens: number;
-  retries: number;
-}
-
-const getTelemetryForStep = (index: number, projectId: string): TelemetryData => {
-  if (projectId === 'medinsight') {
-    const steps = [
-      { model: 'text-embedding-004', executionTime: '0.15s', promptTokens: 120, outputTokens: 0, retries: 0 },
-      { model: 'Gemini-1.5-Flash', executionTime: '1.40s', promptTokens: 1500, outputTokens: 800, retries: 0 },
-      { model: 'Groq-Llama-3-70B', executionTime: '0.85s', promptTokens: 1100, outputTokens: 450, retries: 0 },
-      { model: 'Groq-Llama-3-70B', executionTime: '1.60s', promptTokens: 2200, outputTokens: 900, retries: 0 },
-      { model: 'Groq-Llama-3-70B', executionTime: '0.50s', promptTokens: 600, outputTokens: 150, retries: 0 },
-    ];
-    return {
-      status: '200 OK',
-      ...(steps[index] || { model: 'Gemini-1.5-Flash', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
-    };
-  }
-
-  if (projectId === 'proposal') {
-    const steps = [
-      { model: 'Groq-Llama-3.3', executionTime: '1.80s', promptTokens: 1200, outputTokens: 800, retries: 0 },
-      { model: 'gemini-embedding-001', executionTime: '1.20s', promptTokens: 1000, outputTokens: 0, retries: 0 },
-      { model: 'Groq-Llama-3.3', executionTime: '8.40s', promptTokens: 4500, outputTokens: 2500, retries: 0 },
-      { model: 'Groq-Llama-3.3', executionTime: '3.20s', promptTokens: 1800, outputTokens: 700, retries: 1 },
-      { model: 'System Node', executionTime: '0.05s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'ReportLab Engine', executionTime: '3.50s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'MongoDB', executionTime: '0.30s', promptTokens: 0, outputTokens: 0, retries: 0 },
-    ];
-    return {
-      status: '200 OK',
-      ...(steps[index] || { model: 'Groq-Llama-3.3', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
-    };
-  }
-
-  if (projectId === 'eda') {
-    const steps = [
-      { model: 'Pandas Profiler', executionTime: '0.20s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'Pandas / NumPy', executionTime: '0.80s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'Pandas / SciPy', executionTime: '1.10s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'CrewAI (Llama-3)', executionTime: '1.50s', promptTokens: 1200, outputTokens: 400, retries: 0 },
-      { model: 'Sandboxed Python', executionTime: '2.30s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'Matplotlib', executionTime: '1.80s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'CrewAI (Llama-3)', executionTime: '3.20s', promptTokens: 2500, outputTokens: 1200, retries: 0 },
-    ];
-    return {
-      status: '200 OK',
-      ...(steps[index] || { model: 'CrewAI (Llama-3)', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
-    };
-  }
-
-  if (projectId === 'observability') {
-    const steps = [
-      { model: 'FastAPI Gateway', executionTime: '0.05s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'Guardrails / PII', executionTime: '0.15s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'Groq-Llama-3-70B', executionTime: '0.25s', promptTokens: 400, outputTokens: 100, retries: 0 },
-      { model: 'Inference Router', executionTime: '1.20s', promptTokens: 850, outputTokens: 450, retries: 0 },
-      { model: 'Langfuse / OTel', executionTime: '0.08s', promptTokens: 0, outputTokens: 0, retries: 0 },
-      { model: 'RAGAS / LLM-Judge', executionTime: '1.80s', promptTokens: 1800, outputTokens: 800, retries: 0 },
-      { model: 'FastAPI Gateway', executionTime: '0.02s', promptTokens: 0, outputTokens: 0, retries: 0 },
-    ];
-    return {
-      status: '200 OK',
-      ...(steps[index] || { model: 'Inference Router', executionTime: '1.0s', promptTokens: 1000, outputTokens: 500, retries: 0 })
-    };
-  }
-
-  // Fallback
-  return {
-    executionTime: '1.0s',
-    status: '200 OK',
-    model: 'Groq-Llama-3.3',
-    promptTokens: 1000,
-    outputTokens: 500,
-    retries: 0,
-  };
-};
-
 export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
   architecture,
-  projectId,
+  projectId: _projectId,
   onStepSelect,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -153,10 +70,6 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
       });
     }
   }, [activeNodeIndex]);
-
-  const telemetryDataMap = useMemo(() => {
-    return architecture.map((_, idx) => getTelemetryForStep(idx, projectId));
-  }, [architecture, projectId]);
 
   const updateTooltipPos = useCallback(() => {
     if (hoveredNodeIndex === null) {
@@ -230,10 +143,10 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
         <div className="flex items-center gap-2">
           <Activity className="w-3.5 h-3.5 text-[var(--text-accent)] animate-pulse" />
           <span className="text-[var(--text-primary)] font-bold uppercase tracking-wider text-[11px]">
-            AI Execution Trace Pipeline
+            Architecture Pipeline Flow
           </span>
           <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-[10px] text-[var(--text-tertiary)]">
-            OpenTelemetry / LangSmith Trace
+            Deterministic Graph
           </span>
         </div>
 
@@ -241,12 +154,12 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
           <span className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 -ml-2.5" />
-            <span className="text-[var(--text-secondary)] font-semibold">Active Trace</span>
+            <span className="text-[var(--text-secondary)] font-semibold">Active Node Flow</span>
           </span>
-          <span className="hidden md:inline text-[var(--text-tertiary)]">Loop: 9.0s</span>
         </div>
       </div>
 
+      {/* Desktop Pipeline Flow */}
       <div 
         ref={pipelineScrollRef}
         className="relative hidden sm:flex items-center gap-2 md:gap-3 w-full py-1 overflow-x-auto overflow-y-visible select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -325,12 +238,12 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
         })}
       </div>
 
+      {/* Mobile Flow */}
       <div className="flex sm:hidden flex-col gap-2.5 py-1">
         {architecture.map((step, index) => {
           const Icon = step.icon;
           const isCurrentActive = activeNodeIndex === index;
           const isCompleted = activeNodeIndex > index;
-          const telemetry = telemetryDataMap[index];
 
           return (
             <div
@@ -354,16 +267,16 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
                   <span className="text-xs font-mono font-semibold text-[var(--text-primary)] truncate">
                     {step.title}
                   </span>
-                  <span className="text-[10px] font-mono text-[var(--text-tertiary)]">
-                    {telemetry.model} • {telemetry.executionTime}
+                  <span className="text-[10px] text-[var(--text-secondary)] truncate">
+                    {step.description}
                   </span>
                 </div>
               </div>
 
               {isCurrentActive && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[var(--text-accent)]">
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[var(--text-accent)] shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-accent)] animate-ping" />
-                  Executing
+                  Active
                 </span>
               )}
             </div>
@@ -371,6 +284,7 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
         })}
       </div>
 
+      {/* Desktop Hover Tooltip */}
       {hoveredNodeIndex !== null && tooltipPos && typeof document !== 'undefined' && createPortal(
         <m.div
           initial={{ opacity: 0, y: 6, scale: 0.95 }}
@@ -384,41 +298,20 @@ export const AnimatedPipelineFlow: React.FC<AnimatedPipelineFlowProps> = memo(({
             transform: 'translate(-50%, -100%)',
             zIndex: 9999,
           }}
-          className="w-56 p-3 rounded-xl bg-[var(--bg-primary)]/95 backdrop-blur-xl border border-[var(--border-glow)] shadow-2xl pointer-events-none space-y-2 font-mono text-left"
+          className="w-64 p-3 rounded-xl bg-[var(--bg-primary)]/95 backdrop-blur-xl border border-[var(--border-glow)] shadow-2xl pointer-events-none space-y-1.5 text-left"
         >
           <div className="flex items-center justify-between border-b border-[var(--border-primary)] pb-1.5">
-            <span className="text-xs font-bold text-[var(--text-primary)] truncate">
+            <span className="text-xs font-bold font-display text-[var(--text-primary)] truncate">
               {architecture[hoveredNodeIndex]?.title}
             </span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
-              {telemetryDataMap[hoveredNodeIndex]?.status}
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono font-semibold">
+              Step 0{hoveredNodeIndex + 1}
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5 text-[10px]">
-            <div className="flex items-center gap-1 text-[var(--text-secondary)]">
-              <Clock className="w-3 h-3 text-[var(--text-accent)] shrink-0" />
-              <span>{telemetryDataMap[hoveredNodeIndex]?.executionTime}</span>
-            </div>
-            <div className="flex items-center gap-1 text-[var(--text-secondary)]">
-              <Cpu className="w-3 h-3 text-[var(--text-gold)] shrink-0" />
-              <span className="truncate">{telemetryDataMap[hoveredNodeIndex]?.model}</span>
-            </div>
-            <div className="flex items-center gap-1 text-[var(--text-tertiary)]">
-              <Hash className="w-3 h-3 shrink-0" />
-              <span>{telemetryDataMap[hoveredNodeIndex]?.promptTokens} in</span>
-            </div>
-            <div className="flex items-center gap-1 text-[var(--text-tertiary)]">
-              <Hash className="w-3 h-3 shrink-0" />
-              <span>{telemetryDataMap[hoveredNodeIndex]?.outputTokens} out</span>
-            </div>
-          </div>
-
-          {telemetryDataMap[hoveredNodeIndex]?.retries > 0 && (
-            <div className="pt-1 border-t border-[var(--border-primary)]/40 text-[9px] text-amber-400 flex items-center gap-1">
-              <RotateCcw className="w-2.5 h-2.5" /> Retries: {telemetryDataMap[hoveredNodeIndex]?.retries}
-            </div>
-          )}
+          <p className="text-[11px] text-[var(--text-secondary)] font-normal leading-relaxed">
+            {architecture[hoveredNodeIndex]?.description}
+          </p>
         </m.div>,
         document.body
       )}

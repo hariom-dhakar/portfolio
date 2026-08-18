@@ -136,22 +136,22 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
           scrolled
-            ? 'bg-[var(--bg-glass)] backdrop-blur-xl border-b border-[var(--border-primary)] py-3.5 shadow-sm'
-            : 'bg-transparent border-b border-transparent py-5'
+            ? 'bg-[var(--bg-glass)] backdrop-blur-md border-b border-[var(--border-primary)] py-3 shadow-xs'
+            : 'bg-transparent border-b border-transparent py-4'
         }`}
       >
-        <div className="max-w-[1180px] mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-[1120px] mx-auto px-5 sm:px-6 flex items-center justify-between">
           <button
             onClick={() => handleNavClick('hero')}
-            className="font-display font-semibold text-lg tracking-tight text-[var(--text-primary)] hover:text-[var(--text-accent)] transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1"
+            className="font-display font-medium text-sm md:text-base tracking-tight text-[var(--text-primary)] hover:opacity-80 transition-opacity duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md"
             aria-label="Hariom Dhakar - Return to top"
           >
             Hariom Dhakar
           </button>
 
-          <nav className="hidden lg:flex items-center gap-7" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-6" aria-label="Main Navigation">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -159,16 +159,16 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`relative py-1 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1 ${
-                    isActive ? 'text-[var(--text-primary)] font-semibold' : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+                  className={`relative py-1 text-xs md:text-[13px] transition-colors duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1 ${
+                    isActive ? 'text-[var(--text-primary)] font-medium' : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] font-normal'
                   }`}
                 >
                   {item.label}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[var(--text-accent)] rounded-full"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      className="absolute -bottom-1 left-1 right-1 h-[1.5px] bg-[var(--text-primary)] rounded-full"
+                      transition={{ type: 'spring', stiffness: 400, damping: 35 }}
                     />
                   )}
                 </button>
@@ -176,27 +176,27 @@ export const Navigation = memo(({ theme, toggleTheme }: NavigationProps) => {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400"
+              className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-cyan-400"
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {theme === 'dark' ? (
-                <Sun className="w-4.5 h-4.5 text-amber-400" aria-hidden="true" />
+                <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
               ) : (
-                <Moon className="w-4.5 h-4.5 text-slate-700" aria-hidden="true" />
+                <Moon className="w-4 h-4 text-slate-700" aria-hidden="true" />
               )}
             </button>
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors duration-200 cursor-pointer lg:hidden relative z-50 focus-visible:outline-2 focus-visible:outline-cyan-400"
+              className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors duration-150 cursor-pointer lg:hidden relative z-50 focus-visible:outline-2 focus-visible:outline-cyan-400"
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-menu"
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
+              {isMobileMenuOpen ? <X className="w-4.5 h-4.5" aria-hidden="true" /> : <Menu className="w-4.5 h-4.5" aria-hidden="true" />}
             </button>
           </div>
         </div>

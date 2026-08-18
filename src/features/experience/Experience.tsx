@@ -6,7 +6,7 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.1,
     },
   },
 };
@@ -14,13 +14,13 @@ const containerVariants = {
 const itemVariants = {
   hidden: {
     opacity: 0,
-    y: 24,
+    y: 16,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
+      duration: 0.5,
       ease: [0.16, 1, 0.3, 1] as const,
     },
   },
@@ -29,15 +29,15 @@ const itemVariants = {
 const DELIVERABLES = [
   {
     title: 'CrewAI EDA Analyzer',
-    impact: '70% reduction in manual data analysis effort for ML engineers',
+    impact: 'Automated exploratory data workflows, reducing manual analysis overhead by 70% for engineering teams.',
   },
   {
     title: 'LLM Reasoning Pipeline',
-    impact: 'Auto-generated executive business insights & structured reports',
+    impact: 'Engineered deterministic reasoning pipelines for auto-generating structured executive reports.',
   },
   {
     title: 'FastAPI Microservices',
-    impact: 'High-throughput async data processing & agent API gateways',
+    impact: 'Developed high-throughput asynchronous gateways supporting low-latency multi-agent orchestration.',
   },
 ];
 
@@ -67,104 +67,91 @@ export const Experience = memo(() => {
           className="flex flex-col"
         >
           {/* Section Header */}
-          <div className="flex flex-col mb-8 md:mb-10">
+          <div className="flex flex-col mb-8">
             <m.span variants={itemVariants} className="section-label">
-              System Log
+              Career // 02
             </m.span>
 
             <m.h2 variants={itemVariants} className="section-title">
-              Experiences
+              Work Experience
             </m.h2>
 
             <m.p variants={itemVariants} className="section-description">
-              Delivering automated analytical systems and agentic microservices.
+              Production engineering contributions and technical ownership.
             </m.p>
           </div>
 
           {/* Experience Card */}
           <m.div
             variants={itemVariants}
-            className="card-primary p-6 md:p-8 space-y-6 relative overflow-hidden"
+            className="card-primary p-5 sm:p-6 md:p-7 space-y-6"
           >
             {/* Header */}
-            <div className="border-b border-[var(--border-primary)] pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex flex-col md:flex-row md:items-center gap-4">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-mono text-[10px] tracking-wider border border-emerald-500/20 uppercase w-fit font-bold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Current
-                </span>
-
-                <div>
-                  <h3 className="font-display text-xl md:text-2xl font-bold text-[var(--text-primary)]">
+            <div className="border-b border-[var(--border-primary)] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <h3 className="font-display text-lg sm:text-xl font-semibold text-[var(--text-primary)]">
                     Celebal Technologies
                   </h3>
-
-                  <p className="text-[var(--text-accent)] font-mono text-xs md:text-sm mt-0.5 font-semibold">
-                    AI Engineer
-                  </p>
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-[10px] tracking-wider border border-emerald-500/20 uppercase font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    Current
+                  </span>
                 </div>
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-0.5 font-normal">
+                  AI Engineer • Generative AI & Intelligent Systems
+                </p>
               </div>
 
-              <div className="font-mono text-[var(--text-gold)] text-xs px-3.5 py-1.5 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-primary)] w-fit font-semibold">
+              <div className="font-mono text-xs text-[var(--text-tertiary)] px-3 py-1 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] w-fit">
                 Feb 2026 → Present
               </div>
             </div>
 
-            {/* Deliverables Timeline */}
-            <div className="relative pl-6 space-y-4 border-l-2 border-[var(--border-glow)]">
-              <m.div
-                className="absolute left-[-2px] top-0 w-[2px] h-full bg-[var(--text-accent)] shadow-[0_0_10px_var(--text-accent-glow)]"
-                initial={{ scaleY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.9,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                style={{ transformOrigin: 'top' }}
-              />
+            {/* Deliverables List */}
+            <div className="space-y-3">
+              <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-wider block">
+                Key Deliverables & Impact
+              </span>
 
-              <ul className="space-y-4">
+              <div className="grid grid-cols-1 gap-3">
                 {DELIVERABLES.map((item, index) => (
-                  <m.li
+                  <div
                     key={item.title}
-                    variants={itemVariants}
-                    className="relative list-none flex flex-col gap-1 p-4 rounded-xl card-secondary"
+                    className="p-3.5 sm:p-4 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-primary)] flex flex-col gap-1"
                   >
-                    <span className="font-mono text-[var(--text-gold)] text-[9px] uppercase tracking-widest font-semibold">
-                      DELIVERABLE_0{index + 1}
-                    </span>
+                    <div className="flex items-center justify-between">
+                      <span className="font-display text-sm sm:text-base font-semibold text-[var(--text-primary)]">
+                        {item.title}
+                      </span>
+                      <span className="font-mono text-[10px] text-[var(--text-tertiary)]">
+                        0{index + 1}
+                      </span>
+                    </div>
 
-                    <span className="font-display text-base md:text-lg font-semibold text-[var(--text-primary)]">
-                      {item.title}
-                    </span>
-
-                    <span className="font-mono text-[var(--text-accent)] text-xs">
-                      &gt; {item.impact}
-                    </span>
-                  </m.li>
+                    <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-normal leading-relaxed">
+                      {item.impact}
+                    </p>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Tech Stack */}
-            <m.div
-              variants={itemVariants}
-              className="flex flex-wrap gap-2 pt-4 border-t border-[var(--border-primary)]"
-            >
-              <span className="text-xs font-mono text-[var(--text-tertiary)] mr-2 py-1">
+            <div className="flex flex-wrap items-center gap-1.5 pt-4 border-t border-[var(--border-primary)]">
+              <span className="text-xs font-mono text-[var(--text-tertiary)] mr-2">
                 Stack:
               </span>
 
               {TECH_TAGS.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] font-mono text-[10px] tracking-wider uppercase text-[var(--text-secondary)] hover:text-[var(--text-accent)] hover:border-[var(--border-glow)] transition-all"
+                  className="px-2.5 py-0.5 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] font-mono text-xs text-[var(--text-secondary)]"
                 >
-                  #{tag}
+                  {tag}
                 </span>
               ))}
-            </m.div>
+            </div>
           </m.div>
         </m.div>
       </div>

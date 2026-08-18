@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, memo, forwardRef } from 'react';
+import { useRef, useState, useCallback, memo } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, 
@@ -10,32 +10,51 @@ import {
   CheckCircle2, 
   Cpu, 
   Activity,
-  Code2
+  Code2,
+  Layers
 } from 'lucide-react';
 import { PROJECTS_DATA, type ProjectData, type ArchitectureStep } from '../../data/projectsData';
 import { AnimatedPipelineFlow } from '../../components/AnimatedPipelineFlow';
 
 export const Projects = memo(() => {
+  const [expandedProjectId, setExpandedProjectId] = useState<string | null>(null);
+
+  const handleToggleExpand = useCallback((projectId: string) => {
+    setExpandedProjectId((prev) => (prev === projectId ? null : projectId));
+  }, []);
+
+  const projectPairs: [ProjectData, ProjectData | undefined][] = [];
+  for (let i = 0; i < PROJECTS_DATA.length; i += 2) {
+    projectPairs.push([PROJECTS_DATA[i], PROJECTS_DATA[i + 1]]);
+  }
+
   return (
     <section id="projects" className="w-full overflow-hidden border-t border-[var(--border-primary)]">
       <div className="section-layout">
         <m.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col mb-8 md:mb-10"
+          className="flex flex-col mb-8"
         >
-          <span className="section-label">System Showcases</span>
-          <h2 className="section-title">Selected Work</h2>
+          <span className="section-label">Showcase // 03</span>
+          <h2 className="section-title">Featured Engineering Projects</h2>
           <p className="section-description">
-            Production systems with custom execution architectures and multi-agent pipelines.
+            Production-grade systems featuring multi-agent orchestration, structured RAG architectures, and deterministic evaluation.
           </p>
         </m.div>
 
-        <div className="flex flex-col gap-8 md:gap-10">
-          {PROJECTS_DATA.map((project, idx) => (
-            <ProjectCard key={project.id} project={project} index={idx} />
+        {/* Paired 2-in-one-row Projects Rows */}
+        <div className="flex flex-col gap-4 md:gap-5">
+          {projectPairs.map((pair, rowIndex) => (
+            <ProjectRow
+              key={`row-${rowIndex}-${pair[0].id}`}
+              pair={pair}
+              rowIndex={rowIndex}
+              expandedProjectId={expandedProjectId}
+              onToggleExpand={handleToggleExpand}
+            />
           ))}
         </div>
       </div>
@@ -44,6 +63,79 @@ export const Projects = memo(() => {
 });
 
 Projects.displayName = 'Projects';
+
+interface ProjectRowProps {
+  pair: [ProjectData, ProjectData | undefined];
+  rowIndex: number;
+  expandedProjectId: string | null;
+  onToggleExpand: (id: string) => void;
+}
+
+const ProjectRow = memo(({ pair, rowIndex, expandedProjectId, onToggleExpand }: ProjectRowProps) => {
+  const [p1, p2] = pair;
+  const isP1Expanded = expandedProjectId === p1.id;
+  const isP2Expanded = p2 ? expandedProjectId === p2.id : false;
+  const hasExpanded = isP1Expanded || isP2Expanded;
+
+  const activeProject = isP1Expanded ? p1 : isP2Expanded ? p2 : null;
+  const siblingProject = isP1Expanded ? p2 : isP2Expanded ? p1 : null;
+  const activeIndex = isP1Expanded ? rowIndex * 2 : rowIndex * 2 + 1;
+
+  return (
+    <div className="relative w-full">
+      {hasExpanded && activeProject ? (
+        <div className="relative w-full pb-4 pr-3 sm:pb-5 sm:pr-4">
+          {/* Sibling Card Visually Stacked Behind */}
+          {siblingProject && (
+            <div 
+              onClick={() => onToggleExpand(siblingProject.id)}
+              className="absolute inset-0 translate-x-2.5 translate-y-2.5 sm:translate-x-3.5 sm:translate-y-3.5 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-secondary)] z-10 p-4 flex flex-col justify-end items-end cursor-pointer group/stack hover:translate-x-3.5 hover:translate-y-3.5 sm:hover:translate-x-4 sm:hover:translate-y-4 transition-all duration-200 shadow-md"
+              title={`Click to bring ${siblingProject.title} forward`}
+              aria-label={`Project underneath: ${siblingProject.title}. Click to view.`}
+            >
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] font-mono text-xs text-[var(--text-secondary)] group-hover/stack:text-[var(--text-primary)] group-hover/stack:border-[var(--border-glow)] transition-colors shadow-xs">
+                <Layers className="w-3.5 h-3.5 text-[var(--text-accent)]" aria-hidden="true" />
+                <span>Underneath: <strong className="text-[var(--text-primary)] font-medium">{siblingProject.title}</strong></span>
+                <span className="text-[var(--text-accent)] font-medium">↗ Click to bring forward</span>
+              </div>
+            </div>
+          )}
+
+          {/* Active Front Card */}
+          <div className="relative z-20 w-full">
+            <ProjectCard
+              project={activeProject}
+              index={activeIndex}
+              isExpanded={true}
+              onToggleExpand={() => onToggleExpand(activeProject.id)}
+              siblingProject={siblingProject}
+              onSwitchToSibling={siblingProject ? () => onToggleExpand(siblingProject.id) : undefined}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 items-start">
+          <ProjectCard
+            project={p1}
+            index={rowIndex * 2}
+            isExpanded={false}
+            onToggleExpand={() => onToggleExpand(p1.id)}
+          />
+          {p2 && (
+            <ProjectCard
+              project={p2}
+              index={rowIndex * 2 + 1}
+              isExpanded={false}
+              onToggleExpand={() => onToggleExpand(p2.id)}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+});
+
+ProjectRow.displayName = 'ProjectRow';
 
 const INLINE_TABS = [
   { id: 'problem', label: 'Problem' },
@@ -55,13 +147,27 @@ const INLINE_TABS = [
 
 type InlineTabId = typeof INLINE_TABS[number]['id'];
 
-const ProjectCard = memo(({ project, index }: { project: ProjectData; index: number }) => {
+interface ProjectCardProps {
+  project: ProjectData;
+  index: number;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+  siblingProject?: ProjectData;
+  onSwitchToSibling?: () => void;
+}
+
+const ProjectCard = memo(({ 
+  project, 
+  index, 
+  isExpanded, 
+  onToggleExpand,
+  siblingProject,
+  onSwitchToSibling 
+}: ProjectCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState<InlineTabId>('problem');
+  const [activeTab, setActiveTab] = useState<InlineTabId>('architecture');
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleStepSelect = useCallback((idx: number) => {
     setActiveStepIndex(idx);
@@ -69,68 +175,80 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
 
   return (
     <m.div 
+      layout
       ref={cardRef}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="card-primary p-5 md:p-6 relative w-full overflow-hidden"
+      transition={{ 
+        layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+        opacity: { duration: 0.3 },
+        y: { duration: 0.3 }
+      }}
+      className="card-primary p-5 sm:p-6 relative w-full overflow-hidden transition-all"
     >
       <div className="w-full flex flex-col gap-4">
         
         {/* CARD HEADER */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[var(--border-primary)] pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-[var(--border-primary)] pb-4">
           <div className="space-y-1 max-w-2xl">
-            <span className="font-mono text-[10px] text-[var(--text-gold)] uppercase tracking-widest flex items-center gap-2 font-semibold">
-              PROJECT 0{index + 1}
+            <span className="font-mono text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider block">
+              Project // 0{index + 1}
             </span>
-            <h3 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-[var(--text-primary)]">
+            <h3 className="text-lg sm:text-xl font-display font-semibold tracking-tight text-[var(--text-primary)]">
               {project.title}
             </h3>
-            <p className="text-xs md:text-sm text-[var(--text-secondary)] font-light leading-relaxed">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-normal leading-relaxed">
               {project.tagline}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            {isExpanded && siblingProject && onSwitchToSibling && (
+              <button
+                onClick={onSwitchToSibling}
+                className="btn-ghost shrink-0 text-xs py-1.5 px-3 focus-visible:outline-2 focus-visible:outline-cyan-400 cursor-pointer"
+                title={`View ${siblingProject.title}`}
+              >
+                <span>View {siblingProject.title} ↔</span>
+              </button>
+            )}
+
             <a 
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-ghost shrink-0 text-xs py-2 px-4 focus-visible:outline-2 focus-visible:outline-cyan-400"
+              className="btn-ghost shrink-0 text-xs py-1.5 px-3.5 focus-visible:outline-2 focus-visible:outline-cyan-400"
               aria-label={`View ${project.title} GitHub Repository`}
             >
-              <span>GitHub Repo</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <span>GitHub</span>
+              <ExternalLink className="w-3 h-3 opacity-70" />
             </a>
 
             <button
-              onClick={() => {
-                setIsExpanded((prev) => !prev);
-                if (!isExpanded) setActiveTab('problem');
-              }}
-              className="btn-primary text-xs py-2 px-4 focus-visible:outline-2 focus-visible:outline-cyan-400 cursor-pointer"
+              onClick={onToggleExpand}
+              className="btn-primary text-xs py-1.5 px-3.5 focus-visible:outline-2 focus-visible:outline-cyan-400 cursor-pointer"
               aria-expanded={isExpanded}
               aria-label={isExpanded ? `Collapse ${project.title}` : `Expand ${project.title}`}
             >
-              <span>{isExpanded ? 'Collapse' : 'Expand'}</span>
+              <span>{isExpanded ? 'Hide Details' : 'View Architecture'}</span>
               {isExpanded ? (
-                <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" />
+                <ChevronUp className="w-3 h-3" aria-hidden="true" />
               ) : (
-                <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />
+                <ChevronDown className="w-3 h-3" aria-hidden="true" />
               )}
             </button>
           </div>
         </div>
 
         {/* TECH STACK & METRICS PREVIEW */}
-        <div className="flex flex-wrap items-center justify-between gap-4 py-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-tertiary)] mr-1">Stack:</span>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-mono text-[var(--text-tertiary)] mr-1">Stack:</span>
             {project.tech.map((t, i) => (
               <span 
                 key={i}
-                className="px-2.5 py-0.5 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-secondary)]"
+                className="px-2 py-0.5 rounded-md bg-[var(--bg-tertiary)] border border-[var(--border-primary)] text-xs font-mono text-[var(--text-secondary)]"
               >
                 {t}
               </span>
@@ -140,8 +258,8 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
           <div className="flex items-center gap-4">
             {project.metrics.map((mItem, i) => (
               <div key={i} className="flex items-baseline gap-1.5 font-mono">
-                <span className="text-sm md:text-base font-bold text-[var(--text-gold)]">{mItem.value}</span>
-                <span className="text-[9px] uppercase tracking-wider text-[var(--text-tertiary)]">{mItem.label}</span>
+                <span className="text-sm md:text-base font-semibold text-[var(--text-primary)]">{mItem.value}</span>
+                <span className="text-[10px] uppercase tracking-wider text-[var(--text-tertiary)]">{mItem.label}</span>
               </div>
             ))}
           </div>
@@ -154,32 +272,25 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden border-t border-[var(--border-primary)] pt-4"
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden border-t border-[var(--border-primary)] pt-4 mt-2"
             >
               {/* STICKY IN-CARD NAVBAR */}
-              <div className="sticky top-0 z-20 bg-[var(--bg-secondary)]/95 backdrop-blur-xl border border-[var(--border-primary)] p-2 mb-6 rounded-xl flex items-center justify-between gap-2 shadow-lg">
-                <nav className="flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar py-1 px-2" aria-label={`${project.title} Case Study Tabs`}>
+              <div className="sticky top-0 z-20 bg-[var(--bg-secondary)] border border-[var(--border-primary)] p-1.5 mb-5 rounded-lg flex items-center justify-between gap-2 shadow-xs">
+                <nav className="flex items-center gap-2 sm:gap-4 overflow-x-auto no-scrollbar py-0.5 px-1" aria-label={`${project.title} Case Study Tabs`}>
                   {INLINE_TABS.map((tab) => {
                     const isActive = activeTab === tab.id;
                     return (
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`relative py-1 text-xs md:text-sm font-medium transition-colors duration-200 cursor-pointer whitespace-nowrap focus-visible:outline-2 focus-visible:outline-cyan-400 rounded-md px-1 ${
+                        className={`relative py-1 px-2.5 text-xs rounded-md transition-colors duration-150 cursor-pointer whitespace-nowrap focus-visible:outline-2 focus-visible:outline-cyan-400 ${
                           isActive
-                            ? 'text-[var(--text-primary)] font-semibold'
+                            ? 'bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-medium border border-[var(--border-primary)]'
                             : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
                         }`}
                       >
                         {tab.label}
-                        {isActive && (
-                          <m.div
-                            layoutId={`activeInCardTab-${project.id}`}
-                            className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[var(--text-accent)] rounded-full"
-                            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                          />
-                        )}
                       </button>
                     );
                   })}
@@ -326,7 +437,7 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
                     </m.div>
                   )}
 
-                  {/* TAB 4: EXECUTION (EXISTING AI EXECUTION TRACE PIPELINE & STEP CARDS) */}
+                  {/* TAB 4: EXECUTION (PRODUCTION EXECUTION GUARDRAILS) */}
                   {activeTab === 'execution' && (
                     <m.div
                       key="tab-execution"
@@ -334,56 +445,29 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                      className="space-y-6"
+                      className="space-y-4"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-accent)] uppercase tracking-wider font-semibold">
-                          <Activity className="w-4 h-4" />
-                          <span>AI Execution Trace & Workflow Breakdown</span>
-                        </div>
-                        <span className="text-[10px] font-mono text-[var(--text-accent)]">
-                          Select step to inspect
-                        </span>
+                      <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-primary)] uppercase tracking-wider font-semibold">
+                        <ShieldCheck className="w-4 h-4 text-[var(--text-accent)]" />
+                        <span>Production Execution Guardrails</span>
                       </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                        {project.architecture.map((step, stepIdx) => (
-                          <StepItemCard 
-                            key={step.id}
-                            ref={(el) => {
-                              stepRefs.current[stepIdx] = el;
-                            }}
-                            step={step}
-                            stepIdx={stepIdx}
-                            isActive={activeStepIndex === stepIdx}
-                            onStepClick={handleStepSelect}
-                          />
-                        ))}
-                      </div>
-
-                      <div className="border-t border-[var(--border-primary)]/40 pt-4 space-y-3">
-                        <div className="flex items-center gap-2 text-xs font-mono text-[var(--text-primary)] uppercase tracking-wider font-semibold">
-                          <ShieldCheck className="w-4 h-4 text-[var(--text-accent)]" />
-                          <span>Production Execution Guardrails</span>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                          {project.productionConsiderations.map((item, pIdx) => (
-                            <div
-                              key={pIdx}
-                              className="p-3.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)] space-y-1 hover:border-[var(--border-glow)] transition-all"
-                            >
-                              <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-accent)] shrink-0" />
-                                <span className="font-mono text-xs font-semibold text-[var(--text-primary)]">
-                                  {item.title}
-                                </span>
-                              </div>
-                              <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed pl-3.5">
-                                {item.detail}
-                              </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {project.productionConsiderations.map((item, pIdx) => (
+                          <div
+                            key={pIdx}
+                            className="p-3.5 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-primary)] space-y-1 hover:border-[var(--border-glow)] transition-all"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-accent)] shrink-0" />
+                              <span className="font-mono text-xs font-semibold text-[var(--text-primary)]">
+                                {item.title}
+                              </span>
                             </div>
-                          ))}
-                        </div>
+                            <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed pl-3.5">
+                              {item.detail}
+                            </p>
+                          </div>
+                        ))}
                       </div>
                     </m.div>
                   )}
@@ -434,49 +518,3 @@ const ProjectCard = memo(({ project, index }: { project: ProjectData; index: num
 });
 
 ProjectCard.displayName = 'ProjectCard';
-
-interface StepItemCardProps {
-  step: ArchitectureStep;
-  stepIdx: number;
-  isActive: boolean;
-  onStepClick: (idx: number) => void;
-}
-
-const StepItemCard = memo(
-  forwardRef<HTMLDivElement, StepItemCardProps>(
-    ({ step, stepIdx, isActive, onStepClick }, ref) => {
-      const Icon = step.icon;
-
-      return (
-        <div
-          ref={ref}
-          onClick={() => onStepClick(stepIdx)}
-          className={`p-2.5 md:p-3 rounded-xl border transition-all duration-200 cursor-pointer flex items-start gap-3 ${
-            isActive
-              ? 'bg-[var(--brand-glow)] border-[var(--border-glow)] shadow-sm'
-              : 'bg-[var(--bg-tertiary)] border-[var(--border-primary)] hover:border-[var(--border-glow)]'
-          }`}
-        >
-          <div className={`w-7 h-7 rounded-lg flex items-center justify-center border shrink-0 transition-colors ${
-            isActive ? 'bg-[var(--brand-glow)] text-[var(--text-accent)] border-[var(--border-glow)]' : 'bg-[var(--bg-secondary)] text-[var(--text-tertiary)] border-[var(--border-primary)]'
-          }`}>
-            <Icon className="w-3.5 h-3.5" />
-          </div>
-          <div className="flex flex-col gap-0.5 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] text-[var(--text-tertiary)]">Step 0{stepIdx + 1}</span>
-              <span className={`text-xs font-display font-medium truncate ${isActive ? 'text-[var(--text-accent)]' : 'text-[var(--text-primary)]'}`}>
-                {step.title}
-              </span>
-            </div>
-            <p className="text-xs text-[var(--text-secondary)] font-light leading-snug">
-              {step.description}
-            </p>
-          </div>
-        </div>
-      );
-    }
-  )
-);
-
-StepItemCard.displayName = 'StepItemCard';
